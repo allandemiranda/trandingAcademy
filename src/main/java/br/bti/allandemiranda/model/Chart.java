@@ -4,24 +4,49 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+import java.util.NoSuchElementException;
 
 /**
  * The type Chart.
  */
 public class Chart {
 
+  private CurrencyExchange currencyExchange;
   private final LinkedList<Candlestick> candlestickLinkedList = new LinkedList<>();
 
   /**
    * Instantiates a new Chart.
    *
    * @param firstCandlestick the first candlestick
-   * @throws NullPointerException the null pointer exception
+   * @param currencyExchange the currency exchange
+   *
    * @throws InterruptedException the interrupted exception
    */
-  public Chart(Candlestick firstCandlestick) throws NullPointerException, InterruptedException {
+  public Chart(Candlestick firstCandlestick, CurrencyExchange currencyExchange) throws InterruptedException {
+    setCurrencyExchange(currencyExchange);
     pushCandlestick(firstCandlestick);
+  }
+
+  /**
+   * Gets currency exchange.
+   *
+   * @return the currency exchange
+   */
+  public CurrencyExchange getCurrencyExchange() {
+    return currencyExchange;
+  }
+
+  /**
+   * Sets currency exchange.
+   *
+   * @param currencyExchange the currency exchange
+   */
+  private void setCurrencyExchange(CurrencyExchange currencyExchange) {
+    if (currencyExchange == null) {
+      throw new NullPointerException("Can't set a NULL Currency Exchange to this Chart");
+    } else {
+      this.currencyExchange = currencyExchange;
+    }
   }
 
   /**
@@ -37,6 +62,7 @@ public class Chart {
    * Gets size index.
    *
    * @return the size index
+   *
    * @throws InterruptedException the interrupted exception
    */
   private int getSizeIndex() throws InterruptedException {
@@ -60,6 +86,7 @@ public class Chart {
    * Gets candlestick position.
    *
    * @param candlestick the candlestick
+   *
    * @return the candlestick position
    */
   public int getCandlestickPosition(Candlestick candlestick) {
@@ -67,8 +94,7 @@ public class Chart {
     if (position > -1) {
       return position;
     } else {
-      throw new NullPointerException(
-          "Candlestick " + candlestick.toString() + " not exist on this Chart");
+      throw new NoSuchElementException("Candlestick " + candlestick.toString() + " not exist on this Chart");
     }
   }
 
@@ -76,13 +102,12 @@ public class Chart {
    * Gets candlestick.
    *
    * @param position the position
+   *
    * @return the candlestick
-   * @throws ArrayIndexOutOfBoundsException the array index out of bounds exception
    */
-  public Candlestick getCandlestick(int position) throws ArrayIndexOutOfBoundsException {
+  public Candlestick getCandlestick(int position) {
     if (position <= 0) {
-      throw new ArrayIndexOutOfBoundsException(
-          "Get Candlestick position " + position + " not exist on this Chart");
+      throw new ArrayIndexOutOfBoundsException("Get Candlestick position " + position + " not exist on this Chart");
     } else {
       return getCandlestickList().get(position - 1);
     }
@@ -92,22 +117,19 @@ public class Chart {
    * Gets candlestick.
    *
    * @param localDateTime the local date time
+   *
    * @return the candlestick
-   * @throws NullPointerException the null pointer exception
+   *
    * @throws InterruptedException the interrupted exception
    */
-  public Candlestick getCandlestick(LocalDateTime localDateTime)
-      throws NullPointerException, InterruptedException {
-    List<Candlestick> candlestickList =
-        getCandlestickList().parallelStream()
-            .filter(o -> localDateTime.equals(o.getLocalDateTime())).toList();
+  public Candlestick getCandlestick(LocalDateTime localDateTime) throws InterruptedException {
+    List<Candlestick> candlestickList = getCandlestickList().parallelStream().filter(o -> localDateTime.equals(o.getLocalDateTime()))
+        .toList();
     if (candlestickList.isEmpty()) {
-      throw new NullPointerException(
-          "Get Candlestick at " + localDateTime.toString() + " not exist on this Chart");
+      throw new NoSuchElementException("Get Candlestick at " + localDateTime.toString() + " not exist on this Chart");
     } else {
       if (candlestickList.size() > 1) {
-        throw new InterruptedException(
-            "Get more than one Candlestick at " + localDateTime.toString());
+        throw new InterruptedException("Get more than one Candlestick at " + localDateTime.toString());
       } else {
         return candlestickList.get(0);
       }
@@ -118,21 +140,19 @@ public class Chart {
    * Gets previous candlestick.
    *
    * @param candlestick the candlestick
+   *
    * @return the previous candlestick
-   * @throws NullPointerException the null pointer exception
    */
-  public Candlestick getPreviousCandlestick(Candlestick candlestick) throws NullPointerException {
+  public Candlestick getPreviousCandlestick(Candlestick candlestick) {
     int position = getCandlestickList().indexOf(candlestick);
     if (position > -1) {
       if (position == 0) {
-        throw new NullPointerException(
-            "Candlestick " + candlestick.toString() + " don't have previous on this Chart");
+        throw new NullPointerException("Candlestick " + candlestick.toString() + " don't have previous on this Chart");
       } else {
         return getCandlestick(position - 1);
       }
     } else {
-      throw new NullPointerException(
-          "Candlestick " + candlestick.toString() + " not exist on this Chart");
+      throw new NoSuchElementException("Candlestick " + candlestick.toString() + " not exist on this Chart");
     }
   }
 
@@ -140,23 +160,21 @@ public class Chart {
    * Gets next candlestick.
    *
    * @param candlestick the candlestick
+   *
    * @return the next candlestick
-   * @throws NullPointerException the null pointer exception
+   *
    * @throws InterruptedException the interrupted exception
    */
-  public Candlestick getNextCandlestick(Candlestick candlestick)
-      throws NullPointerException, InterruptedException {
+  public Candlestick getNextCandlestick(Candlestick candlestick) throws InterruptedException {
     int position = getCandlestickList().indexOf(candlestick);
     if (position > -1) {
       if (position == getSizeIndex()) {
-        throw new NullPointerException(
-            "Candlestick " + candlestick.toString() + " don't have next on this Chart");
+        throw new NullPointerException("Candlestick " + candlestick.toString() + " don't have next on this Chart");
       } else {
         return getCandlestick(position + 1);
       }
     } else {
-      throw new NullPointerException(
-          "Candlestick " + candlestick.toString() + " not exist on this Chart");
+      throw new NoSuchElementException("Candlestick " + candlestick.toString() + " not exist on this Chart");
     }
   }
 
@@ -164,17 +182,18 @@ public class Chart {
    * Gets list of candlestick on same price action.
    *
    * @param priceAction the price action
+   *
    * @return the list of candlestick on same price action
    */
   public List<Candlestick> getListOfCandlestickOnSamePriceAction(PriceAction priceAction) {
-    return getCandlestickList().parallelStream().filter(o -> priceAction.equals(o.getPriceAction()))
-        .toList();
+    return getCandlestickList().parallelStream().filter(o -> priceAction.equals(o.getPriceAction())).toList();
   }
 
   /**
    * Gets list of candlestick on same body size.
    *
    * @param size the size
+   *
    * @return the list of candlestick on same body size
    */
   public List<Candlestick> getListOfCandlestickOnSameBodySize(Double size) {
@@ -185,28 +204,29 @@ public class Chart {
    * Gets list of candlestick on same upper shadow size.
    *
    * @param size the size
+   *
    * @return the list of candlestick on same upper shadow size
    */
   public List<Candlestick> getListOfCandlestickOnSameUpperShadowSize(Double size) {
-    return getCandlestickList().parallelStream().filter(o -> size.equals(o.getUpperShadowSize()))
-        .toList();
+    return getCandlestickList().parallelStream().filter(o -> size.equals(o.getUpperShadowSize())).toList();
   }
 
   /**
    * Gets list of candlestick on same lower shadow size.
    *
    * @param size the size
+   *
    * @return the list of candlestick on same lower shadow size
    */
   public List<Candlestick> getListOfCandlestickOnSameLowerShadowSize(Double size) {
-    return getCandlestickList().parallelStream().filter(o -> size.equals(o.getLowerShadowSize()))
-        .toList();
+    return getCandlestickList().parallelStream().filter(o -> size.equals(o.getLowerShadowSize())).toList();
   }
 
   /**
    * Gets list of candlestick on same full size.
    *
    * @param size the size
+   *
    * @return the list of candlestick on same full size
    */
   public List<Candlestick> getListOfCandlestickOnSameFullSize(Double size) {
@@ -217,45 +237,45 @@ public class Chart {
    * Gets list of candlestick on same division size.
    *
    * @param candlestick the candlestick
+   *
    * @return the list of candlestick on same division size
    */
   public List<Candlestick> getListOfCandlestickOnSameDivisionSize(Candlestick candlestick) {
-    return getCandlestickList().parallelStream()
-        .filter(o -> candlestick.hashCandlestickSize() == o.hashCandlestickSize()).toList();
+    return getCandlestickList().parallelStream().filter(o -> candlestick.hashCandlestickSize() == o.hashCandlestickSize()).toList();
   }
 
   /**
    * Gets list of candlestick on same full division size.
    *
    * @param candlestick the candlestick
+   *
    * @return the list of candlestick on same full division size
    */
   public List<Candlestick> getListOfCandlestickOnSameFullDivisionSize(Candlestick candlestick) {
-    return getCandlestickList().parallelStream()
-        .filter(o -> candlestick.hashCandlestickSize(true) == o.hashCandlestickSize()).toList();
+    return getCandlestickList().parallelStream().filter(o -> candlestick.hashCandlestickSize(true) == o.hashCandlestickSize()).toList();
   }
 
   /**
    * Gets list of candlestick on same positions price.
    *
    * @param candlestick the candlestick
+   *
    * @return the list of candlestick on same positions price
    */
   public List<Candlestick> getListOfCandlestickOnSamePositionsPrice(Candlestick candlestick) {
-    return getCandlestickList().parallelStream().filter(
-            o -> candlestick.hashCandlestickPositionsPrice() == o.hashCandlestickPositionsPrice())
-        .toList();
+    return getCandlestickList().parallelStream()
+        .filter(o -> candlestick.hashCandlestickPositionsPrice() == o.hashCandlestickPositionsPrice()).toList();
   }
 
   /**
    * Gets list of candlestick on same price.
    *
    * @param candlestick the candlestick
+   *
    * @return the list of candlestick on same price
    */
   public List<Candlestick> getListOfCandlestickOnSamePrice(Candlestick candlestick) {
-    return getCandlestickList().parallelStream()
-        .filter(o -> candlestick.hashCandlestickPrice() == o.hashCandlestickPrice()).toList();
+    return getCandlestickList().parallelStream().filter(o -> candlestick.hashCandlestickPrice() == o.hashCandlestickPrice()).toList();
   }
 
   /**
@@ -269,23 +289,24 @@ public class Chart {
    * Add candlestick.
    *
    * @param candlestick the candlestick
+   *
    * @throws InterruptedException the interrupted exception
    */
-  public void addCandlestick(Candlestick candlestick)
-      throws NullPointerException, InterruptedException {
+  public void addCandlestick(Candlestick candlestick) throws InterruptedException {
     if (candlestick == null) {
       throw new NullPointerException("Can't add a new NULL Candlestick to this Chart");
     } else {
-      List<Candlestick> candlestickList =
-          getCandlestickList().parallelStream()
-              .filter(o -> candlestick.getLocalDateTime().equals(o.getLocalDateTime())).toList();
-      if (candlestickList.isEmpty()) {
-        getCandlestickList().add(candlestick);
-        sortCandlestickGraphicByDate();
+      if(candlestick.getCurrencyExchange().equals(getCurrencyExchange())) {
+        List<Candlestick> candlestickList =
+            getCandlestickList().parallelStream().filter(o -> candlestick.getLocalDateTime().equals(o.getLocalDateTime())).toList();
+        if (candlestickList.isEmpty()) {
+          getCandlestickList().add(candlestick);
+          sortCandlestickGraphicByDate();
+        } else {
+          throw new InterruptedException("Have in the Chart a same Candlestick date at " + candlestick.getLocalDateTime().toString());
+        }
       } else {
-        throw new InterruptedException(
-            "Have in the Chart a same Candlestick date at " + candlestick.getLocalDateTime()
-                .toString());
+        throw new InterruptedException("This Candlestick " + candlestick.getLocalDateTime().toString() + " have diferent Currency");
       }
     }
   }
@@ -294,47 +315,24 @@ public class Chart {
    * Push candlestick.
    *
    * @param candlestick the candlestick
+   *
    * @throws InterruptedException the interrupted exception
    */
-  public void pushCandlestick(Candlestick candlestick)
-      throws NullPointerException, InterruptedException {
+  public void pushCandlestick(Candlestick candlestick) throws InterruptedException {
     if (candlestick == null) {
       throw new NullPointerException("Can't push a new NULL Candlestick to this Chart");
     } else {
-      List<Candlestick> candlestickList =
-          getCandlestickList().parallelStream()
-              .filter(o -> candlestick.getLocalDateTime().equals(o.getLocalDateTime())).toList();
-      if (candlestickList.isEmpty()) {
-        getCandlestickList().add(candlestick);
+      if(candlestick.getCurrencyExchange().equals(getCurrencyExchange())) {
+        List<Candlestick> candlestickList = getCandlestickList().parallelStream()
+            .filter(o -> candlestick.getLocalDateTime().equals(o.getLocalDateTime())).toList();
+        if (candlestickList.isEmpty()) {
+          getCandlestickList().add(candlestick);
+        } else {
+          throw new InterruptedException("Have in the Chart a same Candlestick date at " + candlestick.getLocalDateTime().toString());
+        }
       } else {
-        throw new InterruptedException(
-            "Have in the Chart a same Candlestick date at " + candlestick.getLocalDateTime()
-                .toString());
+        throw new InterruptedException("This Candlestick " + candlestick.getLocalDateTime().toString() + " have diferent Currency");
       }
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Chart chart = (Chart) o;
-    return Objects.equals(candlestickLinkedList, chart.candlestickLinkedList);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(candlestickLinkedList);
-  }
-
-  @Override
-  public String toString() {
-    return "Chart{" +
-        "candlestickLinkedList=" + candlestickLinkedList +
-        '}';
   }
 }

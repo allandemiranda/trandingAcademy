@@ -1,9 +1,5 @@
 package br.bti.allandemiranda.model;
 
-import static br.bti.allandemiranda.model.PriceAction.HIGH;
-import static br.bti.allandemiranda.model.PriceAction.LOW;
-import static br.bti.allandemiranda.model.PriceAction.NEUTRAL;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -20,60 +16,66 @@ public class Candlestick {
   private Double lowPrice;
   private Double highPrice;
   private LocalDateTime localDateTime;
+  private CurrencyExchange currencyExchange;
 
   /**
    * Instantiates a new Candlestick.
    *
-   * @param openPrice  the open price
-   * @param closePrice the close price
-   * @param lowPrice   the low price
-   * @param highPrice  the high price
+   * @param openPrice        the open price
+   * @param closePrice       the close price
+   * @param lowPrice         the low price
+   * @param highPrice        the high price
+   * @param localDateTime    the local date time
+   * @param currencyExchange the currency exchange
    */
-  public Candlestick(Double openPrice, Double closePrice, Double lowPrice, Double highPrice,
-      LocalDateTime localDateTime) {
+  public Candlestick(Double openPrice, Double closePrice, Double lowPrice, Double highPrice, LocalDateTime localDateTime,
+      CurrencyExchange currencyExchange) {
     setOpenPrice(openPrice);
     setClosePrice(closePrice);
     setLowPrice(lowPrice);
     setHighPrice(highPrice);
     setLocalDateTime(localDateTime);
+    setCurrencyExchange(currencyExchange);
   }
 
   /**
    * Instantiates a new Candlestick.
    *
-   * @param openPrice     the open price
-   * @param closePrice    the close price
-   * @param lowPrice      the low price
-   * @param highPrice     the high price
-   * @param localDateTime the local date time
+   * @param openPrice        the open price
+   * @param closePrice       the close price
+   * @param lowPrice         the low price
+   * @param highPrice        the high price
+   * @param localDateTime    the local date time
+   * @param currencyExchange the currency exchange
    */
-  public Candlestick(Double openPrice, Double closePrice, Double lowPrice, Double highPrice,
-      String localDateTime) {
+  public Candlestick(Double openPrice, Double closePrice, Double lowPrice, Double highPrice, String localDateTime,
+      CurrencyExchange currencyExchange) {
     setOpenPrice(openPrice);
     setClosePrice(closePrice);
     setLowPrice(lowPrice);
     setHighPrice(highPrice);
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER);
-    setLocalDateTime(LocalDateTime.parse(localDateTime, formatter));
+    setLocalDateTime(localDateTime);
+    setCurrencyExchange(currencyExchange);
   }
 
   /**
    * Instantiates a new Candlestick.
    *
-   * @param openPrice     the open price
-   * @param closePrice    the close price
-   * @param lowPrice      the low price
-   * @param highPrice     the high price
-   * @param localDateTime the local date time
+   * @param openPrice        the open price
+   * @param closePrice       the close price
+   * @param lowPrice         the low price
+   * @param highPrice        the high price
+   * @param localDateTime    the local date time
+   * @param currencyExchange the currency exchange
    */
-  public Candlestick(String openPrice, String closePrice, String lowPrice, String highPrice,
-      String localDateTime) {
+  public Candlestick(String openPrice, String closePrice, String lowPrice, String highPrice, String localDateTime,
+      CurrencyExchange currencyExchange) {
     setOpenPrice(openPrice);
     setClosePrice(closePrice);
     setLowPrice(lowPrice);
     setHighPrice(highPrice);
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER);
-    setLocalDateTime(LocalDateTime.parse(localDateTime, formatter));
+    setLocalDateTime(localDateTime);
+    setCurrencyExchange(currencyExchange);
   }
 
   /**
@@ -103,8 +105,8 @@ public class Candlestick {
    *
    * @param openPrice the open price
    */
-  private void setOpenPrice(String openPrice) throws NumberFormatException {
-    this.openPrice = Double.parseDouble(openPrice);
+  private void setOpenPrice(String openPrice) {
+    setOpenPrice(Double.parseDouble(openPrice));
   }
 
   /**
@@ -134,8 +136,8 @@ public class Candlestick {
    *
    * @param closePrice the close price
    */
-  private void setClosePrice(String closePrice) throws NumberFormatException {
-    this.closePrice = Double.parseDouble(closePrice);
+  private void setClosePrice(String closePrice) {
+    setClosePrice(Double.parseDouble(closePrice));
   }
 
   /**
@@ -166,7 +168,7 @@ public class Candlestick {
    * @param lowPrice the low price
    */
   private void setLowPrice(String lowPrice) {
-    this.lowPrice = Double.parseDouble(lowPrice);
+    setLowPrice(Double.parseDouble(lowPrice));
   }
 
   /**
@@ -197,7 +199,7 @@ public class Candlestick {
    * @param highPrice the high price
    */
   private void setHighPrice(String highPrice) {
-    this.highPrice = Double.parseDouble(highPrice);
+    setHighPrice(Double.parseDouble(highPrice));
   }
 
   /**
@@ -223,18 +225,32 @@ public class Candlestick {
   }
 
   /**
+   * Sets local date time.
+   *
+   * @param localDateTime the local date time (yyyy-MM-dd kk:mm)
+   */
+  private void setLocalDateTime(String localDateTime) {
+    if (localDateTime == null) {
+      throw new NullPointerException("Can't set a NULL Local Date Time to Candlestick");
+    } else {
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER);
+      setLocalDateTime(LocalDateTime.parse(localDateTime, formatter));
+    }
+  }
+
+  /**
    * Gets price action.
    *
    * @return the price action
    */
   public PriceAction getPriceAction() {
     if (getOpenPrice() > getClosePrice()) {
-      return LOW;
+      return PriceAction.LOW;
     } else {
       if (getOpenPrice() < getClosePrice()) {
-        return HIGH;
+        return PriceAction.HIGH;
       } else {
-        return NEUTRAL;
+        return PriceAction.NEUTRAL;
       }
     }
   }
@@ -286,6 +302,28 @@ public class Candlestick {
   }
 
   /**
+   * Gets currency exchange.
+   *
+   * @return the currency exchange
+   */
+  public CurrencyExchange getCurrencyExchange() {
+    return currencyExchange;
+  }
+
+  /**
+   * Sets currency exchange.
+   *
+   * @param currencyExchange the currency exchange
+   */
+  private void setCurrencyExchange(CurrencyExchange currencyExchange) {
+    if (currencyExchange == null) {
+      throw new NullPointerException("Can't set a NULL Currency to Candlestick");
+    } else {
+      this.currencyExchange = currencyExchange;
+    }
+  }
+
+  /**
    * Hash candlestick size hash.
    *
    * @return the hash
@@ -298,6 +336,7 @@ public class Candlestick {
    * Hash candlestick size.
    *
    * @param includeFullSize the include full size
+   *
    * @return the hash
    */
   public int hashCandlestickSize(Boolean includeFullSize) {
@@ -324,35 +363,5 @@ public class Candlestick {
    */
   public int hashCandlestickPrice() {
     return Objects.hash(openPrice, closePrice);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Candlestick that = (Candlestick) o;
-    return openPrice.equals(that.openPrice) && closePrice.equals(that.closePrice)
-        && lowPrice.equals(that.lowPrice) && highPrice.equals(
-        that.highPrice) && localDateTime.equals(that.localDateTime);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(openPrice, closePrice, lowPrice, highPrice, localDateTime);
-  }
-
-  @Override
-  public String toString() {
-    return "Candlestick{" +
-        "openPrice=" + openPrice +
-        ", closePrice=" + closePrice +
-        ", lowPrice=" + lowPrice +
-        ", highPrice=" + highPrice +
-        ", localDateTime=" + localDateTime +
-        '}';
   }
 }
