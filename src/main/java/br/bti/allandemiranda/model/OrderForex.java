@@ -1,15 +1,12 @@
 package br.bti.allandemiranda.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import org.apache.commons.lang3.tuple.Pair;
+import java.util.LinkedList;
 
 public class OrderForex {
 
   private CurrencyExchange currencyExchange;
   private String comment;
-
-  private Candlestick openCandlestick;
 
   private Double spreed;
   private Double lot;
@@ -17,10 +14,13 @@ public class OrderForex {
   private Position position;
   private PositionStatus positionStatus;
 
+  private Double priceOpen;
   private Double stopLoss;
   private Double takeProfit;
   private Double risk;
 
-  private List<Pair<LocalDateTime, Double>> interactions;
+  private LinkedList<> interactions;
+
+  private record Data(LocalDateTime localDateTime, )
 
 }

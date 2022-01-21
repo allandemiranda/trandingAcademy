@@ -3,8 +3,6 @@ package br.bti.allandemiranda.model;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
-import javax.validation.constraints.NotBlank;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Currency exchange.
@@ -152,7 +150,17 @@ public class CurrencyExchange {
    * @throws InterruptedException the interrupted exception
    */
   private void setVolumeStep(String volumeStep) throws InterruptedException {
-    setVolumeStep(Double.parseDouble(volumeStep));
+    if (volumeStep != null) {
+      double temp;
+      try {
+        temp = Double.parseDouble(volumeStep);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Maximal Volume not accept");
+      }
+      setVolumeStep(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Volume Step to this Currency Exchange");
+    }
   }
 
   /**
@@ -208,11 +216,15 @@ public class CurrencyExchange {
    * @throws InterruptedException the interrupted exception
    */
   private void setVolumeRange(Double minimalVolume, Double maximalVolume) throws InterruptedException {
-    if (minimalVolume < maximalVolume) {
-      setMinimalVolume(minimalVolume);
-      setMaximalVolume(maximalVolume);
+    if (minimalVolume != null && maximalVolume != null) {
+      if (minimalVolume > maximalVolume) {
+        setMinimalVolume(minimalVolume);
+        setMaximalVolume(maximalVolume);
+      } else {
+        throw new InterruptedException("Ranger of volume in this Currency Exchange are improper");
+      }
     } else {
-      throw new InterruptedException("Ranger of volume in this Currency Exchange are improper");
+      throw new NullPointerException("Can't set a NULL Volume to this Currency Exchange");
     }
   }
 
@@ -225,10 +237,29 @@ public class CurrencyExchange {
    * @throws InterruptedException the interrupted exception
    */
   private void setVolumeRange(String minimalVolume, String maximalVolume) throws InterruptedException {
-    setMinimalVolume(Double.parseDouble(minimalVolume));
-    setMaximalVolume(Double.parseDouble(maximalVolume));
-    if (getMinimalVolume() >= getMaximalVolume()) {
-      throw new InterruptedException("Ranger of volume in this Currency Exchange are improper");
+    if (minimalVolume != null && maximalVolume != null) {
+      double minimal, maximal;
+
+      try {
+        minimal = Double.parseDouble(minimalVolume);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Maximal Volume not accept");
+      }
+
+      try {
+        maximal = Double.parseDouble(maximalVolume);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Minimal Volume not accept");
+      }
+
+      if (minimal > maximal) {
+        throw new InterruptedException("Ranger of volume in this Currency Exchange are improper");
+      } else {
+        setMinimalVolume(minimal);
+        setMaximalVolume(maximal);
+      }
+    } else {
+      throw new NullPointerException("Can't set a NULL Volume to this Currency Exchange");
     }
   }
 
@@ -263,11 +294,15 @@ public class CurrencyExchange {
    * @throws InterruptedException the interrupted exception
    */
   private void setCurrency(Currency marginCurrency, Currency profitCurrency) throws InterruptedException {
-    if (marginCurrency.equals(profitCurrency)) {
-      throw new InterruptedException("Can't set a same currency " + marginCurrency + " " + profitCurrency);
+    if (marginCurrency == null || profitCurrency == null) {
+      throw new NullPointerException("Can't set a NULL Currency to this Currency Exchange");
     } else {
-      setMarginCurrency(marginCurrency);
-      setProfitCurrency(profitCurrency);
+      if (marginCurrency.equals(profitCurrency)) {
+        throw new InterruptedException("Can't set a same currency " + marginCurrency + " " + profitCurrency);
+      } else {
+        setMarginCurrency(marginCurrency);
+        setProfitCurrency(profitCurrency);
+      }
     }
   }
 
@@ -280,16 +315,20 @@ public class CurrencyExchange {
    * @throws InterruptedException the interrupted exception
    */
   private void setCurrency(String marginCurrency, String profitCurrency) throws InterruptedException {
-    if (marginCurrency.equals(profitCurrency)) {
-      throw new InterruptedException("Can't set a same currency " + marginCurrency + " " + profitCurrency);
+    if (marginCurrency == null || profitCurrency == null) {
+      throw new NullPointerException("Can't set a NULL Currency to this Currency Exchange");
     } else {
-      try {
-        Currency margin = Arrays.stream(Currency.values()).filter(o -> o.toString().equals(marginCurrency)).findFirst().get();
-        setMarginCurrency(margin);
-        Currency profit = Arrays.stream(Currency.values()).filter(o -> o.toString().equals(profitCurrency)).findFirst().get();
-        setProfitCurrency(profit);
-      } catch (NoSuchElementException e) {
-        throw new NoSuchElementException("Can't set a Currency because we don't have in the list");
+      if (marginCurrency.equals(profitCurrency)) {
+        throw new InterruptedException("Can't set a same currency " + marginCurrency + " " + profitCurrency);
+      } else {
+        try {
+          Currency margin = Arrays.stream(Currency.values()).filter(o -> o.toString().equals(marginCurrency)).findFirst().get();
+          setMarginCurrency(margin);
+          Currency profit = Arrays.stream(Currency.values()).filter(o -> o.toString().equals(profitCurrency)).findFirst().get();
+          setProfitCurrency(profit);
+        } catch (NoSuchElementException e) {
+          throw new NoSuchElementException("Can't set a Currency because we don't have in the list");
+        }
       }
     }
   }
@@ -308,7 +347,7 @@ public class CurrencyExchange {
    *
    * @param marginCurrency the margin currency
    */
-  private void setMarginCurrency(Currency marginCurrency) {
+  private void setMarginCurrency(Currency marginCurrency) throws NullPointerException {
     if (marginCurrency == null) {
       throw new NullPointerException("Can't set a NULL Margin Currency to this Currency Exchange");
     } else {
@@ -329,15 +368,13 @@ public class CurrencyExchange {
    * Sets contract size.
    *
    * @param contractSize the contract size
-   *
-   * @throws InterruptedException the interrupted exception
    */
-  private void setContractSize(Integer contractSize) throws InterruptedException {
+  private void setContractSize(Integer contractSize) {
     if (contractSize == null) {
       throw new NullPointerException("Can't set a NULL Digits to this Currency Exchange");
     } else {
       if (contractSize < 1) {
-        throw new InterruptedException("Can't set a negative Digits to this Currency Exchange");
+        throw new NumberFormatException("Can't set a negative Digits to this Currency Exchange");
       } else {
         this.contractSize = contractSize;
       }
@@ -348,11 +385,19 @@ public class CurrencyExchange {
    * Sets contract size.
    *
    * @param contractSize the contract size
-   *
-   * @throws InterruptedException the interrupted exception
    */
-  private void setContractSize(String contractSize) throws InterruptedException {
-    setContractSize(Integer.parseInt(contractSize));
+  private void setContractSize(String contractSize) {
+    if (contractSize != null) {
+      int temp;
+      try {
+        temp = Integer.parseInt(contractSize);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Contract Size not accept");
+      }
+      setContractSize(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Contract Size to this Currency Exchange");
+    }
   }
 
   /**
@@ -368,15 +413,13 @@ public class CurrencyExchange {
    * Sets digits.
    *
    * @param digits the digits
-   *
-   * @throws InterruptedException the interrupted exception
    */
-  private void setDigits(Integer digits) throws InterruptedException {
+  private void setDigits(Integer digits) {
     if (digits == null) {
       throw new NullPointerException("Can't set a NULL Digits to this Currency Exchange");
     } else {
       if (digits < 0) {
-        throw new InterruptedException("Can't set a negative Digits to this Currency Exchange");
+        throw new NumberFormatException("Can't set a negative Digits to this Currency Exchange");
       } else {
         this.digits = digits;
       }
@@ -387,11 +430,19 @@ public class CurrencyExchange {
    * Sets digits.
    *
    * @param digits the digits
-   *
-   * @throws InterruptedException the interrupted exception
    */
-  private void setDigits(String digits) throws InterruptedException {
-    setDigits(Integer.parseInt(digits));
+  private void setDigits(String digits) {
+    if (digits != null) {
+      int temp;
+      try {
+        temp = Integer.parseInt(digits);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Swap Long not accept");
+      }
+      setDigits(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Swap Long to this Currency Exchange");
+    }
   }
 
   /**
@@ -421,7 +472,11 @@ public class CurrencyExchange {
     if (spread == null) {
       throw new NullPointerException("Can't set a NULL Spreed to this Currency Exchange");
     } else {
-      this.spread = spread;
+      if (spread < 0) {
+        throw new NumberFormatException("The format negative of Spreed not accept");
+      } else {
+        this.spread = spread;
+      }
     }
   }
 
@@ -431,7 +486,17 @@ public class CurrencyExchange {
    * @param spread the spread
    */
   private void setSpread(String spread) {
-    setSpread(Integer.parseInt(spread));
+    if (spread != null) {
+      int temp;
+      try {
+        temp = Integer.parseInt(spread);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Swap Long not accept");
+      }
+      setSpread(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Swap Long to this Currency Exchange");
+    }
   }
 
   /**
@@ -461,11 +526,18 @@ public class CurrencyExchange {
    *
    * @param swapLong the swap long
    */
-  private void setSwapLong(
-      @NotBlank(message = "")
-      String swapLong) {
-    // TODO -> revisar todos os Not Null, criar novas class e depois testes
-    setSwapLong(Double.parseDouble(swapLong));
+  private void setSwapLong(String swapLong) {
+    if (swapLong != null) {
+      double temp;
+      try {
+        temp = Double.parseDouble(swapLong);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Swap Long not accept");
+      }
+      setSwapLong(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Swap Long to this Currency Exchange");
+    }
   }
 
   /**
@@ -482,10 +554,12 @@ public class CurrencyExchange {
    *
    * @param swapShort the swap short
    */
-  private void setSwapShort(
-      @NotNull("Can't set a NULL Swap Short to this Currency Exchange")
-          Double swapShort) {
-    this.swapShort = swapShort;
+  private void setSwapShort(Double swapShort) {
+    if (swapShort != null) {
+      this.swapShort = swapShort;
+    } else {
+      throw new NullPointerException("Can't set a NULL Swap Short to this Currency Exchange");
+    }
   }
 
   /**
@@ -493,14 +567,17 @@ public class CurrencyExchange {
    *
    * @param swapShort the swap short
    */
-  private void setSwapShort(
-      @NotBlank(message = "Can't set a NULL Swap Short to this Currency Exchange")
-          String swapShort
-  ) {
-    try {
-      setSwapShort(Double.parseDouble(swapShort));
-    } catch (NumberFormatException e) {
-      throw new NumberFormatException("The format of Swap Short not accept");
+  private void setSwapShort(String swapShort) {
+    if (swapShort != null) {
+      double temp;
+      try {
+        temp = Double.parseDouble(swapShort);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Swap Short not accept");
+      }
+      setSwapShort(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Swap Short to this Currency Exchange");
     }
 
   }
@@ -519,11 +596,13 @@ public class CurrencyExchange {
    *
    * @param swapThreeDays the swap three days
    */
-  private void setSwapThreeDays(
-      @NotNull("Can't set a NULL Swap Three Days to this Currency Exchange")
-          DayOfWeek swapThreeDays
-  ) {
-    this.swapThreeDays = swapThreeDays;
+  private void setSwapThreeDays(DayOfWeek swapThreeDays) {
+    if (swapThreeDays != null) {
+      this.swapThreeDays = swapThreeDays;
+    } else {
+      throw new NullPointerException("Can't set a NULL Swap Three Days to this Currency Exchange");
+    }
+
   }
 
   /**
@@ -531,23 +610,26 @@ public class CurrencyExchange {
    *
    * @param swapThreeDays the swap three days (the day-of-week to represent, from 1 (Monday) to 7 (Sunday))
    */
-  private void setSwapThreeDays(
-      @NotNull("Can't set a NULL Swap Three Days to this Currency Exchange")
-          Integer swapThreeDays
-  ) {
-    setSwapThreeDays(DayOfWeek.of(swapThreeDays));
+  private void setSwapThreeDays(Integer swapThreeDays) {
+    if (swapThreeDays != null) {
+      if (swapThreeDays >= 1 && swapThreeDays <= 7) {
+        setSwapThreeDays(DayOfWeek.of(swapThreeDays));
+      } else {
+        throw new NumberFormatException("Can't set a Swap Three Days negative, zero or more than 7 to this Currency Exchange");
+      }
+    } else {
+      throw new NullPointerException("Can't set a NULL Swap Three Days to this Currency Exchange");
+    }
   }
 
   /**
    * Sets swap three days.
    *
    * @param swapThreeDays the swap three days (the day-of-week to represent, from "1" (Monday, MONDAY, monday) to "7" (Sunday ...))
+   *
    * @throws InterruptedException the interrupted exception
    */
-  private void setSwapThreeDays(
-      @NotBlank(message = "Can't set a NULL Swap Three Days to this Currency Exchange")
-          String swapThreeDays
-  ) throws InterruptedException {
+  private void setSwapThreeDays(String swapThreeDays) throws InterruptedException {
     switch (swapThreeDays) {
       case "1", "MONDAY", "monday", "Monday" -> setSwapThreeDays(DayOfWeek.MONDAY);
       case "2", "TUESDAY", "tuesday", "Tuesday" -> setSwapThreeDays(DayOfWeek.TUESDAY);

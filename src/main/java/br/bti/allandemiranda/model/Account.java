@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Account.
@@ -15,14 +13,28 @@ public class Account {
   private static final String LEVERAGE_ONE_PER = "1:";
   private Currency currency;
   private Integer leverage;
-  private LinkedList<Pair<LocalDateTime, Double>> amountList;
+  private LinkedList<DataAmount> amountList;
 
+  /**
+   * Instantiates a new Account.
+   *
+   * @param currency the currency
+   * @param leverage the leverage
+   * @param amount   the amount
+   */
   public Account(Currency currency, Integer leverage, Double amount) {
     setCurrency(currency);
     setLeverage(leverage);
     setInitialAmount(amount);
   }
 
+  /**
+   * Instantiates a new Account.
+   *
+   * @param currency the currency
+   * @param leverage the leverage
+   * @param amount   the amount
+   */
   public Account(Currency currency, String leverage, Double amount) {
     setCurrency(currency);
     setLeverage(leverage);
@@ -34,7 +46,7 @@ public class Account {
    *
    * @return the amount list
    */
-  public LinkedList<Pair<LocalDateTime, Double>> getAmountList() {
+  public LinkedList<DataAmount> getAmountList() {
     return amountList;
   }
 
@@ -43,30 +55,48 @@ public class Account {
    *
    * @param amount the amount
    */
-  private void setInitialAmount(@NotNull Double amount) {
-    getAmountList().add(Pair.of(LocalDateTime.now(), amount));
+  private void setInitialAmount(Double amount) {
+    if (amount != null) {
+      getAmountList().add(new DataAmount(LocalDateTime.now(), amount, amount));
+    } else {
+      throw new NullPointerException("Can't set a NULL Initial Amount to Account");
+    }
   }
 
-  public Double pushAmount(@NotNull Double addAmount, @NotNull LocalDateTime localDateTime) throws InterruptedException {
-    if (getAmountList().size() > 1) {
-      if (localDateTime.isAfter(getAmountList().getLast().getLeft())) {
-        Double newAmount = getAmountList().getLast().getRight() + addAmount;
-        getAmountList().add(Pair.of(localDateTime, newAmount));
-        return newAmount;
+  /**
+   * Push amount and margin.
+   *
+   * @param addAmount     the add amount
+   * @param addMargin     the add margin
+   * @param localDateTime the local date time
+   *
+   * @throws InterruptedException the interrupted exception
+   */
+  public void pushAmountAndMargin(Double addAmount, Double addMargin, LocalDateTime localDateTime) throws InterruptedException {
+    if (addAmount != null && localDateTime != null) {
+      if (getAmountList().size() > 1) {
+        if (localDateTime.isAfter(getAmountList().getLast().getLocalDateTime())) {
+          Double newAmount = getAmountList().getLast().getAmount() + addAmount;
+          Double margin = getAmountList().getLast().getMargin() + addMargin;
+          getAmountList().add(new DataAmount(localDateTime, newAmount, margin));
+        } else {
+          throw new InterruptedException("Can't add this amount because the date is old");
+        }
       } else {
-        throw new InterruptedException("Can't add this amount because the date is old");
+        if (getAmountList().size() == 1) {
+          Double amountTemp = getAmountList().getLast().getAmount();
+          Double marginTemp = getAmountList().getLast().getMargin();
+          getAmountList().clear();
+          getAmountList().add(new DataAmount(localDateTime.minusSeconds(60), amountTemp, marginTemp));
+          Double newAmount = amountTemp + addAmount;
+          Double newmargin = marginTemp + addMargin;
+          getAmountList().add(new DataAmount(localDateTime, newAmount, newmargin));
+        } else {
+          throw new NoSuchElementException("Can't set a new amount because we don't find a fist value");
+        }
       }
     } else {
-      if (getAmountList().size() == 1) {
-        Double amountTemp = getAmountList().getLast().getRight();
-        getAmountList().clear();
-        getAmountList().add(Pair.of(localDateTime.minusSeconds(60), amountTemp));
-        Double newAmount = amountTemp + addAmount;
-        getAmountList().add(Pair.of(localDateTime, newAmount));
-        return newAmount;
-      } else {
-        throw new NoSuchElementException("Can't set a new amount because we don't find a fist value");
-      }
+      throw new NullPointerException("Can't set a NULL Push Amount to Account");
     }
   }
 
@@ -98,12 +128,16 @@ public class Account {
    * @param currency the currency
    */
   private void setCurrency(String currency) {
-    try {
-      Currency tempCurrency = Arrays.stream(Currency.values())
-          .filter(o -> o.toString().equals(currency)).findFirst().get();
-      setCurrency(tempCurrency);
-    } catch (NoSuchElementException e) {
-      throw new NoSuchElementException("Can't set a Currency because we don't have in the list");
+    if (currency == null) {
+      throw new NullPointerException("Can't set a NULL Currency to Account");
+    } else {
+      try {
+        Currency tempCurrency = Arrays.stream(Currency.values())
+            .filter(o -> o.toString().equals(currency)).findFirst().get();
+        setCurrency(tempCurrency);
+      } catch (NoSuchElementException e) {
+        throw new NoSuchElementException("Can't set a Currency because we don't have in the list");
+      }
     }
   }
 
@@ -121,8 +155,18 @@ public class Account {
    *
    * @param leverage the leverage (Ex 1:500)
    */
-  private void setLeverage(@NotNull String leverage) {
-    setLeverage(Integer.parseInt(leverage.replaceAll(LEVERAGE_ONE_PER, "")));
+  private void setLeverage(String leverage) {
+    if (leverage != null) {
+      int temp;
+      try {
+        temp = Integer.parseInt(leverage.replaceAll(LEVERAGE_ONE_PER, ""));
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Leverage not accept");
+      }
+      setLeverage(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Leverage to Account");
+    }
   }
 
   /**
@@ -144,6 +188,39 @@ public class Account {
    * @return the full leverage (Ex 1:500)
    */
   public String getFullLeverage() {
-    return LEVERAGE_ONE_PER + leverage;
+    return LEVERAGE_ONE_PER + getLeverage().toString();
+  }
+
+  /**
+   * The type Data amount.
+   */
+  private record DataAmount(LocalDateTime localDateTime, Double amount, Double margin) {
+
+    /**
+     * Gets local date time.
+     *
+     * @return the local date time
+     */
+    public LocalDateTime getLocalDateTime() {
+      return localDateTime;
+    }
+
+    /**
+     * Gets amount.
+     *
+     * @return the amount
+     */
+    public Double getAmount() {
+      return amount;
+    }
+
+    /**
+     * Gets margin.
+     *
+     * @return the margin
+     */
+    public Double getMargin() {
+      return margin;
+    }
   }
 }

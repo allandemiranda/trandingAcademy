@@ -106,7 +106,17 @@ public class Candlestick {
    * @param openPrice the open price
    */
   private void setOpenPrice(String openPrice) {
-    setOpenPrice(Double.parseDouble(openPrice));
+    if (openPrice != null) {
+      double temp;
+      try {
+        temp = Double.parseDouble(openPrice);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Open Price not accept");
+      }
+      setOpenPrice(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Open Price to this Candlestick");
+    }
   }
 
   /**
@@ -137,7 +147,17 @@ public class Candlestick {
    * @param closePrice the close price
    */
   private void setClosePrice(String closePrice) {
-    setClosePrice(Double.parseDouble(closePrice));
+    if (closePrice != null) {
+      double temp;
+      try {
+        temp = Double.parseDouble(closePrice);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Close Price not accept");
+      }
+      setClosePrice(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Close Price to this Candlestick");
+    }
   }
 
   /**
@@ -168,7 +188,17 @@ public class Candlestick {
    * @param lowPrice the low price
    */
   private void setLowPrice(String lowPrice) {
-    setLowPrice(Double.parseDouble(lowPrice));
+    if (lowPrice != null) {
+      double temp;
+      try {
+        temp = Double.parseDouble(lowPrice);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Low Price not accept");
+      }
+      setLowPrice(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Low Price to this Candlestick");
+    }
   }
 
   /**
@@ -199,7 +229,17 @@ public class Candlestick {
    * @param highPrice the high price
    */
   private void setHighPrice(String highPrice) {
-    setHighPrice(Double.parseDouble(highPrice));
+    if (highPrice != null) {
+      double temp;
+      try {
+        temp = Double.parseDouble(highPrice);
+      } catch (NumberFormatException e) {
+        throw new NumberFormatException("The format of Low Price not accept");
+      }
+      setHighPrice(temp);
+    } else {
+      throw new NullPointerException("Can't set a NULL Low Price to this Candlestick");
+    }
   }
 
   /**
@@ -233,9 +273,17 @@ public class Candlestick {
     if (localDateTime == null) {
       throw new NullPointerException("Can't set a NULL Local Date Time to Candlestick");
     } else {
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER);
-      setLocalDateTime(LocalDateTime.parse(localDateTime, formatter));
+      setLocalDateTime(LocalDateTime.parse(localDateTime, getDateTimeFormatter()));
     }
+  }
+
+  /**
+   * Gets date time formatter.
+   *
+   * @return the date time formatter
+   */
+  private DateTimeFormatter getDateTimeFormatter() {
+    return DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER);
   }
 
   /**
