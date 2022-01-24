@@ -1,4 +1,4 @@
-package br.bti.allandemiranda.model;
+package br.bti.allandemiranda.forex.model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

@@ -1,4 +1,4 @@
-package br.bti.allandemiranda.model;
+package br.bti.allandemiranda.forex.model;
 
 /**
  * The enum Position.
