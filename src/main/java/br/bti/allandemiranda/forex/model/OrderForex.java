@@ -1,5 +1,6 @@
 //package br.bti.allandemiranda.forex.model;
 //
+//import java.time.LocalDateTime;
 //import java.util.LinkedList;
 //import java.util.Objects;
 //
@@ -137,16 +138,42 @@
 //      if(interaction == null || closeOrder == null){
 //        throw new NullPointerException("Can't set a NULL interaction or status order to this Order Forex");
 //      } else {
-//        PositionStatus tempPositionStatus = checkOrderStatus(interaction);
-//        if(tempPositionStatus.equals(PositionStatus.OPEN)){
+//        if(getLastInteraction().getLocalDateTime().isBefore(interaction.getLocalDateTime())) {
+//          PositionStatus tempPositionStatus = checkOrderStatus(interaction);
+//          if (tempPositionStatus.equals(PositionStatus.OPEN)) {
 //
+//          }
+//        } else {
+//          throw new InterruptedException("Try push a interaction whit a local data older");
 //        }
 //      }
 //    }
 //  }
 //
-//  private Double applySwap(){
+//  private Double applySwap(Candlestick interaction) throws InterruptedException {
+//    if(interaction != null){
+//      if(getLastInteraction().getLocalDateTime().isAfter(interaction.getLocalDateTime()) || getLastInteraction().getLocalDateTime().equals(interaction.getLocalDateTime())) {
+//        throw new InterruptedException("Try check a interaction swat whit a local data older");
+//      } else {
+//        LocalDateTime swapDate = LocalDateTime.of(getLastInteraction().getLocalDateTime().getYear(),
+//            getLastInteraction().getLocalDateTime().getMonth(), getLastInteraction().getLocalDateTime().getDayOfMonth(), 21, 59, 59);
+//        if (getLastInteraction().getLocalDateTime().isAfter(swapDate)) {
+//          return 0.0;
+//        } else {
+//          if (interaction.getLocalDateTime().isAfter(swapDate)) {
+//            if(getLastInteraction().getLocalDateTime().getDayOfWeek().equals(getCurrencyExchange().getSwapThreeDays())){
 //
+//            } else {
+//
+//            }
+//          } else {
+//            return 0.0;
+//          }
+//        }
+//      }
+//    } else {
+//      throw new NullPointerException("Can't set a NULL Candlestick interaction to apply a swap");
+//    }
 //  }
 //
 //  private PositionStatus checkOrderStatus(Candlestick interaction) {

@@ -1,8 +1,10 @@
 package br.bti.allandemiranda.forex.model;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.util.InputMismatchException;
+import org.junit.Assert;
 
 /**
  * The type Candlestick.
@@ -10,72 +12,69 @@ import java.util.Objects;
 public class Candlestick {
 
   private static final String DATE_TIME_FORMATTER = "yyyy-MM-dd kk:mm";
-  private static final double NEUTRAL_VALUE = 0.0;
-  private Double openPrice;
-  private Double closePrice;
-  private Double lowPrice;
-  private Double highPrice;
+  private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
+  private static final String VALID_NUMBER = "need be a valid number";
+  private static final String BE_NUMBER = "need be a number";
+  private static final String NOT_NULL = "can't be a NULL";
+  private static final String LOCAL_DATE_TIME = "Local Date Time";
+  private static final String VALID_DATE = "need be a valid date";
+  private static final String BE_DATE = "need be a date";
+  private static final String CURRENCY_PAIR = "Currency Pair";
+  private static final String HIGH_PRICE = "High Price";
+  private static final String LOW_PRICE = "Low Price";
+  private static final String CLOSE_PRICE = "Close Price";
+  private static final String OPEN_PRICE = "Open Price";
+  private double openPrice;
+  private double closePrice;
+  private double lowPrice;
+  private double highPrice;
   private LocalDateTime localDateTime;
-  private CurrencyExchange currencyExchange;
+  private CurrencyPair currencyPair;
 
   /**
    * Instantiates a new Candlestick.
    *
-   * @param openPrice        the open price
-   * @param closePrice       the close price
-   * @param lowPrice         the low price
-   * @param highPrice        the high price
-   * @param localDateTime    the local date time
-   * @param currencyExchange the currency exchange
+   * @param openPrice       the open price
+   * @param closePrice      the close price
+   * @param lowPrice        the low price
+   * @param highPrice       the high price
+   * @param localDateTime   the local date time
+   * @param currencyPair    the currency pair
    */
-  public Candlestick(Double openPrice, Double closePrice, Double lowPrice, Double highPrice, LocalDateTime localDateTime,
-      CurrencyExchange currencyExchange) {
+  public Candlestick(double openPrice, double closePrice, double lowPrice, double highPrice, LocalDateTime localDateTime,
+      CurrencyPair currencyPair) {
     setOpenPrice(openPrice);
     setClosePrice(closePrice);
     setLowPrice(lowPrice);
     setHighPrice(highPrice);
     setLocalDateTime(localDateTime);
-    setCurrencyExchange(currencyExchange);
+    setCurrencyPair(currencyPair);
+
+    //! Need check if is valid Candlestick
+    Assert.assertTrue(checkCandlestick(getOpenPrice(),getClosePrice(), getLowPrice(), getHighPrice()));
   }
 
   /**
    * Instantiates a new Candlestick.
    *
-   * @param openPrice        the open price
-   * @param closePrice       the close price
-   * @param lowPrice         the low price
-   * @param highPrice        the high price
-   * @param localDateTime    the local date time
-   * @param currencyExchange the currency exchange
-   */
-  public Candlestick(Double openPrice, Double closePrice, Double lowPrice, Double highPrice, String localDateTime,
-      CurrencyExchange currencyExchange) {
-    setOpenPrice(openPrice);
-    setClosePrice(closePrice);
-    setLowPrice(lowPrice);
-    setHighPrice(highPrice);
-    setLocalDateTime(localDateTime);
-    setCurrencyExchange(currencyExchange);
-  }
-
-  /**
-   * Instantiates a new Candlestick.
-   *
-   * @param openPrice        the open price
-   * @param closePrice       the close price
-   * @param lowPrice         the low price
-   * @param highPrice        the high price
-   * @param localDateTime    the local date time
-   * @param currencyExchange the currency exchange
+   * @param openPrice       the open price
+   * @param closePrice      the close price
+   * @param lowPrice        the low price
+   * @param highPrice       the high price
+   * @param localDateTime   the local date time
+   * @param currencyPair    the currency pair
    */
   public Candlestick(String openPrice, String closePrice, String lowPrice, String highPrice, String localDateTime,
-      CurrencyExchange currencyExchange) {
+      CurrencyPair currencyPair) {
     setOpenPrice(openPrice);
     setClosePrice(closePrice);
     setLowPrice(lowPrice);
     setHighPrice(highPrice);
     setLocalDateTime(localDateTime);
-    setCurrencyExchange(currencyExchange);
+    setCurrencyPair(currencyPair);
+
+    //! Need check if is valid Candlestick
+    Assert.assertTrue(checkCandlestick(getOpenPrice(),getClosePrice(), getLowPrice(), getHighPrice()));
   }
 
   /**
@@ -83,7 +82,7 @@ public class Candlestick {
    *
    * @return the open price
    */
-  public Double getOpenPrice() {
+  public double getOpenPrice() {
     return openPrice;
   }
 
@@ -92,11 +91,11 @@ public class Candlestick {
    *
    * @param openPrice the open price
    */
-  private void setOpenPrice(Double openPrice) {
-    if (openPrice == null) {
-      throw new NullPointerException("Can't set a NULL Open Price to Candlestick");
-    } else {
+  private void setOpenPrice(double openPrice) {
+    if (Math.abs(openPrice) == openPrice) {
       this.openPrice = openPrice;
+    } else {
+      throw new InputMismatchException(OPEN_PRICE + " " + NOT_NEGATIVE_NUMBER);
     }
   }
 
@@ -107,15 +106,17 @@ public class Candlestick {
    */
   private void setOpenPrice(String openPrice) {
     if (openPrice != null) {
-      double temp;
-      try {
-        temp = Double.parseDouble(openPrice);
-      } catch (NumberFormatException e) {
-        throw new NumberFormatException("The format of Open Price not accept");
+      if (!openPrice.isBlank()) {
+        try {
+          setOpenPrice(Double.parseDouble(openPrice));
+        } catch (NumberFormatException e) {
+          throw new NumberFormatException(OPEN_PRICE + " " + VALID_NUMBER);
+        }
+      } else {
+        throw new IllegalArgumentException(OPEN_PRICE + " " + BE_NUMBER);
       }
-      setOpenPrice(temp);
     } else {
-      throw new NullPointerException("Can't set a NULL Open Price to this Candlestick");
+      throw new IllegalArgumentException(OPEN_PRICE + " " + NOT_NULL);
     }
   }
 
@@ -124,7 +125,7 @@ public class Candlestick {
    *
    * @return the close price
    */
-  public Double getClosePrice() {
+  public double getClosePrice() {
     return closePrice;
   }
 
@@ -133,11 +134,11 @@ public class Candlestick {
    *
    * @param closePrice the close price
    */
-  private void setClosePrice(Double closePrice) {
-    if (closePrice == null) {
-      throw new NullPointerException("Can't set a NULL Close Price to Candlestick");
-    } else {
+  private void setClosePrice(double closePrice) {
+    if (Math.abs(closePrice) == closePrice) {
       this.closePrice = closePrice;
+    } else {
+      throw new InputMismatchException(CLOSE_PRICE + " " + NOT_NEGATIVE_NUMBER);
     }
   }
 
@@ -148,15 +149,17 @@ public class Candlestick {
    */
   private void setClosePrice(String closePrice) {
     if (closePrice != null) {
-      double temp;
-      try {
-        temp = Double.parseDouble(closePrice);
-      } catch (NumberFormatException e) {
-        throw new NumberFormatException("The format of Close Price not accept");
+      if (!closePrice.isBlank()) {
+        try {
+          setClosePrice(Double.parseDouble(closePrice));
+        } catch (NumberFormatException e) {
+          throw new NumberFormatException(CLOSE_PRICE + " " + VALID_NUMBER);
+        }
+      } else {
+        throw new IllegalArgumentException(CLOSE_PRICE + " " + BE_NUMBER);
       }
-      setClosePrice(temp);
     } else {
-      throw new NullPointerException("Can't set a NULL Close Price to this Candlestick");
+      throw new IllegalArgumentException(CLOSE_PRICE + " " + NOT_NULL);
     }
   }
 
@@ -165,7 +168,7 @@ public class Candlestick {
    *
    * @return the low price
    */
-  public Double getLowPrice() {
+  public double getLowPrice() {
     return lowPrice;
   }
 
@@ -174,11 +177,11 @@ public class Candlestick {
    *
    * @param lowPrice the low price
    */
-  private void setLowPrice(Double lowPrice) {
-    if (lowPrice == null) {
-      throw new NullPointerException("Can't set a NULL Low Price to Candlestick");
-    } else {
+  private void setLowPrice(double lowPrice) {
+    if (Math.abs(lowPrice) == lowPrice) {
       this.lowPrice = lowPrice;
+    } else {
+      throw new InputMismatchException(LOW_PRICE + " " + NOT_NEGATIVE_NUMBER);
     }
   }
 
@@ -189,15 +192,17 @@ public class Candlestick {
    */
   private void setLowPrice(String lowPrice) {
     if (lowPrice != null) {
-      double temp;
-      try {
-        temp = Double.parseDouble(lowPrice);
-      } catch (NumberFormatException e) {
-        throw new NumberFormatException("The format of Low Price not accept");
+      if (!lowPrice.isBlank()) {
+        try {
+          setLowPrice(Double.parseDouble(lowPrice));
+        } catch (NumberFormatException e) {
+          throw new NumberFormatException(LOW_PRICE + " " + VALID_NUMBER);
+        }
+      } else {
+        throw new IllegalArgumentException(LOW_PRICE + " " + BE_NUMBER);
       }
-      setLowPrice(temp);
     } else {
-      throw new NullPointerException("Can't set a NULL Low Price to this Candlestick");
+      throw new IllegalArgumentException(LOW_PRICE + " " + NOT_NULL);
     }
   }
 
@@ -206,7 +211,7 @@ public class Candlestick {
    *
    * @return the high price
    */
-  public Double getHighPrice() {
+  public double getHighPrice() {
     return highPrice;
   }
 
@@ -215,11 +220,11 @@ public class Candlestick {
    *
    * @param highPrice the high price
    */
-  private void setHighPrice(Double highPrice) {
-    if (highPrice == null) {
-      throw new NullPointerException("Can't set a NULL High Price to Candlestick");
-    } else {
+  private void setHighPrice(double highPrice) {
+    if (Math.abs(highPrice) == highPrice) {
       this.highPrice = highPrice;
+    } else {
+      throw new InputMismatchException(HIGH_PRICE + " " + NOT_NEGATIVE_NUMBER);
     }
   }
 
@@ -230,15 +235,17 @@ public class Candlestick {
    */
   private void setHighPrice(String highPrice) {
     if (highPrice != null) {
-      double temp;
-      try {
-        temp = Double.parseDouble(highPrice);
-      } catch (NumberFormatException e) {
-        throw new NumberFormatException("The format of Low Price not accept");
+      if (!highPrice.isBlank()) {
+        try {
+          setHighPrice(Double.parseDouble(highPrice));
+        } catch (NumberFormatException e) {
+          throw new NumberFormatException(HIGH_PRICE + " " + VALID_NUMBER);
+        }
+      } else {
+        throw new IllegalArgumentException(HIGH_PRICE + " " + BE_NUMBER);
       }
-      setHighPrice(temp);
     } else {
-      throw new NullPointerException("Can't set a NULL Low Price to this Candlestick");
+      throw new IllegalArgumentException(HIGH_PRICE + " " + NOT_NULL);
     }
   }
 
@@ -257,23 +264,31 @@ public class Candlestick {
    * @param localDateTime the local date time
    */
   private void setLocalDateTime(LocalDateTime localDateTime) {
-    if (localDateTime == null) {
-      throw new NullPointerException("Can't set a NULL Local Date Time to Candlestick");
-    } else {
+    if (localDateTime != null) {
       this.localDateTime = localDateTime;
+    } else {
+      throw new IllegalArgumentException(LOCAL_DATE_TIME + " " + NOT_NULL);
     }
   }
 
   /**
    * Sets local date time.
    *
-   * @param localDateTime the local date time (yyyy-MM-dd kk:mm)
+   * @param localDateTime the local date time
    */
   private void setLocalDateTime(String localDateTime) {
-    if (localDateTime == null) {
-      throw new NullPointerException("Can't set a NULL Local Date Time to Candlestick");
+    if (localDateTime != null) {
+      try {
+        if (!localDateTime.isBlank()) {
+          this.localDateTime = LocalDateTime.parse(localDateTime, getDateTimeFormatter());
+        } else {
+          throw new IllegalArgumentException(LOCAL_DATE_TIME + " " + BE_DATE);
+        }
+      } catch (DateTimeException e) {
+        throw new DateTimeException(LOCAL_DATE_TIME + " " + VALID_DATE);
+      }
     } else {
-      setLocalDateTime(LocalDateTime.parse(localDateTime, getDateTimeFormatter()));
+      throw new IllegalArgumentException(LOCAL_DATE_TIME + " " + NOT_NULL);
     }
   }
 
@@ -287,129 +302,50 @@ public class Candlestick {
   }
 
   /**
-   * Gets price action.
-   *
-   * @return the price action
-   */
-  public PriceAction getPriceAction() {
-    if (getOpenPrice() > getClosePrice()) {
-      return PriceAction.LOW;
-    } else {
-      if (getOpenPrice() < getClosePrice()) {
-        return PriceAction.HIGH;
-      } else {
-        return PriceAction.NEUTRAL;
-      }
-    }
-  }
-
-  /**
-   * Gets body size.
-   *
-   * @return the body size
-   */
-  public Double getBodySize() {
-    return switch (getPriceAction()) {
-      case NEUTRAL -> NEUTRAL_VALUE;
-      case HIGH -> getClosePrice() - getOpenPrice();
-      case LOW -> getOpenPrice() - getClosePrice();
-    };
-  }
-
-  /**
-   * Gets upper shadow size.
-   *
-   * @return the upper shadow size
-   */
-  public Double getUpperShadowSize() {
-    return switch (getPriceAction()) {
-      case HIGH, NEUTRAL -> getHighPrice() - getClosePrice();
-      case LOW -> getHighPrice() - getOpenPrice();
-    };
-  }
-
-  /**
-   * Gets lower shadow size.
-   *
-   * @return the lower shadow size
-   */
-  public Double getLowerShadowSize() {
-    return switch (getPriceAction()) {
-      case HIGH, NEUTRAL -> getOpenPrice() - getLowPrice();
-      case LOW -> getClosePrice() - getOpenPrice();
-    };
-  }
-
-  /**
-   * Gets full size.
-   *
-   * @return the full size
-   */
-  public Double getFullSize() {
-    return getUpperShadowSize() + getBodySize() + getLowerShadowSize();
-  }
-
-  /**
    * Gets currency exchange.
    *
    * @return the currency exchange
    */
-  public CurrencyExchange getCurrencyExchange() {
-    return currencyExchange;
+  public CurrencyPair getCurrencyPair() {
+    return currencyPair;
   }
 
   /**
    * Sets currency exchange.
    *
-   * @param currencyExchange the currency exchange
+   * @param currencyPair the currency pair
    */
-  private void setCurrencyExchange(CurrencyExchange currencyExchange) {
-    if (currencyExchange == null) {
-      throw new NullPointerException("Can't set a NULL Currency to Candlestick");
+  private void setCurrencyPair(CurrencyPair currencyPair) {
+    if (currencyPair != null) {
+      this.currencyPair = currencyPair;
     } else {
-      this.currencyExchange = currencyExchange;
+      throw new IllegalArgumentException(CURRENCY_PAIR + " " + NOT_NULL);
     }
   }
 
   /**
-   * Hash candlestick size hash.
+   * Check candlestick boolean.
    *
-   * @return the hash
+   * @param openPrice  the open price
+   * @param closePrice the close price
+   * @param lowPrice   the low price
+   * @param highPrice  the high price
+   *
+   * @return the boolean
    */
-  public int hashCandlestickSize() {
-    return hashCandlestickSize(false);
-  }
-
-  /**
-   * Hash candlestick size.
-   *
-   * @param includeFullSize the include full size
-   *
-   * @return the hash
-   */
-  public int hashCandlestickSize(Boolean includeFullSize) {
-    if (includeFullSize) {
-      return Objects.hash(getUpperShadowSize(), getBodySize(), getLowerShadowSize(), getFullSize());
+  private boolean checkCandlestick(double openPrice, double closePrice, double lowPrice, double highPrice) {
+    if (lowPrice <= highPrice) {
+      if (openPrice >= lowPrice && openPrice <= highPrice) {
+        if (closePrice >= lowPrice && closePrice <= highPrice) {
+          return true;
+        } else {
+          throw new IllegalArgumentException(CLOSE_PRICE +" need be between the " + HIGH_PRICE + " and " + LOW_PRICE);
+        }
+      } else {
+        throw new IllegalArgumentException(OPEN_PRICE + " need be between the " + HIGH_PRICE + " and " + LOW_PRICE);
+      }
     } else {
-      return Objects.hash(getUpperShadowSize(), getBodySize(), getLowerShadowSize());
+      throw new IllegalArgumentException(LOW_PRICE +" need be less or equal a " + HIGH_PRICE);
     }
-  }
-
-  /**
-   * Hash candlestick position of the price.
-   *
-   * @return the hash
-   */
-  public int hashCandlestickPositionsPrice() {
-    return Objects.hash(openPrice, closePrice, lowPrice, highPrice);
-  }
-
-  /**
-   * Hash candlestick position open and close of the price.
-   *
-   * @return the hash
-   */
-  public int hashCandlestickPrice() {
-    return Objects.hash(openPrice, closePrice);
   }
 }
