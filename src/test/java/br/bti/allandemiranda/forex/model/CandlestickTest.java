@@ -185,7 +185,10 @@ class CandlestickTest {
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
 
     // then
-    Assertions.assertThrows(InputMismatchException.class, executable);
+    //! Never will check if this price is negative, because we have another check that if the prices are a really the Candlestick
+    // Assertions.assertThrows(InputMismatchException.class, executable);
+    //! This is the Throws to check if the prices are a really the Candlestick
+    Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
 
   @Test
@@ -355,7 +358,10 @@ class CandlestickTest {
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
 
     // then
-    Assertions.assertThrows(InputMismatchException.class, executable);
+    //! Never will check if this price is negative, because we have another check that if the prices are a really the Candlestick
+    // Assertions.assertThrows(InputMismatchException.class, executable);
+    //! This is the Throws to check if the prices are a really the Candlestick
+    Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
 
   @Test
@@ -440,7 +446,10 @@ class CandlestickTest {
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
 
     // then
-    Assertions.assertThrows(InputMismatchException.class, executable);
+    //! Never will check if this price is negative, because we have another check that if the prices are a really the Candlestick
+    // Assertions.assertThrows(InputMismatchException.class, executable);
+    //! This is the Throws to check if the prices are a really the Candlestick
+    Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
 
   @Test

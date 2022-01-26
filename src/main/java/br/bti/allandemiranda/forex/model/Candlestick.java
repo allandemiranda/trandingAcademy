@@ -4,7 +4,6 @@ import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
-import org.junit.Assert;
 
 /**
  * The type Candlestick.
@@ -24,6 +23,7 @@ public class Candlestick {
   private static final String LOW_PRICE = "Low Price";
   private static final String CLOSE_PRICE = "Close Price";
   private static final String OPEN_PRICE = "Open Price";
+
   private double openPrice;
   private double closePrice;
   private double lowPrice;
@@ -34,47 +34,35 @@ public class Candlestick {
   /**
    * Instantiates a new Candlestick.
    *
-   * @param openPrice       the open price
-   * @param closePrice      the close price
-   * @param lowPrice        the low price
-   * @param highPrice       the high price
-   * @param localDateTime   the local date time
-   * @param currencyPair    the currency pair
+   * @param openPrice     the open price
+   * @param closePrice    the close price
+   * @param lowPrice      the low price
+   * @param highPrice     the high price
+   * @param localDateTime the local date time
+   * @param currencyPair  the currency pair
    */
   public Candlestick(double openPrice, double closePrice, double lowPrice, double highPrice, LocalDateTime localDateTime,
       CurrencyPair currencyPair) {
-    setOpenPrice(openPrice);
-    setClosePrice(closePrice);
-    setLowPrice(lowPrice);
-    setHighPrice(highPrice);
+    setCandlestick(openPrice, closePrice, lowPrice, highPrice);
     setLocalDateTime(localDateTime);
     setCurrencyPair(currencyPair);
-
-    //! Need check if is valid Candlestick
-    Assert.assertTrue(checkCandlestick(getOpenPrice(),getClosePrice(), getLowPrice(), getHighPrice()));
   }
 
   /**
    * Instantiates a new Candlestick.
    *
-   * @param openPrice       the open price
-   * @param closePrice      the close price
-   * @param lowPrice        the low price
-   * @param highPrice       the high price
-   * @param localDateTime   the local date time
-   * @param currencyPair    the currency pair
+   * @param openPrice     the open price
+   * @param closePrice    the close price
+   * @param lowPrice      the low price
+   * @param highPrice     the high price
+   * @param localDateTime the local date time
+   * @param currencyPair  the currency pair
    */
   public Candlestick(String openPrice, String closePrice, String lowPrice, String highPrice, String localDateTime,
       CurrencyPair currencyPair) {
-    setOpenPrice(openPrice);
-    setClosePrice(closePrice);
-    setLowPrice(lowPrice);
-    setHighPrice(highPrice);
+    setCandlestick(openPrice, closePrice, lowPrice, highPrice);
     setLocalDateTime(localDateTime);
     setCurrencyPair(currencyPair);
-
-    //! Need check if is valid Candlestick
-    Assert.assertTrue(checkCandlestick(getOpenPrice(),getClosePrice(), getLowPrice(), getHighPrice()));
   }
 
   /**
@@ -324,28 +312,55 @@ public class Candlestick {
   }
 
   /**
-   * Check candlestick boolean.
+   * Sets candlestick.
    *
    * @param openPrice  the open price
    * @param closePrice the close price
    * @param lowPrice   the low price
    * @param highPrice  the high price
-   *
-   * @return the boolean
    */
-  private boolean checkCandlestick(double openPrice, double closePrice, double lowPrice, double highPrice) {
+  private void setCandlestick(double openPrice, double closePrice, double lowPrice, double highPrice) {
     if (lowPrice <= highPrice) {
       if (openPrice >= lowPrice && openPrice <= highPrice) {
         if (closePrice >= lowPrice && closePrice <= highPrice) {
-          return true;
+          setOpenPrice(openPrice);
+          setClosePrice(closePrice);
+          setLowPrice(lowPrice);
+          setHighPrice(highPrice);
         } else {
-          throw new IllegalArgumentException(CLOSE_PRICE +" need be between the " + HIGH_PRICE + " and " + LOW_PRICE);
+          throw new IllegalArgumentException(CLOSE_PRICE + " need be between the " + HIGH_PRICE + " and " + LOW_PRICE);
         }
       } else {
         throw new IllegalArgumentException(OPEN_PRICE + " need be between the " + HIGH_PRICE + " and " + LOW_PRICE);
       }
     } else {
-      throw new IllegalArgumentException(LOW_PRICE +" need be less or equal a " + HIGH_PRICE);
+      throw new IllegalArgumentException(LOW_PRICE + " need be less or equal a " + HIGH_PRICE);
+    }
+  }
+
+  /**
+   * Sets candlestick.
+   *
+   * @param openPrice  the open price
+   * @param closePrice the close price
+   * @param lowPrice   the low price
+   * @param highPrice  the high price
+   */
+  private void setCandlestick(String openPrice, String closePrice, String lowPrice, String highPrice) {
+    setOpenPrice(openPrice);
+    setClosePrice(closePrice);
+    setLowPrice(lowPrice);
+    setHighPrice(highPrice);
+    if (getLowPrice() <= getHighPrice()) {
+      if (getOpenPrice() >= getLowPrice() && getOpenPrice() <= getHighPrice()) {
+        if (!(getClosePrice() >= getLowPrice() && getClosePrice() <= getHighPrice())) {
+          throw new IllegalArgumentException(CLOSE_PRICE + " need be between the " + HIGH_PRICE + " and " + LOW_PRICE);
+        }
+      } else {
+        throw new IllegalArgumentException(OPEN_PRICE + " need be between the " + HIGH_PRICE + " and " + LOW_PRICE);
+      }
+    } else {
+      throw new IllegalArgumentException(LOW_PRICE + " need be less or equal a " + HIGH_PRICE);
     }
   }
 }
