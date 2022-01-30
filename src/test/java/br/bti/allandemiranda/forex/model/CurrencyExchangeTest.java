@@ -21,11 +21,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     CurrencyExchange currencyExchange = new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertEquals(spread, currencyExchange.getSpread());
     Assertions.assertEquals(digits, currencyExchange.getDigits());
@@ -52,11 +50,9 @@ class CurrencyExchangeTest {
     String swapLong = "-1.2";
     String swapShort = "3.7";
     String swapThreeDays = "abc1";
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -74,11 +70,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = null;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -96,11 +90,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -118,11 +110,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -140,11 +130,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -162,11 +150,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -184,11 +170,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -206,11 +190,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -228,11 +210,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -250,11 +230,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -272,11 +250,9 @@ class CurrencyExchangeTest {
     double swapLong = -1.2;
     double swapShort = 3.7;
     DayOfWeek swapThreeDays = DayOfWeek.MONDAY;
-
     // when
     Executable executable = () -> new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -294,11 +270,9 @@ class CurrencyExchangeTest {
     String swapLong = "-1.2";
     String swapShort = "3.7";
     String swapThreeDays = "monday";
-
     // when
     CurrencyExchange currencyExchange = new CurrencyExchange(spread, digits, contractSize, currencyPair, minimalVolume, maximalVolume,
         volumeStep, swapLong, swapShort, swapThreeDays);
-
     // then
     Assertions.assertEquals(0, currencyExchange.getSpread());
     Assertions.assertEquals(5, currencyExchange.getDigits());

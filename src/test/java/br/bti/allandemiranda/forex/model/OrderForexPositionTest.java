@@ -7,7 +7,7 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class PositionTest {
+class OrderForexPositionTest {
 
   @Test
   void values() {
@@ -15,11 +15,9 @@ class PositionTest {
     String buy = "BUY";
     String sell = "SELL";
     int size = 2;
-
     // when
-    String array = Arrays.toString(Position.values());
-    int arraySize = Position.values().length;
-
+    String array = Arrays.toString(OrderForexPosition.values());
+    int arraySize = OrderForexPosition.values().length;
     // then
     Assertions.assertTrue(array.contains(buy));
     Assertions.assertTrue(array.contains(sell));
@@ -31,14 +29,12 @@ class PositionTest {
     // given
     String buy = "BUY";
     String sell = "SELL";
-
     // when
-    Position buyPosition = Position.valueOf(buy);
-    Position sellPosition = Position.valueOf(sell);
-
+    OrderForexPosition buyOrderForexPosition = OrderForexPosition.valueOf(buy);
+    OrderForexPosition sellOrderForexPosition = OrderForexPosition.valueOf(sell);
     // then
-    Assertions.assertEquals(Position.BUY, buyPosition);
-    Assertions.assertEquals(Position.SELL, sellPosition);
+    Assertions.assertEquals(OrderForexPosition.BUY, buyOrderForexPosition);
+    Assertions.assertEquals(OrderForexPosition.SELL, sellOrderForexPosition);
   }
 
   @ParameterizedTest
@@ -46,8 +42,7 @@ class PositionTest {
   void valueOfThrows(String name) {
     // given
     // when
-    Executable executable = () -> Position.valueOf(name);
-
+    Executable executable = () -> OrderForexPosition.valueOf(name);
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }

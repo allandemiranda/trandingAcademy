@@ -2,8 +2,8 @@ package br.bti.allandemiranda.forex.model;
 
 import com.sun.jdi.request.InvalidRequestStateException;
 import java.util.InputMismatchException;
-import java.util.LinkedList;
 
+// TODO: refazer isso aqui tamb?m
 public class OrderForex {
 
   private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
@@ -18,18 +18,18 @@ public class OrderForex {
 
   private static final String CURRENCY_EXCHANGE = "Currency Exchange";
   private static final String LOT = "Lot";
-  private static final String POSITION = "Position";
-  private static final String POSITION_STATUS = "Position Status";
+  private static final String POSITION = "OrderForexPosition";
+  private static final String POSITION_STATUS = "OrderForexPosition Status";
 
 
   private CurrencyExchange currencyExchange;    // --> 1(set),3
   private double lot;                           // --> 1(get)
-  private Position position;                    // --> 2
-  private PositionStatus positionStatus = PositionStatus.OPEN;
+  private OrderForexPosition orderForexPosition;                    // --> 2
+  private OrderForexStatus orderForexStatus = OrderForexStatus.OPEN;
   private double stopLoss;                      // --> 2
   private double takeProfit;                    // --> 2
   private Candlestick lastInteraction;            // --> 3
-  private LinkedList<DataAmount> interactionlist; // --> 3
+//  private LinkedList<DataAmount> interactionlist; // --> 3
   private double initialPrice; // TODO ->> adicionar o get e set
   private String comment;
 
@@ -70,51 +70,51 @@ public class OrderForex {
     }
   }
 
-  public Position getPosition() {
-    return position;
+  public OrderForexPosition getPosition() {
+    return orderForexPosition;
   }
 
-  private void setPosition(Position position) {
-    if (position != null) {
-      this.position = position;
+  private void setPosition(OrderForexPosition orderForexPosition) {
+    if (orderForexPosition != null) {
+      this.orderForexPosition = orderForexPosition;
     } else {
       throw new IllegalArgumentException(POSITION + " " + NOT_NULL);
     }
   }
 
-  public PositionStatus getPositionStatus() {
-    return positionStatus;
+  public OrderForexStatus getPositionStatus() {
+    return orderForexStatus;
   }
 
-  private void setPositionStatus(PositionStatus positionStatus) {
-    if (positionStatus != null) {
-      this.positionStatus = positionStatus;
+  private void setPositionStatus(OrderForexStatus orderForexStatus) {
+    if (orderForexStatus != null) {
+      this.orderForexStatus = orderForexStatus;
     } else {
       throw new IllegalArgumentException(POSITION_STATUS + " " + NOT_NULL);
     }
   }
 
   public void closePositionManual() {
-    if (getPositionStatus().equals(PositionStatus.OPEN)) {
-      this.positionStatus = PositionStatus.ClOSE_MANUALLY;
+    if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
+      this.orderForexStatus = OrderForexStatus.ClOSE_MANUALLY;
     } else {
-      throw new InvalidRequestStateException("Can't close the position, because this is closed");
+      throw new InvalidRequestStateException("Can't close the orderForexPosition, because this is closed");
     }
   }
 
   private void closePositionMarginLoss() {
-    if (getPositionStatus().equals(PositionStatus.OPEN)) {
-      this.positionStatus = PositionStatus.ClOSE_MARGIN_LOSS;
+    if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
+      this.orderForexStatus = OrderForexStatus.ClOSE_MARGIN_LOSS;
     } else {
-      throw new InvalidRequestStateException("Can't close the position, because this is closed");
+      throw new InvalidRequestStateException("Can't close the orderForexPosition, because this is closed");
     }
   }
 
   private void closePositionStopLoss() {
-    if (getPositionStatus().equals(PositionStatus.OPEN)) {
-      this.positionStatus = PositionStatus.ClOSE_STOP_LOSS;
+    if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
+      this.orderForexStatus = OrderForexStatus.ClOSE_STOP_LOSS;
     } else {
-      throw new InvalidRequestStateException("Can't close the position, because this is closed");
+      throw new InvalidRequestStateException("Can't close the orderForexPosition, because this is closed");
     }
   }
 
@@ -144,13 +144,13 @@ public class OrderForex {
     this.lastInteraction = lastInteraction;
   }
 
-  public LinkedList<DataAmount> getInteractionlist() {
-    return interactionlist;
-  }
-
-  public void setInteractionlist(LinkedList<DataAmount> interactionlist) {
-    this.interactionlist = interactionlist;
-  }
+//  public LinkedList<DataAmount> getInteractionlist() {
+//    return interactionlist;
+//  }
+//
+//  public void setInteractionlist(LinkedList<DataAmount> interactionlist) {
+//    this.interactionlist = interactionlist;
+//  }
 
   public String getComment() {
     return comment;

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
@@ -22,10 +23,8 @@ class CandlestickTest {
     double highPrice = 0.4;
     LocalDateTime localDateTime = LocalDateTime.now();
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Candlestick candlestick = new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertEquals(openPrice, candlestick.getOpenPrice());
     Assertions.assertEquals(closePrice, candlestick.getClosePrice());
@@ -44,10 +43,8 @@ class CandlestickTest {
     double highPrice = 0.5;
     LocalDateTime localDateTime = LocalDateTime.now();
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -61,10 +58,8 @@ class CandlestickTest {
     double highPrice = 0.5;
     LocalDateTime localDateTime = LocalDateTime.now();
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -78,10 +73,8 @@ class CandlestickTest {
     double highPrice = 0.1;
     LocalDateTime localDateTime = LocalDateTime.now();
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -95,10 +88,8 @@ class CandlestickTest {
     double highPrice = 0.4;
     LocalDateTime localDateTime = LocalDateTime.now();
     CurrencyPair currencyPair = null;
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -112,10 +103,8 @@ class CandlestickTest {
     double highPrice = 0.4;
     LocalDateTime localDateTime = null;
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -129,10 +118,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22:00";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(DateTimeException.class, executable);
   }
@@ -146,10 +133,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = null;
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -163,15 +148,14 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
 
   @Test
+  @Disabled("We have another test to check if is a Candlestick before this negative test")
   void setHighPriceNegativeThrows() {
     // given
     double openPrice = 0.2;
@@ -180,15 +164,10 @@ class CandlestickTest {
     double highPrice = -0.4;
     LocalDateTime localDateTime = LocalDateTime.now();
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
-    //! Never will check if this price is negative, because we have another check that if the prices are a really the Candlestick
-    // Assertions.assertThrows(InputMismatchException.class, executable);
-    //! This is the Throws to check if the prices are a really the Candlestick
-    Assertions.assertThrows(IllegalArgumentException.class, executable);
+    Assertions.assertThrows(InputMismatchException.class, executable);
   }
 
   @Test
@@ -200,10 +179,8 @@ class CandlestickTest {
     String highPrice = null;
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -217,10 +194,8 @@ class CandlestickTest {
     String highPrice = "";
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -234,10 +209,8 @@ class CandlestickTest {
     String highPrice = "-0.4";
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -251,10 +224,8 @@ class CandlestickTest {
     String highPrice = "0,4";
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(NumberFormatException.class, executable);
   }
@@ -268,10 +239,8 @@ class CandlestickTest {
     double highPrice = 0.4;
     LocalDateTime localDateTime = LocalDateTime.now();
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -285,10 +254,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -302,10 +269,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -319,10 +284,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -336,15 +299,14 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(NumberFormatException.class, executable);
   }
 
   @Test
+  @Disabled("We have another test to check if is a Candlestick before this negative test")
   void setClosePriceNegativeThrows() {
     // given
     double openPrice = 0.2;
@@ -353,15 +315,10 @@ class CandlestickTest {
     double highPrice = 0.4;
     LocalDateTime localDateTime = LocalDateTime.now();
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
-    //! Never will check if this price is negative, because we have another check that if the prices are a really the Candlestick
-    // Assertions.assertThrows(InputMismatchException.class, executable);
-    //! This is the Throws to check if the prices are a really the Candlestick
-    Assertions.assertThrows(IllegalArgumentException.class, executable);
+    Assertions.assertThrows(InputMismatchException.class, executable);
   }
 
   @Test
@@ -373,10 +330,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -390,10 +345,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -407,10 +360,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -424,15 +375,14 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(NumberFormatException.class, executable);
   }
 
   @Test
+  @Disabled("We have another test to check if is a Candlestick before this negative test")
   void setOpenPriceNegativeThrows() {
     // given
     double openPrice = -0.2;
@@ -441,15 +391,10 @@ class CandlestickTest {
     double highPrice = 0.4;
     LocalDateTime localDateTime = LocalDateTime.now();
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
-    //! Never will check if this price is negative, because we have another check that if the prices are a really the Candlestick
-    // Assertions.assertThrows(InputMismatchException.class, executable);
-    //! This is the Throws to check if the prices are a really the Candlestick
-    Assertions.assertThrows(IllegalArgumentException.class, executable);
+    Assertions.assertThrows(InputMismatchException.class, executable);
   }
 
   @Test
@@ -461,10 +406,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -478,10 +421,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -495,10 +436,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -512,10 +451,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Executable executable = () -> new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertThrows(NumberFormatException.class, executable);
   }
@@ -529,10 +466,8 @@ class CandlestickTest {
     String highPrice = Double.toString(0.4);
     String localDateTime = "2021-01-01 12:22";
     CurrencyPair currencyPair = Mockito.mock(CurrencyPair.class);
-
     // when
     Candlestick candlestick = new Candlestick(openPrice, closePrice, lowPrice, highPrice,localDateTime, currencyPair);
-
     // then
     Assertions.assertEquals(0.2, candlestick.getOpenPrice());
     Assertions.assertEquals(0.3, candlestick.getClosePrice());

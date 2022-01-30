@@ -12,10 +12,8 @@ class CurrencyPairTest {
     // given
     Currency currencyBase = Currency.AUD;
     Currency currencyProfit = Currency.EUR;
-
     // when
     CurrencyPair currencyPair = new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertEquals(currencyBase, currencyPair.getBase());
   }
@@ -25,10 +23,8 @@ class CurrencyPairTest {
     // given
     String currencyBase = "AUD";
     String currencyProfit = "EUR";
-
     // when
     CurrencyPair currencyPair = new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertEquals(Currency.AUD, currencyPair.getBase());
   }
@@ -38,10 +34,8 @@ class CurrencyPairTest {
     // given
     Currency currencyBase = Currency.AUD;
     Currency currencyProfit = Currency.AUD;
-
     // when
     Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertThrows(InputMismatchException.class, executable);
   }
@@ -51,10 +45,8 @@ class CurrencyPairTest {
     // given
     Currency currencyBase = Currency.AUD;
     Currency currencyProfit = Currency.EUR;
-
     // when
     CurrencyPair currencyPair = new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertEquals(currencyProfit, currencyPair.getProfit());
   }
@@ -64,10 +56,8 @@ class CurrencyPairTest {
     // given
     String currencyBase = "AUD";
     String currencyProfit = "EUR";
-
     // when
     CurrencyPair currencyPair = new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertEquals(Currency.EUR, currencyPair.getProfit());
   }
@@ -77,10 +67,8 @@ class CurrencyPairTest {
     // given
     String currencyBase = "###";
     String currencyProfit = "EUR";
-
     // when
     Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -90,10 +78,8 @@ class CurrencyPairTest {
     // given
     String currencyBase = "EUR";
     String currencyProfit = "###";
-
     // when
     Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -103,10 +89,8 @@ class CurrencyPairTest {
     // given
     Currency currencyBase = null;
     Currency currencyProfit = Currency.AUD;
-
     // when
     Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -116,10 +100,8 @@ class CurrencyPairTest {
     // given
     Currency currencyBase = Currency.AUD;
     Currency currencyProfit = null;
-
     // when
     Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -129,10 +111,8 @@ class CurrencyPairTest {
     // given
     String currencyBase = null;
     String currencyProfit = "EUR";
-
     // when
     Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -142,10 +122,8 @@ class CurrencyPairTest {
     // given
     String currencyBase = "EUR";
     String currencyProfit = null;
-
     // when
     Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
-
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }

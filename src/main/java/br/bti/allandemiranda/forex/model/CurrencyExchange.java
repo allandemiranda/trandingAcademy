@@ -5,6 +5,9 @@ import java.util.InputMismatchException;
 
 /**
  * The type Currency exchange.
+ *
+ * @author Allan de Miranda Silva
+ * @version 0.1
  */
 public class CurrencyExchange {
 
@@ -24,15 +27,15 @@ public class CurrencyExchange {
   private static final String SWAP_SHORT = "Swap Short";
   private static final String SWAP_THREE_DAYS = "Swap Three Days";
 
-  private int spread; //! In points
-  private int digits; //! In digits
+  private int spread;               //! In points
+  private int digits;               //! In digits
   private int contractSize;
   private CurrencyPair currencyPair;
   private double minimalVolume;
   private double maximalVolume;
   private double volumeStep;
-  private double swapLong;  //! In points
-  private double swapShort; //! In points
+  private double swapLong;          //! In points
+  private double swapShort;         //! In points
   private DayOfWeek swapThreeDays;
 
   /**

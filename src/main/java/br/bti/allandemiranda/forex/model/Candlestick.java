@@ -7,6 +7,9 @@ import java.util.InputMismatchException;
 
 /**
  * The type Candlestick.
+ *
+ * @author Allan de Miranda Silva
+ * @version 0.1
  */
 public class Candlestick {
 

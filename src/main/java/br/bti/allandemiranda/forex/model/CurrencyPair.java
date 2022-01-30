@@ -3,7 +3,10 @@ package br.bti.allandemiranda.forex.model;
 import java.util.InputMismatchException;
 
 /**
- * The type Currency pair. (BASE/PROFIT)
+ * The type Currency pair.
+ *
+ * @author Allan de Miranda Silva
+ * @version 0.1
  */
 public class CurrencyPair {
 
