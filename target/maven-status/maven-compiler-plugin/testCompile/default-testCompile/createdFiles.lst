@@ -1,0 +1,10 @@
+br\bti\allandemiranda\forex\model\utils\CurrencyExchangeTest.class
+br\bti\allandemiranda\forex\model\utils\CurrencyTest.class
+br\bti\allandemiranda\forex\model\utils\OrderForexPositionTest.class
+br\bti\allandemiranda\forex\model\utils\OrderForexStatusTest.class
+br\bti\allandemiranda\forex\model\utils\CurrencyPairTest.class
+br\bti\allandemiranda\forex\model\analysis\MovingAveragesTest.class
+br\bti\allandemiranda\forex\parser\MetatraderTest.class
+br\bti\allandemiranda\forex\model\analysis\ApplicationTest.class
+br\bti\allandemiranda\forex\model\utils\CandlestickTest.class
+br\bti\allandemiranda\forex\model\utils\ChartTest.class

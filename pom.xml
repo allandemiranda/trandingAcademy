@@ -8,19 +8,67 @@
   <artifactId>trandingAcademy</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <name>Tranding Academy</name>
+  <description>Tranding system test</description>
+  <inceptionYear>2022</inceptionYear>
+
+  <developers>
+    <developer>
+      <id>allandemiranda</id>
+      <name>Allan de Mianda Silva</name>
+      <email>allandemiranda@gmail.com</email>
+      <url>http://www.allandemiranda.bti.br/</url>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+        <role>tester</role>
+      </roles>
+      <timezone>Europe/Lisbon</timezone>
+    </developer>
+  </developers>
+
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
+    <project.resources>src/main/resources/</project.resources>
   </properties>
 
+  <scm>
+    <developerConnection>scm:git:https://github.com/allandemiranda/trandingAcademy.git</developerConnection>
+    <connection>scm:git:https://github.com/allandemiranda/trandingAcademy.git</connection>
+    <tag>HEAD</tag>
+  </scm>
+
   <dependencies>
+    <!-- Project libraries -->
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-javadoc-plugin</artifactId>
       <version>3.3.1</version>
       <type>maven-plugin</type>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <version>1.9.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+      <version>1.82</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.17.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.17.1</version>
+    </dependency>
 
+    <!-- Test dependencies -->
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
@@ -62,17 +110,43 @@
   </dependencyManagement>
 
   <build>
+
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
+
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0-M5</version>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <outputDirectory>${project.resources}/doc</outputDirectory>
+        </configuration>
+      </plugin>
+
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.3.0</version>
         <configuration>
           <descriptors>
-            <descriptor>src/assembly/bin.xml</descriptor>
+            <descriptor>${project.resources}/assembly/bin.xml</descriptor>
           </descriptors>
         </configuration>
         <executions>
@@ -85,6 +159,8 @@
           </execution>
         </executions>
       </plugin>
+
+
     </plugins>
   </build>
 
