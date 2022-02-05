@@ -12,8 +12,9 @@
       </LEVELS>
       <VISIBILITIES>
         <VISIBILITY>PUBLIC</VISIBILITY>
-        <VISIBILITY>DEFAULT</VISIBILITY>
         <VISIBILITY>PROTECTED</VISIBILITY>
+        <VISIBILITY>DEFAULT</VISIBILITY>
+        <VISIBILITY>PRIVATE</VISIBILITY>
       </VISIBILITIES>
     </GENERAL>
     <TEMPLATES>
@@ -176,27 +177,15 @@
       <FIELDS>
         <FIELD>
           <KEY>^.*(public|protected|private)*.+static.*(\w\s\w)+.+</KEY>
-          <VALUE>/**\n
- * The constant ${element.getName()}.\n
- */</VALUE>
+          <VALUE />
         </FIELD>
         <FIELD>
           <KEY>^.*(public|protected|private)*.*(\w\s\w)+.+</KEY>
-          <VALUE>/**\n
-    &lt;#if element.parent.isInterface()&gt;
-        * The constant ${element.getName()}.\n
-&lt;#else&gt;
-        * The ${name}.\n
-&lt;/#if&gt; */</VALUE>
+          <VALUE />
         </FIELD>
         <FIELD>
           <KEY>.+</KEY>
-          <VALUE>/**\n
-    &lt;#if element.parent.isEnum()&gt;
-        *${name} ${typeName}.\n
-&lt;#else&gt;
-        * The ${name}.\n
-&lt;/#if&gt;*/</VALUE>
+          <VALUE />
         </FIELD>
       </FIELDS>
     </TEMPLATES>

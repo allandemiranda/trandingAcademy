@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: br.bti.allandemiranda.forex.model.utils.CandlestickTest
--------------------------------------------------------------------------------
-Tests run: 42, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.766 s - in br.bti.allandemiranda.forex.model.utils.CandlestickTest

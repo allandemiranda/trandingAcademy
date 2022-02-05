@@ -17,7 +17,6 @@ public class AllanProcessor extends Processor {
 
   //TODO ISSO É SOMENTE UM TESTE PARA SABER SE DEU TUDO CERTO
 
-  // TODO -->> MELHORAR METODOS PARA SEREM MAIS RÁPIDOS, PARALELISMO
   @Parameter(names = {"-ema1"})
   private int ema1;
 

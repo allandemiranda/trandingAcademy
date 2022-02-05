@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Objects;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Candlestick.
@@ -337,7 +339,8 @@ public class Candlestick {
    *
    * @return the date time formatter
    */
-  private DateTimeFormatter getDateTimeFormatter() {
+  @Contract(" -> new")
+  private @NotNull DateTimeFormatter getDateTimeFormatter() {
     return DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER);
   }
 

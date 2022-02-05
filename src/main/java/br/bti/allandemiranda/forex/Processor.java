@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Processor.
@@ -41,7 +42,7 @@ public abstract class Processor {
    *
    * @param e the e
    */
-  protected static void getException(Exception e) {
+  protected static void getException(@NotNull Exception e) {
     LOGGER.error(e.toString());
     if (LOGGER.getLevel().equals(org.apache.logging.log4j.Level.DEBUG) || LOGGER.getLevel().equals(org.apache.logging.log4j.Level.ALL)) {
       e.printStackTrace();

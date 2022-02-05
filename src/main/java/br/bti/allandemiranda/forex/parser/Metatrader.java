@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Metatrader.
@@ -28,7 +29,7 @@ public class Metatrader {
    *
    * @throws IOException the io exception
    */
-  public static Chart parser(File file, CurrencyExchange currencyExchange) throws IOException {
+  public static @NotNull Chart parser(@NotNull File file, CurrencyExchange currencyExchange) throws IOException {
     Reader reader;
     try {
       reader = Files.newBufferedReader(file.toPath());

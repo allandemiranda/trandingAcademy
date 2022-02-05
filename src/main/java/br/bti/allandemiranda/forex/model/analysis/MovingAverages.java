@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Moving averages.
@@ -81,8 +82,8 @@ public class MovingAverages {
    * @param application the application
    * @return the linear weighted
    */
-  private LinkedList<Double> getLinearWeighted(int periods, Application application) {
-    LOGGER.debug("Getting a Linear Weighted Moving Average (LWMA) list - Periods {} - Application {}", periods, application.toString());
+  private @NotNull LinkedList<Double> getLinearWeighted(int periods, @NotNull Application application) {
+    LOGGER.info("Getting a Linear Weighted Moving Average (LWMA) list - Periods {} - Application {}", periods, application.toString());
     if (periods > 0) {
       LinkedList<Double> allValues = getAllValuesFromApplication(application);
 
@@ -138,11 +139,11 @@ public class MovingAverages {
    * @param application the application
    * @return the smoothed
    */
-  private LinkedList<Double> getSmoothed(int periods, Application application) {
-    LOGGER.debug("Getting a Smoothed Moving Average (SMMA) list - Periods {} - Application {}", periods, application.toString());
+  private @NotNull LinkedList<Double> getSmoothed(int periods, @NotNull Application application) {
+    LOGGER.info("Getting a Smoothed Moving Average (SMMA) list - Periods {} - Application {}", periods, application.toString());
     if (periods > 0) {
       LinkedList<Double> allValues = getAllValuesFromApplication(application);
-      LinkedList<Double> simplesList = getSimple(periods, application);
+      LinkedList<Double> simplesList = getSimpleToChart(periods, application);
 
       LinkedList<Double> smoothedList = new LinkedList<>();
 
@@ -211,12 +212,12 @@ public class MovingAverages {
    * @param application the application
    * @return the exponential
    */
-  private LinkedList<Double> getExponential(int periods, int smoothing, Application application) {
-    LOGGER.debug("Getting a Exponential Moving Average (EMA) list - Periods {} - Smoothing {} - Application {}", periods, smoothing,
+  private @NotNull LinkedList<Double> getExponential(int periods, int smoothing, @NotNull Application application) {
+    LOGGER.info("Getting a Exponential Moving Average (EMA) list - Periods {} - Smoothing {} - Application {}", periods, smoothing,
         application.toString());
     if (periods > 0) {
       LinkedList<Double> allValues = getAllValuesFromApplication(application);
-      LinkedList<Double> simplesList = getSimple(periods, application);
+      LinkedList<Double> simplesList = getSimpleToChart(periods, application);
       double percentage = (smoothing / (periods + 1.0));
 
       Stream<Pair<Integer, ?>> pairStream =
@@ -262,32 +263,22 @@ public class MovingAverages {
   }
 
   /**
-   * Gets simple.
+   * Gets simple to chart.
    *
    * @param periods     the periods
    * @param application the application
-   * @return the simple
+   * @return the simple to chart
    */
-  private LinkedList<Double> getSimple(int periods, Application application) {
-    LOGGER.debug("Getting a Simple Moving Average (SMA) list - Periods {} - Application {}", periods, application.toString());
+  private @NotNull LinkedList<Double> getSimpleToChart(int periods, @NotNull Application application) {
+    LOGGER.info("Getting a Simple Moving Average (SMA) list - Periods {} - Application {}", periods, application.toString());
     if (periods > 0) {
       LinkedList<Double> allValues = getAllValuesFromApplication(application);
 
-      Stream<Pair<Integer, ?>> pairStream =
+      Stream<? extends Pair<Integer, ?>> pairStream =
           IntStream.rangeClosed(0, allValues.size() - 1)
               .boxed().toList()
               .parallelStream()
-              .map(i -> {
-                if ((i + 1) >= periods) {
-                  Double simple = 0.0;
-                  for (int j = 0; j < periods; ++j) {
-                    simple += allValues.get(i - j);
-                  }
-                  return Pair.of(i, (simple / periods));
-                } else {
-                  return Pair.of(i, null);
-                }
-              })
+              .map(i -> getIntegerPair(periods, allValues, i))
               .sorted(Comparator.comparingInt(Pair::getKey));
 
       LinkedList<Double> simpleList = pairStream
@@ -305,14 +296,90 @@ public class MovingAverages {
   }
 
   /**
-   * Gets SMA.
+   * Gets simple to macd.
+   *
+   * @param periods   the periods
+   * @param allValues the all values
+   * @return the simple to macd
+   */
+  protected LinkedList<Double> getSimpleToMACD(int periods, LinkedList<Double> allValues) {
+    LOGGER.info("Getting a MACD Simple Moving Average (SMA) list - Periods {}", periods);
+    if (periods > 0) {
+      Stream<? extends Pair<Integer, ?>> pairStream =
+          IntStream.rangeClosed(0, allValues.size() - 1)
+              .boxed().toList()
+              .parallelStream()
+              .map(i -> getIntegerPairMACD(periods, allValues, i))
+              .sorted(Comparator.comparingInt(Pair::getKey));
+
+      LinkedList<Double> simpleList = pairStream
+          .map(pair -> (Double) pair.getValue())
+          .collect(Collectors.toCollection(LinkedList::new));
+
+      if (allValues.size() == simpleList.size()) {
+        return simpleList;
+      } else {
+        throw new IllegalArgumentException("The chart size need be the same size of Simple Moving Average");
+      }
+    } else {
+      throw new InputMismatchException(PERIODS + " " + NOT_NEGATIVE_NUMBER);
+    }
+  }
+
+  /**
+   * Gets integer pair.
+   *
+   * @param periods   the periods
+   * @param allValues the all values
+   * @param i         the
+   * @return the integer pair
+   */
+  @NotNull
+  private Pair<Integer, ?> getIntegerPair(int periods, @NotNull LinkedList<Double> allValues, Integer i) {
+    if ((i + 1) >= periods) {
+      Double simple = 0.0;
+      for (int j = 0; j < periods; ++j) {
+        simple += allValues.get(i - j);
+      }
+      return Pair.of(i, (simple / periods));
+    } else {
+      return Pair.of(i, null);
+    }
+  }
+
+  /**
+   * Gets integer pair macd.
+   *
+   * @param periods   the periods
+   * @param allValues the all values
+   * @param i         the
+   * @return the integer pair macd
+   */
+  private @NotNull Pair<Integer, ?> getIntegerPairMACD(int periods, LinkedList<Double> allValues, Integer i) {
+    if ((i + 1) >= periods) {
+      Double simple = 0.0;
+      for (int j = 0; j < periods; ++j) {
+        if (allValues.get(i - j) == null) {
+          return Pair.of(i, null);
+        } else {
+          simple += allValues.get(i - j);
+        }
+      }
+      return Pair.of(i, (simple / periods));
+    } else {
+      return Pair.of(i, null);
+    }
+  }
+
+  /**
+   * Gets sma.
    *
    * @param periods     the periods
    * @param application the application
-   * @return the SMA
+   * @return the sma
    */
   public LinkedList<Double> getSMA(int periods, Application application) {
-    return getSimple(periods, application);
+    return getSimpleToChart(periods, application);
   }
 
   /**
@@ -321,8 +388,8 @@ public class MovingAverages {
    * @param application the application
    * @return the all values from application
    */
-  private LinkedList<Double> getAllValuesFromApplication(Application application) {
-    LOGGER.debug("Getting all position values by application {}", application.toString());
+  private @NotNull LinkedList<Double> getAllValuesFromApplication(@NotNull Application application) {
+    LOGGER.info("Getting all position values by application {}", application.toString());
     LinkedList<Double> doubleLinkedList;
     switch (application) {
       case OPEN_VALUE -> doubleLinkedList = getChart().getCandlestickList().stream().map(Candlestick::getOpenPrice)
