@@ -3,12 +3,13 @@ package br.bti.allandemiranda.forex.model.analysis;
 import br.bti.allandemiranda.forex.Processor;
 import br.bti.allandemiranda.forex.model.utils.Candlestick;
 import br.bti.allandemiranda.forex.model.utils.Chart;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -67,7 +68,6 @@ public class MovingAverages {
    *
    * @param periods     the periods
    * @param application the application
-   *
    * @return the lwma
    */
   public LinkedList<Double> getLWMA(int periods, Application application) {
@@ -79,7 +79,6 @@ public class MovingAverages {
    *
    * @param periods     the periods
    * @param application the application
-   *
    * @return the linear weighted
    */
   private LinkedList<Double> getLinearWeighted(int periods, Application application) {
@@ -87,22 +86,29 @@ public class MovingAverages {
     if (periods > 0) {
       LinkedList<Double> allValues = getAllValuesFromApplication(application);
 
-      LinkedList<Double> linearWeightedList = new LinkedList<>();
+      Stream<Pair<Integer, ?>> pairStream =
+          IntStream.rangeClosed(0, allValues.size() - 1)
+              .boxed().toList()
+              .parallelStream()
+              .map(i -> {
+                if (i >= (periods - 1)) {
+                  double sum = 0.0;
+                  int sumDays = 0;
+                  for (int j = 0; j < periods; ++j) {
+                    int day = i - j + 1;
+                    sum += day * allValues.get(i - j);
+                    sumDays += day;
+                  }
+                  return Pair.of(i, (sum / sumDays));
+                } else {
+                  return Pair.of(i, null);
+                }
+              })
+              .sorted(Comparator.comparingInt(Pair::getKey));
 
-      for (int i = 0; i < allValues.size(); ++i) {
-        if (i >= (periods - 1)) {
-          double sum = 0.0;
-          int sumDays = 0;
-          for (int j = 0; j < periods; ++j) {
-            int day = i - j + 1;
-            sum += day * allValues.get(i - j);
-            sumDays += day;
-          }
-          linearWeightedList.add(sum / sumDays);
-        } else {
-          linearWeightedList.add(null);
-        }
-      }
+      LinkedList<Double> linearWeightedList = pairStream
+          .map(pair -> (Double) pair.getValue())
+          .collect(Collectors.toCollection(LinkedList::new));
 
       if (linearWeightedList.size() == allValues.size()) {
         return linearWeightedList;
@@ -119,7 +125,6 @@ public class MovingAverages {
    *
    * @param periods     the periods
    * @param application the application
-   *
    * @return the smma
    */
   public LinkedList<Double> getSMMA(int periods, Application application) {
@@ -131,7 +136,6 @@ public class MovingAverages {
    *
    * @param periods     the periods
    * @param application the application
-   *
    * @return the smoothed
    */
   private LinkedList<Double> getSmoothed(int periods, Application application) {
@@ -142,6 +146,7 @@ public class MovingAverages {
 
       LinkedList<Double> smoothedList = new LinkedList<>();
 
+      // ! Can't use a parallel stream in this for, because me need the last value
       for (int i = 0; i < allValues.size(); ++i) {
         if (simplesList.get(i) != null) {
           if (i > 0) {
@@ -180,7 +185,6 @@ public class MovingAverages {
    *
    * @param periods     the periods
    * @param application the application
-   *
    * @return the ema
    */
   public LinkedList<Double> getEMA(int periods, Application application) {
@@ -193,7 +197,6 @@ public class MovingAverages {
    * @param periods     the periods
    * @param smoothing   the smoothing
    * @param application the application
-   *
    * @return the ema
    */
   public LinkedList<Double> getEMA(int periods, int smoothing, Application application) {
@@ -206,7 +209,6 @@ public class MovingAverages {
    * @param periods     the periods
    * @param smoothing   the smoothing
    * @param application the application
-   *
    * @return the exponential
    */
   private LinkedList<Double> getExponential(int periods, int smoothing, Application application) {
@@ -217,30 +219,37 @@ public class MovingAverages {
       LinkedList<Double> simplesList = getSimple(periods, application);
       double percentage = (smoothing / (periods + 1.0));
 
-      LinkedList<Double> exponentialList = new LinkedList<>();
+      Stream<Pair<Integer, ?>> pairStream =
+          IntStream.rangeClosed(0, allValues.size() - 1)
+              .boxed().toList()
+              .parallelStream()
+              .map(i -> {
+                if (simplesList.get(i) != null) {
+                  if (i > 0) {
+                    if (simplesList.get(i - 1) != null) {
+                      double result = (allValues.get(i) * percentage) + (simplesList.get(i - 1) * (1 - percentage));
+                      if (result >= 0.0) {
+                        return Pair.of(i, result);
+                      } else {
+                        LOGGER.warn("We get a negative number in Exponential Moving Average generation list - Number {} - Position Chart {}",
+                            result, i);
+                        return Pair.of(i, 0.0);
+                      }
+                    } else {
+                      return Pair.of(i, null);
+                    }
+                  } else {
+                    return Pair.of(i, null);
+                  }
+                } else {
+                  return Pair.of(i, null);
+                }
+              })
+              .sorted(Comparator.comparingInt(Pair::getKey));
 
-      for (int i = 0; i < allValues.size(); ++i) {
-        if (simplesList.get(i) != null) {
-          if (i > 0) {
-            if (simplesList.get(i - 1) != null) {
-              double result = (allValues.get(i) * percentage) + (simplesList.get(i - 1) * (1 - percentage));
-              if (result >= 0.0) {
-                exponentialList.add(result);
-              } else {
-                LOGGER.warn("We get a negative number in Exponential Moving Average generation list - Number {} - Position Chart {}",
-                    result, i);
-                exponentialList.add(0.0);
-              }
-            } else {
-              exponentialList.add(null);
-            }
-          } else {
-            exponentialList.add(null);
-          }
-        } else {
-          exponentialList.add(null);
-        }
-      }
+      LinkedList<Double> exponentialList = pairStream
+          .map(pair -> (Double) pair.getValue())
+          .collect(Collectors.toCollection(LinkedList::new));
 
       if (exponentialList.size() == allValues.size()) {
         return exponentialList;
@@ -257,50 +266,36 @@ public class MovingAverages {
    *
    * @param periods     the periods
    * @param application the application
-   *
    * @return the simple
    */
   private LinkedList<Double> getSimple(int periods, Application application) {
     LOGGER.debug("Getting a Simple Moving Average (SMA) list - Periods {} - Application {}", periods, application.toString());
     if (periods > 0) {
       LinkedList<Double> allValues = getAllValuesFromApplication(application);
-      LinkedList<Double> simplesList = new LinkedList<>();
 
-      HashMap<Integer, Double> hashMap = new HashMap<>();
+      Stream<Pair<Integer, ?>> pairStream =
+          IntStream.rangeClosed(0, allValues.size() - 1)
+              .boxed().toList()
+              .parallelStream()
+              .map(i -> {
+                if ((i + 1) >= periods) {
+                  Double simple = 0.0;
+                  for (int j = 0; j < periods; ++j) {
+                    simple += allValues.get(i - j);
+                  }
+                  return Pair.of(i, (simple / periods));
+                } else {
+                  return Pair.of(i, null);
+                }
+              })
+              .sorted(Comparator.comparingInt(Pair::getKey));
 
-      List<Integer> indexList = IntStream.rangeClosed(0, allValues.size() - 1).boxed().toList();
+      LinkedList<Double> simpleList = pairStream
+          .map(pair -> (Double) pair.getValue())
+          .collect(Collectors.toCollection(LinkedList::new));
 
-      try {
-        indexList.parallelStream().forEach(i -> {
-          if ((i + 1) >= periods) {
-            Double simple = 0.0;
-            for (int j = 0; j < periods; ++j) {
-              simple += allValues.get(i - j);
-            }
-            hashMap.put(i, (simple / periods));
-          } else {
-            hashMap.put(i, null);
-          }
-        });
-      } catch (Exception e){
-        LOGGER.error("VALUE = {} -> {}", indexList.size(), hashMap.size());
-      }
-
-      if(indexList.size() != hashMap.size()){
-        LOGGER.error("VALUE = {} -> {}", indexList.size(), hashMap.size());
-      }
-
-      indexList.forEach(i -> {
-        if(hashMap.containsKey(i)) {
-          simplesList.add(hashMap.get(i));
-        } else {
-          LOGGER.error("VALUE = {}", i);
-//          throw new IllegalArgumentException("Index of Simple Moving Average not find in this process");
-        }
-      });
-
-      if (allValues.size() == simplesList.size()) {
-        return simplesList;
+      if (allValues.size() == simpleList.size()) {
+        return simpleList;
       } else {
         throw new IllegalArgumentException("The chart size need be the same size of Simple Moving Average");
       }
@@ -314,7 +309,6 @@ public class MovingAverages {
    *
    * @param periods     the periods
    * @param application the application
-   *
    * @return the SMA
    */
   public LinkedList<Double> getSMA(int periods, Application application) {
@@ -325,7 +319,6 @@ public class MovingAverages {
    * Gets all values from application.
    *
    * @param application the application
-   *
    * @return the all values from application
    */
   private LinkedList<Double> getAllValuesFromApplication(Application application) {
