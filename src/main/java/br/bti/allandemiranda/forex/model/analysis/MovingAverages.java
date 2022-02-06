@@ -46,7 +46,6 @@ public class MovingAverages {
    * @return the chart
    */
   private Chart getChart() {
-    LOGGER.debug("Getting the Chart");
     return chart;
   }
 
@@ -56,7 +55,6 @@ public class MovingAverages {
    * @param chart the chart
    */
   private void setChart(Chart chart) {
-    LOGGER.debug("Setting the Chart");
     if (chart != null) {
       this.chart = chart;
     } else {

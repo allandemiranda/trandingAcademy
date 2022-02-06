@@ -40,7 +40,6 @@ public class MACD {
    * @return the chart
    */
   private Chart getChart() {
-    LOGGER.debug("Getting the Chart");
     return chart;
   }
 
@@ -50,7 +49,6 @@ public class MACD {
    * @param chart the chart
    */
   private void setChart(Chart chart) {
-    LOGGER.debug("Setting the Chart");
     if (chart != null) {
       this.chart = chart;
     } else {
@@ -69,6 +67,7 @@ public class MACD {
    * @throws InterruptedException the interrupted exception
    */
   public LinkedList<Pair<Double, Double>> getMACD(int fastEMA, int slowEMA, int macdSMA, Application application) throws InterruptedException {
+    LOGGER.info("Getting a MACD list - Fast EMA {} - Slow EMA {} - MACD SMA {} - Application {}", fastEMA, slowEMA, macdSMA, application.toString());
     MovingAverages movingAverages = new MovingAverages(getChart());
 
     class ThreadEMA extends Thread {
