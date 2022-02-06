@@ -70,12 +70,66 @@ public class MACD {
    * @param macdSMA     the macd sma
    * @param application the application
    * @return the MACH and SIGNAL pair
+   * @throws InterruptedException the interrupted exception
    */
-  public LinkedList<Pair<Double, Double>> getMACD(int fastEMA, int slowEMA, int macdSMA, Application application) {
+  public LinkedList<Pair<Double, Double>> getMACD(int fastEMA, int slowEMA, int macdSMA, Application application) throws InterruptedException {
     MovingAverages movingAverages = new MovingAverages(chart);
 
-    LinkedList<Double> fastList = movingAverages.getEMA(fastEMA, application);
-    LinkedList<Double> slowList = movingAverages.getEMA(slowEMA, application);
+    class ThreadEMA extends Thread {
+
+      private final int ema;
+      private LinkedList<Double> list = new LinkedList<>();
+
+      /**
+       * Instantiates a new Thread ema.
+       *
+       * @param ema the ema
+       */
+      public ThreadEMA(int ema) {
+        this.ema = ema;
+      }
+
+      @Override
+      public void run() {
+        super.run();
+        setList(movingAverages.getEMA(ema, application));
+      }
+
+      /**
+       * Gets list.
+       *
+       * @return the list
+       */
+      public LinkedList<Double> getList() {
+        return list;
+      }
+
+      /**
+       * Sets list.
+       *
+       * @param list the list
+       */
+      private void setList(LinkedList<Double> list) {
+        this.list = list;
+      }
+    }
+
+    ThreadEMA fast = new ThreadEMA(fastEMA);
+    ThreadEMA slow = new ThreadEMA(slowEMA);
+
+    fast.start();
+    slow.start();
+
+    try {
+      fast.join();
+      slow.join();
+    } catch (InterruptedException e) {
+      LOGGER.error(e);
+      throw new InterruptedException("Find a problem on get a EMA");
+    }
+
+    LinkedList<Double> fastList = fast.getList();
+    LinkedList<Double> slowList = slow.getList();
 
     Stream<Pair<Integer, ?>> macdStream =
         IntStream.rangeClosed(0, chart.getCandlestickList().size() - 1)
@@ -105,7 +159,7 @@ public class MACD {
               .boxed().toList()
               .parallelStream()
               .map(i -> {
-                if(macdList.get(i) == null || signalList.get(i) == null) {
+                if (macdList.get(i) == null || signalList.get(i) == null) {
                   return Pair.of(i, null);
                 } else {
                   return Pair.of(i, Pair.of(macdList.get(i), signalList.get(i)));
@@ -114,7 +168,7 @@ public class MACD {
               .sorted(Comparator.comparingInt(Pair::getKey));
 
       LinkedList<Pair<Double, Double>> finalList = finalStream
-          .map( integerPair -> (Pair<Double, Double>) integerPair.getValue())
+          .map(integerPair -> (Pair<Double, Double>) integerPair.getValue())
           .collect(Collectors.toCollection(LinkedList::new));
 
       if (finalList.size() == chart.getCandlestickList().size()) {
