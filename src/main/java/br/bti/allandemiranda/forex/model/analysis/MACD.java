@@ -19,12 +19,8 @@ import org.apache.logging.log4j.Logger;
  */
 public class MACD {
 
-  private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
   private static final String NOT_NULL = "can't be a NULL";
-  private static final String PERIODS = "Periods";
-  private static final String APPLICATION = "Application";
   private static final String CHART = "Application";
-  private static final String BE_VALID_VALUE = "need be a valid value";
 
   protected static Logger LOGGER = LogManager.getLogger(Processor.class);
   private Chart chart;
@@ -73,7 +69,7 @@ public class MACD {
    * @throws InterruptedException the interrupted exception
    */
   public LinkedList<Pair<Double, Double>> getMACD(int fastEMA, int slowEMA, int macdSMA, Application application) throws InterruptedException {
-    MovingAverages movingAverages = new MovingAverages(chart);
+    MovingAverages movingAverages = new MovingAverages(getChart());
 
     class ThreadEMA extends Thread {
 
