@@ -3,20 +3,19 @@ package br.bti.allandemiranda.forex.model.utils;
 import com.sun.jdi.request.InvalidRequestStateException;
 import java.util.InputMismatchException;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Order forex.
  *
  * @author Allan de Miranda Silva
- * @version 0.2
+ * @version 1.0.0
  */
 public class OrderForex {
 
+  //! TODO: NEED IMPROVE THE CONCEPT OF THIS CLASS
+
   private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
-  private static final String NOT_NULL = "can't be a NULL";
-  private static final String CURRENCY_EXCHANGE = "Currency Exchange";
-  private static final String POSITION = "OrderForexPosition";
-  private static final String POSITION_STATUS = "OrderForexPosition Status";
   private static final String STOP_LOSS = "Stop Loss";
   private static final String TAKE_PROFIT = "Take Profit";
 
@@ -38,8 +37,9 @@ public class OrderForex {
    * @param takeProfit         the take profit
    * @param comment            the comment
    */
-  public OrderForex(CurrencyExchange currencyExchange, OrderForexPosition orderForexPosition, OrderForexStatus orderForexStatus,
-      double stopLoss, double takeProfit, double initialPoints, String comment) {
+  public OrderForex(@NotNull CurrencyExchange currencyExchange,
+      @NotNull OrderForexPosition orderForexPosition, @NotNull OrderForexStatus orderForexStatus,
+      double stopLoss, double takeProfit, double initialPoints, @NotNull String comment) {
     setCurrencyExchange(currencyExchange);
     setPosition(orderForexPosition);
     setPositionStatus(orderForexStatus);
@@ -49,13 +49,12 @@ public class OrderForex {
     setPoints(initialPoints);
   }
 
-
   /**
    * Gets currency exchange.
    *
    * @return the currency exchange
    */
-  public CurrencyExchange getCurrencyExchange() {
+  public @NotNull CurrencyExchange getCurrencyExchange() {
     return currencyExchange;
   }
 
@@ -64,12 +63,8 @@ public class OrderForex {
    *
    * @param currencyExchange the currency exchange
    */
-  private void setCurrencyExchange(CurrencyExchange currencyExchange) {
-    if (currencyExchange != null) {
-      this.currencyExchange = currencyExchange;
-    } else {
-      throw new IllegalArgumentException(CURRENCY_EXCHANGE + " " + NOT_NULL);
-    }
+  private void setCurrencyExchange(@NotNull CurrencyExchange currencyExchange) {
+    this.currencyExchange = currencyExchange;
   }
 
   /**
@@ -77,7 +72,7 @@ public class OrderForex {
    *
    * @return the position
    */
-  public OrderForexPosition getPosition() {
+  public @NotNull OrderForexPosition getPosition() {
     return orderForexPosition;
   }
 
@@ -86,12 +81,8 @@ public class OrderForex {
    *
    * @param orderForexPosition the order forex position
    */
-  private void setPosition(OrderForexPosition orderForexPosition) {
-    if (orderForexPosition != null) {
-      this.orderForexPosition = orderForexPosition;
-    } else {
-      throw new IllegalArgumentException(POSITION + " " + NOT_NULL);
-    }
+  private void setPosition(@NotNull OrderForexPosition orderForexPosition) {
+    this.orderForexPosition = orderForexPosition;
   }
 
   /**
@@ -99,7 +90,7 @@ public class OrderForex {
    *
    * @return the position status
    */
-  public OrderForexStatus getPositionStatus() {
+  public @NotNull OrderForexStatus getPositionStatus() {
     return orderForexStatus;
   }
 
@@ -108,12 +99,8 @@ public class OrderForex {
    *
    * @param orderForexStatus the order forex status
    */
-  private void setPositionStatus(OrderForexStatus orderForexStatus) {
-    if (orderForexStatus != null) {
-      this.orderForexStatus = orderForexStatus;
-    } else {
-      throw new IllegalArgumentException(POSITION_STATUS + " " + NOT_NULL);
-    }
+  private void setPositionStatus(@NotNull OrderForexStatus orderForexStatus) {
+    this.orderForexStatus = orderForexStatus;
   }
 
   /**
@@ -123,7 +110,8 @@ public class OrderForex {
     if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
       this.orderForexStatus = OrderForexStatus.ClOSE_MANUALLY;
     } else {
-      throw new InvalidRequestStateException("Can't close the orderForexPosition, because this is closed");
+      throw new InvalidRequestStateException(
+          "Can't close the orderForexPosition, because this is closed");
     }
   }
 
@@ -134,7 +122,8 @@ public class OrderForex {
     if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
       this.orderForexStatus = OrderForexStatus.ClOSE_MARGIN_LOSS;
     } else {
-      throw new InvalidRequestStateException("Can't close the orderForexPosition, because this is closed");
+      throw new InvalidRequestStateException(
+          "Can't close the orderForexPosition, because this is closed");
     }
   }
 
@@ -145,7 +134,8 @@ public class OrderForex {
     if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
       this.orderForexStatus = OrderForexStatus.ClOSE_STOP_LOSS;
     } else {
-      throw new InvalidRequestStateException("Can't close the orderForexPosition, because this is closed");
+      throw new InvalidRequestStateException(
+          "Can't close the orderForexPosition, because this is closed");
     }
   }
 
@@ -207,7 +197,7 @@ public class OrderForex {
    *
    * @param comment the comment
    */
-  private void setComment(String comment) {
+  private void setComment(@NotNull String comment) {
     this.comment = comment;
   }
 
@@ -247,20 +237,22 @@ public class OrderForex {
       return false;
     }
     OrderForex that = (OrderForex) o;
-    return Double.compare(that.stopLoss, stopLoss) == 0 && Double.compare(that.takeProfit, takeProfit) == 0
-        && Double.compare(that.points, points) == 0 && currencyExchange.equals(that.currencyExchange)
+    return Double.compare(that.stopLoss, stopLoss) == 0
+        && Double.compare(that.takeProfit, takeProfit) == 0 && Double.compare(that.points, points) == 0
+        && currencyExchange.equals(that.currencyExchange)
         && orderForexPosition == that.orderForexPosition && orderForexStatus == that.orderForexStatus;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(currencyExchange, orderForexPosition, orderForexStatus, stopLoss, takeProfit, points);
+    return Objects.hash(currencyExchange, orderForexPosition, orderForexStatus, stopLoss, takeProfit,
+        points);
   }
 
   @Override
   public String toString() {
-    return "OrderForex{" + "currencyExchange=" + currencyExchange + ", orderForexPosition=" + orderForexPosition + ", orderForexStatus="
-        + orderForexStatus + ", stopLoss=" + stopLoss + ", takeProfit=" + takeProfit + ", points=" + points + ", comment='" + comment + '\''
-        + '}';
+    return "OrderForex{" + "currencyExchange=" + currencyExchange + ", orderForexPosition="
+        + orderForexPosition + ", orderForexStatus=" + orderForexStatus + ", stopLoss=" + stopLoss
+        + ", takeProfit=" + takeProfit + ", points=" + points + ", comment='" + comment + '\'' + '}';
   }
 }

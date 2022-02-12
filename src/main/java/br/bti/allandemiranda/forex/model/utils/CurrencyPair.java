@@ -2,16 +2,16 @@ package br.bti.allandemiranda.forex.model.utils;
 
 import java.util.InputMismatchException;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Currency pair.
  *
  * @author Allan de Miranda Silva
- * @version 0.2
+ * @version 1.0.0
  */
 public class CurrencyPair {
 
-  private static final String NOT_NULL = "can't be a NULL";
   private static final String VALID_CURRENCY = "need be a valid Currency";
   private static final String NOT_EQUAL = "can't be equal";
   private static final String PROFIT = "Profit Currency";
@@ -26,7 +26,7 @@ public class CurrencyPair {
    * @param base   the base
    * @param profit the profit
    */
-  public CurrencyPair(Currency base, Currency profit) {
+  public CurrencyPair(@NotNull Currency base, @NotNull Currency profit) {
     setBase(base);
     setProfit(profit);
   }
@@ -37,7 +37,7 @@ public class CurrencyPair {
    * @param base   the base
    * @param profit the profit
    */
-  public CurrencyPair(String base, String profit) {
+  public CurrencyPair(@NotNull String base, @NotNull String profit) {
     setBase(base);
     setProfit(profit);
   }
@@ -56,15 +56,11 @@ public class CurrencyPair {
    *
    * @param base the base
    */
-  private void setBase(Currency base) {
-    if (base != null) {
-      if (base.equals(getProfit())) {
-        throw new InputMismatchException(BASE + " " + NOT_EQUAL + " " + PROFIT);
-      } else {
-        this.base = base;
-      }
+  private void setBase(@NotNull Currency base) {
+    if (base.equals(getProfit())) {
+      throw new InputMismatchException(BASE + " " + NOT_EQUAL + " " + PROFIT);
     } else {
-      throw new IllegalArgumentException(BASE + " " + NOT_NULL);
+      this.base = base;
     }
   }
 
@@ -73,15 +69,11 @@ public class CurrencyPair {
    *
    * @param base the base
    */
-  private void setBase(String base) {
-    if (base != null) {
-      try {
-        setBase(Currency.valueOf(base));
-      } catch (IllegalArgumentException e) {
-        throw new IllegalArgumentException(BASE + " " + VALID_CURRENCY);
-      }
-    } else {
-      throw new IllegalArgumentException(BASE + " " + NOT_NULL);
+  private void setBase(@NotNull String base) {
+    try {
+      setBase(Currency.valueOf(base));
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException(BASE + " " + VALID_CURRENCY);
     }
   }
 
@@ -99,15 +91,11 @@ public class CurrencyPair {
    *
    * @param profit the profit
    */
-  private void setProfit(Currency profit) {
-    if (profit != null) {
-      if (profit.equals(getBase())) {
-        throw new InputMismatchException(PROFIT + " " + NOT_EQUAL + " " + BASE);
-      } else {
-        this.profit = profit;
-      }
+  private void setProfit(@NotNull Currency profit) {
+    if (profit.equals(getBase())) {
+      throw new InputMismatchException(PROFIT + " " + NOT_EQUAL + " " + BASE);
     } else {
-      throw new IllegalArgumentException(PROFIT + " " + NOT_NULL);
+      this.profit = profit;
     }
   }
 
@@ -116,15 +104,11 @@ public class CurrencyPair {
    *
    * @param profit the profit
    */
-  private void setProfit(String profit) {
-    if (profit != null) {
-      try {
-        setProfit(Currency.valueOf(profit));
-      } catch (IllegalArgumentException e) {
-        throw new IllegalArgumentException(PROFIT + " " + VALID_CURRENCY);
-      }
-    } else {
-      throw new IllegalArgumentException(PROFIT + "" + NOT_NULL);
+  private void setProfit(@NotNull String profit) {
+    try {
+      setProfit(Currency.valueOf(profit));
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException(PROFIT + " " + VALID_CURRENCY);
     }
   }
 

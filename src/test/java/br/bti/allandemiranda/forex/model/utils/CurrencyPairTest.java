@@ -5,6 +5,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+/**
+ * The type Currency pair test.
+ *
+ * @author Allan de Miranda Silva
+ * @version 1.0.0
+ */
 class CurrencyPairTest {
 
   @Test

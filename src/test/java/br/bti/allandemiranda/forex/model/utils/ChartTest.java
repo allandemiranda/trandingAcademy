@@ -6,6 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mockito;
 
+/**
+ * The type Chart test.
+ *
+ * @author Allan de Miranda Silva
+ * @version 1.0.0
+ */
 class ChartTest {
 
   @Test
@@ -55,16 +61,13 @@ class ChartTest {
     Chart chart = new Chart(currencyExchange);
     chart.getCandlestickList().add(candlestickA1);
     chart.getCandlestickList().add(candlestickA2);
-    chart.addPoints(point);
 
     Chart chart1 = new Chart(currencyExchange);
     chart1.getCandlestickList().add(candlestickA1);
     chart1.getCandlestickList().add(candlestickA2);
-    chart1.addPoints(point1);
     // then
     Assertions.assertEquals(chart, chart1);
     Assertions.assertEquals(chart.getCandlestickList(), chart1.getCandlestickList());
-    Assertions.assertNotEquals(chart.getPoints(), chart1.getPoints());
   }
 
   @Test
@@ -79,15 +82,12 @@ class ChartTest {
     Chart chart = new Chart(currencyExchange);
     chart.getCandlestickList().add(candlestickA1);
     chart.getCandlestickList().add(candlestickA2);
-    chart.addPoints(point);
 
     Chart chart1 = new Chart(currencyExchange);
     chart1.getCandlestickList().add(candlestickA1);
     chart1.getCandlestickList().add(candlestickA2);
-    chart1.addPoints(point1);
     // then
     Assertions.assertEquals(chart.hashCode(), chart1.hashCode());
-    Assertions.assertNotEquals(chart.getPoints(), chart1.getPoints());
   }
 
   @Test
@@ -101,29 +101,21 @@ class ChartTest {
     CurrencyPair currencyPair = new CurrencyPair(Currency.EUR, Currency.USD);
     String volume = "10";
 
-    Candlestick candlestick = new Candlestick(openPrice, closePrice, lowPrice, highPrice, volume, localDateTime, currencyPair);
+    Candlestick candlestick = new Candlestick(openPrice, closePrice, lowPrice, highPrice, volume,
+        localDateTime, currencyPair);
 
     CurrencyExchange currencyExchange = new CurrencyExchange(1, 1, currencyPair, 1, 1, DayOfWeek.MONDAY);
     // when
     Chart chart = new Chart(currencyExchange);
     chart.getCandlestickList().add(candlestick);
     // then
-    String toString = "Chart{"
-        + "candlestickList=["
-        + "Candlestick{"
-        + "openPrice=0.2,"
-        + " closePrice=0.3,"
-        + " lowPrice=0.1, highPrice=0.4"
-        + ", volume=10,"
-        + " localDateTime=2021-01-01T12:22,"
-        + " currencyPair=CurrencyPair{base=EUR, profit=USD}}],"
-        + " currencyExchange=CurrencyExchange{spread=1,"
-        + " digits=1,"
-        + " currencyPair=CurrencyPair{base=EUR, profit=USD},"
-        + " swapLong=1.0,"
-        + " swapShort=1.0,"
-        + " swapThreeDays=MONDAY},"
-        + " points=0.0}";
+    String toString =
+        "Chart{" + "candlestickList=[" + "Candlestick{" + "openPrice=0.2," + " closePrice=0.3,"
+            + " lowPrice=0.1, highPrice=0.4" + ", volume=10," + " localDateTime=2021-01-01T12:22,"
+            + " currencyPair=CurrencyPair{base=EUR, profit=USD}}],"
+            + " currencyExchange=CurrencyExchange{spread=1," + " digits=1,"
+            + " currencyPair=CurrencyPair{base=EUR, profit=USD}," + " swapLong=1.0," + " swapShort=1.0,"
+            + " swapThreeDays=MONDAY}}";
     Assertions.assertEquals(toString, chart.toString());
   }
 
@@ -142,8 +134,10 @@ class ChartTest {
 
     CurrencyExchange currencyExchange = new CurrencyExchange(1, 1, currencyPair, 1, 1, DayOfWeek.MONDAY);
 
-    Candlestick candlestick = new Candlestick(openPrice, closePrice, lowPrice, highPrice, volume, localDateTime, currencyPair);
-    Candlestick candlestick1 = new Candlestick(openPrice, closePrice, lowPrice, highPrice, volume, localDateTime, currencyPair1);
+    Candlestick candlestick = new Candlestick(openPrice, closePrice, lowPrice, highPrice, volume,
+        localDateTime, currencyPair);
+    Candlestick candlestick1 = new Candlestick(openPrice, closePrice, lowPrice, highPrice, volume,
+        localDateTime, currencyPair1);
     // when
     Chart chart = new Chart(currencyExchange);
     chart.getCandlestickList().add(candlestick);

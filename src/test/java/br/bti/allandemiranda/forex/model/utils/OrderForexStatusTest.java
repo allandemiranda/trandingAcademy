@@ -6,6 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+/**
+ * The type Order forex status test.
+ *
+ * @author Allan de Miranda Silva
+ * @version 1.0.0
+ */
 class OrderForexStatusTest {
 
   @Test
@@ -19,7 +25,8 @@ class OrderForexStatusTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"OPEN", "ClOSE_MANUALLY", "ClOSE_MARGIN_LOSS", "ClOSE_STOP_LOSS", "ClOSE_TAKE_PROFIT"})
+  @ValueSource(strings = {"OPEN", "ClOSE_MANUALLY", "ClOSE_MARGIN_LOSS", "ClOSE_STOP_LOSS",
+      "ClOSE_TAKE_PROFIT"})
   void valuesList(String status) {
     // given
     // when

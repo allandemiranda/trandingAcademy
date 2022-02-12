@@ -7,6 +7,12 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+/**
+ * The type Order forex position test.
+ *
+ * @author Allan de Miranda Silva
+ * @version 1.0.0
+ */
 class OrderForexPositionTest {
 
   @Test

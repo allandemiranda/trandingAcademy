@@ -4,7 +4,7 @@ package br.bti.allandemiranda.forex.model.utils;
  * The enum Order forex status.
  *
  * @author Allan de Miranda Silva
- * @version 0.2
+ * @version 1.0.0
  */
 public enum OrderForexStatus {
   //! Open a position
