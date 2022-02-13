@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * The type Moving averages.
  *
  * @author Allan de Miranda Silva
- * @version 1.0.0
+ * @version 1.1.0
  */
 public class MovingAverages {
 
@@ -77,7 +77,7 @@ public class MovingAverages {
             }
           }).sorted(Comparator.comparingInt(Pair::getKey));
 
-      return simpleStream.map(pair -> (Pair<LocalDateTime, Double>) pair.getValue()).toList();
+      return simpleStream.sequential().map(pair -> (Pair<LocalDateTime, Double>) pair.getValue()).toList();
     } else {
       throw new InputMismatchException(PERIODS + " " + NOT_NEGATIVE_NUMBER);
     }
@@ -102,7 +102,7 @@ public class MovingAverages {
       List<Pair<LocalDateTime, Double>> finalList = new ArrayList<>();
 
       for (int i = 0; i < list.size(); ++i) {
-        if ((i + 1) >= periods || !finalList.isEmpty()) {
+        if ((i + 1) >= periods && !finalList.isEmpty()) {
           if (Objects.isNull(finalList.get(i - 1).getRight())) {
             DoubleSummaryStatistics statistics = new DoubleSummaryStatistics();
             boolean flag = false;
@@ -147,5 +147,20 @@ public class MovingAverages {
   public static @NotNull List<Pair<LocalDateTime, Double>> getEMA(int periods, int smoothing,
       List<Pair<LocalDateTime, Double>> list) {
     return getExponential(periods, smoothing, list);
+  }
+
+  /**
+   * Gets EMA with the smoothing 2.
+   *
+   * @param periods the periods
+   * @param list    the list
+   *
+   * @return the default ema
+   *
+   * @since 1.1.0
+   */
+  public static @NotNull List<Pair<LocalDateTime, Double>> getDefaultEMA(int periods,
+      List<Pair<LocalDateTime, Double>> list) {
+    return getExponential(periods, 2, list);
   }
 }

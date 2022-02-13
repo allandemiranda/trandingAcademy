@@ -35,7 +35,7 @@ class MetatraderTest {
     Assertions.assertEquals(3, chart.getCandlestickList().size());
     Assertions.assertEquals(
         new Candlestick("1.35442", "1.35502", "1.35437", "1.35502", "1269", "2014-01-23 06:00",
-            currencyExchange.getCurrencyPair()), chart.getCandlestickList().getFirst());
+            currencyExchange.getCurrencyPair()), chart.getCandlestickList().get(0));
   }
 
   @Test

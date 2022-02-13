@@ -84,7 +84,6 @@ class MovingAveragesTest {
         7.480552376257273, 7.688331425754364, 7.812998855452618, 7.887799313271571, 7.932679587962943);
     // when
     List<Pair<LocalDateTime, Double>> result = MovingAverages.getEMA(periods, 2, closeList);
-    System.out.println(result);
     // then
     int nullPoint = (int) result.parallelStream().filter(pair -> pair.getRight() == null).count();
     switch (periods) {
