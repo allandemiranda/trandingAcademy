@@ -11,7 +11,7 @@
 //  private static final String NOT_NULL = "can't be a NULL";
 //  private static final String CHART = "CandlestickPriceField";
 //
-//  protected static Logger LOGGER = LogManager.getLogger(Processor.class);
+//  protected static Logger logger = LogManager.getLogger(Processor.class);
 //  private Chart chart;
 //
 //  public StochasticOscillator(Chart chart) {

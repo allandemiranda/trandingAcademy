@@ -2,8 +2,8 @@ package br.bti.allandemiranda.forex.model.utils;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +35,7 @@ public class Chart {
    *
    * @return the candlestick list
    */
-  public @NotNull LinkedList<Candlestick> getCandlestickList() {
+  public @NotNull List<Candlestick> getCandlestickList() {
     return candlestickList;
   }
 
@@ -87,26 +87,26 @@ public class Chart {
    *
    * @return the price field list. On the left: The Time. On the right: The price.
    */
-  public @NotNull LinkedList<Pair<LocalDateTime, Double>> getPriceFieldList(
+  public @NotNull List<Pair<LocalDateTime, Double>> getPriceFieldList(
       @NotNull CandlestickPriceField candlestickPriceField) {
-    LinkedList<Pair<LocalDateTime, Double>> doubleLinkedList;
+    List<Pair<LocalDateTime, Double>> doubleList;
     switch (candlestickPriceField) {
-      case OPEN_VALUE -> doubleLinkedList = getCandlestickList().stream()
+      case OPEN_VALUE -> doubleList = getCandlestickList().stream()
           .map(candlestick -> Pair.of(candlestick.getLocalDateTime(), candlestick.getOpenPrice()))
-          .collect(Collectors.toCollection(LinkedList::new));
-      case LOW_VALUE -> doubleLinkedList = getCandlestickList().stream()
+          .toList();
+      case LOW_VALUE -> doubleList = getCandlestickList().stream()
           .map(candlestick -> Pair.of(candlestick.getLocalDateTime(), candlestick.getLowPrice()))
-          .collect(Collectors.toCollection(LinkedList::new));
-      case HIGH_VALUE -> doubleLinkedList = getCandlestickList().stream()
+          .toList();
+      case HIGH_VALUE -> doubleList = getCandlestickList().stream()
           .map(candlestick -> Pair.of(candlestick.getLocalDateTime(), candlestick.getHighPrice()))
-          .collect(Collectors.toCollection(LinkedList::new));
-      case CLOSE_VALUE -> doubleLinkedList = getCandlestickList().stream()
+          .toList();
+      case CLOSE_VALUE -> doubleList = getCandlestickList().stream()
           .map(candlestick -> Pair.of(candlestick.getLocalDateTime(), candlestick.getClosePrice()))
-          .collect(Collectors.toCollection(LinkedList::new));
+          .toList();
       default -> throw new IllegalArgumentException(PRICEFIELD + " " + BE_VALID_VALUE);
     }
-    if (doubleLinkedList.size() == getCandlestickList().size()) {
-      return doubleLinkedList;
+    if (doubleList.size() == getCandlestickList().size()) {
+      return doubleList;
     } else {
       throw new IllegalStateException("Different size to create a list of price field");
     }
@@ -117,10 +117,9 @@ public class Chart {
    *
    * @return the volume list. On the left: The Time. On the right: The Volume.
    */
-  public @NotNull LinkedList<Pair<LocalDateTime, Integer>> getVolumeList() {
-    LinkedList<Pair<LocalDateTime, Integer>> list = getCandlestickList().stream()
-        .map(candlestick -> Pair.of(candlestick.getLocalDateTime(), candlestick.getVolume()))
-        .collect(Collectors.toCollection(LinkedList::new));
+  public @NotNull List<Pair<LocalDateTime, Integer>> getVolumeList() {
+    List<Pair<LocalDateTime, Integer>> list = getCandlestickList().stream()
+        .map(candlestick -> Pair.of(candlestick.getLocalDateTime(), candlestick.getVolume())).toList();
     if (list.size() == getCandlestickList().size()) {
       return list;
     } else {

@@ -23,7 +23,7 @@
 //  private static final String NOT_NULL = "can't be a NULL";
 //  private static final String CHART = "CandlestickPriceField";
 //
-//  protected static Logger LOGGER = LogManager.getLogger(Processor.class);
+//  protected static Logger logger = LogManager.getLogger(Processor.class);
 //  private Chart chart;
 //
 //  /**
@@ -64,7 +64,7 @@
 //   * @return the williams percent
 //   */
 //  public LinkedList<Double> getWilliamsPercent(int period) {
-//    LOGGER.info("Getting a Williams Percent Range list - Period {} ", period);
+//    logger.info("Getting a Williams Percent Range list - Period {} ", period);
 //    LinkedList<Candlestick> candlestickList = getChart().getCandlestickList();
 //
 //    Stream<Pair<Integer, ?>> williamsStream = IntStream.rangeClosed(0, candlestickList.size() - 1)
@@ -107,7 +107,7 @@
 //                    threadToMaxValue.join();
 //                    threadToMinValue.join();
 //                  } catch (InterruptedException e) {
-//                    LOGGER.error(e);
+//                    logger.error(e);
 //                    e.printStackTrace();
 //                  }
 ////                  TODO: Guardado para se precisar rever o paralelismo nesse ponto

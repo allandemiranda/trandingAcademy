@@ -14,8 +14,8 @@ public class CurrencyPair {
 
   private static final String VALID_CURRENCY = "need be a valid Currency";
   private static final String NOT_EQUAL = "can't be equal";
-  private static final String PROFIT = "Profit Currency";
-  private static final String BASE = "Base Currency";
+  private static final String PROFIT_NAME = "Profit Currency";
+  private static final String BASE_NAME = "Base Currency";
 
   private Currency base;
   private Currency profit;
@@ -58,7 +58,7 @@ public class CurrencyPair {
    */
   private void setBase(@NotNull Currency base) {
     if (base.equals(getProfit())) {
-      throw new InputMismatchException(BASE + " " + NOT_EQUAL + " " + PROFIT);
+      throw new InputMismatchException(BASE_NAME + " " + NOT_EQUAL + " " + PROFIT_NAME);
     } else {
       this.base = base;
     }
@@ -73,7 +73,7 @@ public class CurrencyPair {
     try {
       setBase(Currency.valueOf(base));
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException(BASE + " " + VALID_CURRENCY);
+      throw new IllegalArgumentException(BASE_NAME + " " + VALID_CURRENCY);
     }
   }
 
@@ -93,7 +93,7 @@ public class CurrencyPair {
    */
   private void setProfit(@NotNull Currency profit) {
     if (profit.equals(getBase())) {
-      throw new InputMismatchException(PROFIT + " " + NOT_EQUAL + " " + BASE);
+      throw new InputMismatchException(PROFIT_NAME + " " + NOT_EQUAL + " " + BASE_NAME);
     } else {
       this.profit = profit;
     }
@@ -108,7 +108,7 @@ public class CurrencyPair {
     try {
       setProfit(Currency.valueOf(profit));
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException(PROFIT + " " + VALID_CURRENCY);
+      throw new IllegalArgumentException(PROFIT_NAME + " " + VALID_CURRENCY);
     }
   }
 

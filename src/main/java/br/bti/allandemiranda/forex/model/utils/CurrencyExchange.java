@@ -17,10 +17,8 @@ public class CurrencyExchange {
   private static final String VALID_NUMBER = "need be a valid number";
   private static final String BE_GREATER_ZERO = "need be greater than zero";
   private static final String BE_NUMBER = "need be a number";
-  private static final String NOT_NULL = "can't be a NULL";
   private static final String SPREED = "Spreed";
-  private static final String DIGITS = "Digits";
-  private static final String CURRENT_PAIR = "Currency Pair";
+  private static final String DIGITS_NAME = "Digits";
   private static final String SWAP_LONG = "Swap Long";
   private static final String SWAP_SHORT = "Swap Short";
   private static final String SWAP_THREE_DAYS = "Swap Three Days";
@@ -130,7 +128,7 @@ public class CurrencyExchange {
     if (digits > 0) {
       this.digits = digits;
     } else {
-      throw new InputMismatchException(DIGITS + " " + BE_GREATER_ZERO);
+      throw new InputMismatchException(DIGITS_NAME + " " + BE_GREATER_ZERO);
     }
   }
 
@@ -144,10 +142,10 @@ public class CurrencyExchange {
       try {
         setDigits(Integer.parseInt(digits));
       } catch (NumberFormatException e) {
-        throw new NumberFormatException(DIGITS + " " + VALID_NUMBER);
+        throw new NumberFormatException(DIGITS_NAME + " " + VALID_NUMBER);
       }
     } else {
-      throw new IllegalArgumentException(DIGITS + " " + BE_NUMBER);
+      throw new IllegalArgumentException(DIGITS_NAME + " " + BE_NUMBER);
     }
   }
 

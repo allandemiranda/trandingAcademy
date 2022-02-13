@@ -1,6 +1,5 @@
 package br.bti.allandemiranda.forex.model.utils;
 
-import com.sun.jdi.request.InvalidRequestStateException;
 import java.util.InputMismatchException;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +17,7 @@ public class OrderForex {
   private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
   private static final String STOP_LOSS = "Stop Loss";
   private static final String TAKE_PROFIT = "Take Profit";
+  private static final String IS_CLOSED = "Can't close the orderForexPosition, because this is closed";
 
   private CurrencyExchange currencyExchange;
   private OrderForexPosition orderForexPosition;
@@ -110,8 +110,7 @@ public class OrderForex {
     if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
       this.orderForexStatus = OrderForexStatus.ClOSE_MANUALLY;
     } else {
-      throw new InvalidRequestStateException(
-          "Can't close the orderForexPosition, because this is closed");
+      throw new IllegalStateException(IS_CLOSED);
     }
   }
 
@@ -122,8 +121,7 @@ public class OrderForex {
     if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
       this.orderForexStatus = OrderForexStatus.ClOSE_MARGIN_LOSS;
     } else {
-      throw new InvalidRequestStateException(
-          "Can't close the orderForexPosition, because this is closed");
+      throw new IllegalStateException(IS_CLOSED);
     }
   }
 
@@ -134,8 +132,7 @@ public class OrderForex {
     if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
       this.orderForexStatus = OrderForexStatus.ClOSE_STOP_LOSS;
     } else {
-      throw new InvalidRequestStateException(
-          "Can't close the orderForexPosition, because this is closed");
+      throw new IllegalStateException(IS_CLOSED);
     }
   }
 

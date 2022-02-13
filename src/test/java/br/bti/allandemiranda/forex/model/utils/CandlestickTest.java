@@ -727,7 +727,53 @@ class CandlestickTest {
   }
 
   @Test
-  void getCandlestickAction() {
-    //! TODO
+  void getCandlestickActionUpper() {
+    // given
+    double openPrice = 0.2;
+    double closePrice = 0.3;
+    double lowPrice = 0.1;
+    double highPrice = 0.4;
+    LocalDateTime localDateTime = LocalDateTime.now();
+    CurrencyPair currencyPair = new CurrencyPair(Currency.EUR, Currency.USD);
+    int volume = 10;
+    // when
+    Candlestick candlestick = new Candlestick(openPrice, closePrice, lowPrice, highPrice, volume,
+        localDateTime, currencyPair);
+    // then
+    Assertions.assertEquals(CandlestickAction.UPPER, candlestick.getCandlestickAction());
+  }
+
+  @Test
+  void getCandlestickActionNeutral() {
+    // given
+    double openPrice = 0.2;
+    double closePrice = 0.2;
+    double lowPrice = 0.1;
+    double highPrice = 0.4;
+    LocalDateTime localDateTime = LocalDateTime.now();
+    CurrencyPair currencyPair = new CurrencyPair(Currency.EUR, Currency.USD);
+    int volume = 10;
+    // when
+    Candlestick candlestick = new Candlestick(openPrice, closePrice, lowPrice, highPrice, volume,
+        localDateTime, currencyPair);
+    // then
+    Assertions.assertEquals(CandlestickAction.NEUTRAL, candlestick.getCandlestickAction());
+  }
+
+  @Test
+  void getCandlestickActionDown() {
+    // given
+    double openPrice = 0.3;
+    double closePrice = 0.2;
+    double lowPrice = 0.1;
+    double highPrice = 0.4;
+    LocalDateTime localDateTime = LocalDateTime.now();
+    CurrencyPair currencyPair = new CurrencyPair(Currency.EUR, Currency.USD);
+    int volume = 10;
+    // when
+    Candlestick candlestick = new Candlestick(openPrice, closePrice, lowPrice, highPrice, volume,
+        localDateTime, currencyPair);
+    // then
+    Assertions.assertEquals(CandlestickAction.DOWN, candlestick.getCandlestickAction());
   }
 }

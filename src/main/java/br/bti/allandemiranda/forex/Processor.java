@@ -21,7 +21,7 @@
 //public abstract class Processor {
 //
 //  private static final String PROPERTIES_FILE = "-propertiesFile";
-//  protected static Logger LOGGER = LogManager.getLogger(Processor.class);
+//  protected static Logger logger = LogManager.getLogger(Processor.class);
 //  private File propertiesFile;
 //  private boolean havePropertiesFile;
 //
@@ -43,8 +43,8 @@
 //   * @param e the e
 //   */
 //  protected static void getException(@NotNull Exception e) {
-//    LOGGER.error(e.toString());
-//    if (LOGGER.getLevel().equals(org.apache.logging.log4j.Level.DEBUG) || LOGGER.getLevel().equals(org.apache.logging.log4j.Level.ALL)) {
+//    logger.error(e.toString());
+//    if (logger.getLevel().equals(org.apache.logging.log4j.Level.DEBUG) || logger.getLevel().equals(org.apache.logging.log4j.Level.ALL)) {
 //      e.printStackTrace();
 //    }
 //  }
@@ -82,14 +82,14 @@
 //   * @param args the args
 //   */
 //  private void setPropertiesFile(String... args) {
-//    LOGGER.info("Starting the job {}", this.getClass());
+//    logger.info("Starting the job {}", this.getClass());
 //    if (Arrays.stream(args).toList().contains(PROPERTIES_FILE)) {
 //      setHavePropertiesFile(true);
 //      this.propertiesFile = new File(Arrays.stream(args).toList().get(Arrays.stream(args).toList().indexOf(PROPERTIES_FILE) + 1));
 //    } else {
 //      setHavePropertiesFile(false);
-//      LOGGER.warn("Can't find a properties file parameter");
-//      LOGGER.info("#########################");
+//      logger.warn("Can't find a properties file parameter");
+//      logger.info("#########################");
 //    }
 //  }
 //
@@ -108,12 +108,12 @@
 //      JCommander jCommander = new JCommander(this);
 //      jCommander.setAcceptUnknownOptions(true);
 //
-//      LOGGER.info("### List of Parameter ###");
+//      logger.info("### List of Parameter ###");
 //      for (Entry<Object, Object> a : properties.entrySet()) {
-//        LOGGER.info("{}: {}", a.getKey().toString(), a.getValue().toString());
+//        logger.info("{}: {}", a.getKey().toString(), a.getValue().toString());
 //        jCommander.parse("-" + a.getKey().toString(), a.getValue().toString());
 //      }
-//      LOGGER.info("#########################");
+//      logger.info("#########################");
 //    }
 //  }
 //

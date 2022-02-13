@@ -27,7 +27,7 @@ public class Candlestick {
   private static final String LOW_PRICE = "Low Price";
   private static final String CLOSE_PRICE = "Close Price";
   private static final String OPEN_PRICE = "Open Price";
-  private static final String VOLUME = "Volume";
+  private static final String VOLUME_NAME = "Volume";
 
   private double openPrice;
   private double closePrice;
@@ -284,7 +284,7 @@ public class Candlestick {
     if (Math.abs(volume) == volume) {
       this.volume = volume;
     } else {
-      throw new InputMismatchException(VOLUME + " " + NOT_NEGATIVE_NUMBER);
+      throw new InputMismatchException(VOLUME_NAME + " " + NOT_NEGATIVE_NUMBER);
     }
   }
 
@@ -298,10 +298,10 @@ public class Candlestick {
       try {
         setVolume(Integer.parseInt(volume));
       } catch (NumberFormatException e) {
-        throw new NumberFormatException(VOLUME + " " + VALID_NUMBER);
+        throw new NumberFormatException(VOLUME_NAME + " " + VALID_NUMBER);
       }
     } else {
-      throw new IllegalArgumentException(VOLUME + " " + BE_NUMBER);
+      throw new IllegalArgumentException(VOLUME_NAME + " " + BE_NUMBER);
     }
   }
 

@@ -23,7 +23,7 @@
 //  private static final String NOT_NULL = "can't be a NULL";
 //  private static final String CHART = "CandlestickPriceField";
 //
-//  protected static Logger LOGGER = LogManager.getLogger(Processor.class);
+//  protected static Logger logger = LogManager.getLogger(Processor.class);
 //  private Chart chart;
 //
 //  /**
@@ -68,7 +68,7 @@
 //   * @throws InterruptedException the interrupted exception
 //   */
 //  public LinkedList<Triple<Double, Double,Double>> getMACD(int fastEMA, int slowEMA, int macdSMA, CandlestickPriceField application) throws InterruptedException {
-//    LOGGER.info("Getting a MACD list - Fast EMA {} - Slow EMA {} - MACD SMA {} - CandlestickPriceField {}", fastEMA, slowEMA, macdSMA, application.toString());
+//    logger.info("Getting a MACD list - Fast EMA {} - Slow EMA {} - MACD SMA {} - CandlestickPriceField {}", fastEMA, slowEMA, macdSMA, application.toString());
 //    MovingAverages movingAverages = new MovingAverages(getChart());
 //
 //    class ThreadEMA extends Thread {
@@ -120,7 +120,7 @@
 //      fast.join();
 //      slow.join();
 //    } catch (InterruptedException e) {
-//      LOGGER.error(e);
+//      logger.error(e);
 //      throw new InterruptedException("Find a problem on get a EMA");
 //    }
 //

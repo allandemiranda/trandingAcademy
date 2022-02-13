@@ -44,7 +44,7 @@
 //    Mockito.when(currencyExchange.getCurrencyPair()).thenReturn(new CurrencyPair(Currency.EUR, Currency.USD));
 //    MovingAverages movingAverages = new MovingAverages(Metatrader.parser(historicFile, currencyExchange));
 //
-//    LOGGER.info("ema1 = {} , ema2 = {}", ema1, ema2);
+//    logger.info("ema1 = {} , ema2 = {}", ema1, ema2);
 //
 //    LinkedList<Double> ema50 = movingAverages.getEMA(ema1, CandlestickPriceField.CLOSE_VALUE);
 //    LinkedList<Double> ema100 = movingAverages.getEMA(ema2, CandlestickPriceField.CLOSE_VALUE);
@@ -59,20 +59,20 @@
 //      int j = 1;
 //      if (ema50.get(i - j).equals(ema100.get(i - j))) {
 //        j++;
-//        LOGGER.info("ema100 ({}) = {} , ema50 ({}) = {}", i - j, ema50.get(i - j), i - j, ema100.get(i - j));
+//        logger.info("ema100 ({}) = {} , ema50 ({}) = {}", i - j, ema50.get(i - j), i - j, ema100.get(i - j));
 //      }
 //
 //      if (ema50.get(i - j) >= ema50.get(i)) {
 //        if (ema100.get(i - j) < ema100.get(i) && ema100.get(i) > ema50.get(i)) {
 //          encontros++;
-//          LOGGER.info("ema100 ({}) = {} , ema100 ({}) = {} , ema50 ({}) = {} ,  ema50 ({}) = {} , encontros = {}", i - j, ema100.get(i - j),
+//          logger.info("ema100 ({}) = {} , ema100 ({}) = {} , ema50 ({}) = {} ,  ema50 ({}) = {} , encontros = {}", i - j, ema100.get(i - j),
 //              i, ema100.get(i), i - j, ema50.get(i - j), i, ema50.get(i), encontros);
 //        }
 //      } else {
 //        if (ema50.get(i - j) <= ema50.get(i)) {
 //          if (ema100.get(i - j) > ema100.get(i) && ema100.get(i) < ema50.get(i)) {
 //            encontros++;
-//            LOGGER.info("ema100 ({}) = {} , ema100 ({}) = {} , ema50 ({}) = {} ,  ema50 ({}) = {} , encontros = {}", i - j,
+//            logger.info("ema100 ({}) = {} , ema100 ({}) = {} , ema50 ({}) = {} ,  ema50 ({}) = {} , encontros = {}", i - j,
 //                ema100.get(i - j),
 //                i, ema100.get(i), i - j, ema50.get(i - j), i, ema50.get(i), encontros);
 //          }

@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * The type Currency pair test.
@@ -106,28 +107,6 @@ class CurrencyPairTest {
     // given
     Currency currencyBase = Currency.AUD;
     Currency currencyProfit = null;
-    // when
-    Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
-    // then
-    Assertions.assertThrows(IllegalArgumentException.class, executable);
-  }
-
-  @Test
-  void nullCurrencyThrows3() {
-    // given
-    String currencyBase = null;
-    String currencyProfit = "EUR";
-    // when
-    Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
-    // then
-    Assertions.assertThrows(IllegalArgumentException.class, executable);
-  }
-
-  @Test
-  void nullCurrencyThrows4() {
-    // given
-    String currencyBase = "EUR";
-    String currencyProfit = null;
     // when
     Executable executable = () -> new CurrencyPair(currencyBase, currencyProfit);
     // then
