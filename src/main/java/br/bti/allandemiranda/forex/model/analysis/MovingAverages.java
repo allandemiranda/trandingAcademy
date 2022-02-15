@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.InputMismatchException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * The type Moving averages.
  *
  * @author Allan de Miranda Silva
- * @version 1.1.0
+ * @version 1.1.1
  */
 public class MovingAverages {
 
