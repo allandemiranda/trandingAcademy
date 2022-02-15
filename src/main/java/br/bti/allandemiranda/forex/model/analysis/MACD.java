@@ -6,11 +6,11 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,6 +24,14 @@ public class MACD {
   private static final Logger logger = LogManager.getLogger(MACD.class);
   private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
   private static final String PERIODS = "Periods";
+
+  /**
+   * Instantiates a new Macd.
+   */
+  @Contract(" -> fail")
+  private MACD() {
+    throw new IllegalStateException(MACD.class.toString());
+  }
 
   /**
    * Gets macd.
@@ -70,15 +78,12 @@ public class MACD {
       @NotNull List<Pair<LocalDateTime, Double>> list,
       @NotNull List<Pair<LocalDateTime, Double>> fastList,
       @NotNull List<Pair<LocalDateTime, Double>> slowList) {
-    Stream<? extends Pair<Integer, ?>> streamList = IntStream.rangeClosed(0, list.size() - 1).boxed()
-        .toList().parallelStream().map(i -> {
-          if (Objects.isNull(fastList.get(i).getRight()) || Objects.isNull(slowList.get(i).getRight())) {
-            return Pair.of(i, Pair.of(list.get(i).getLeft(), null));
-          } else {
-            return Pair.of(i,
-                Pair.of(list.get(i).getLeft(), fastList.get(i).getRight() - slowList.get(i).getRight()));
-          }
-        }).sorted(Comparator.comparingInt(Pair::getKey));
-    return streamList.sequential().map(pair -> (Pair<LocalDateTime, Double>) pair.getValue()).toList();
+    return IntStream.rangeClosed(0, list.size() - 1).boxed().toList().parallelStream().map(i -> {
+      if (Objects.isNull(fastList.get(i).getRight()) || Objects.isNull(slowList.get(i).getRight())) {
+        return Pair.of(list.get(i).getLeft(), (Double) null);
+      } else {
+        return Pair.of(list.get(i).getLeft(), fastList.get(i).getRight() - slowList.get(i).getRight());
+      }
+    }).sorted(Comparator.comparing(Pair::getLeft)).toList();
   }
 }

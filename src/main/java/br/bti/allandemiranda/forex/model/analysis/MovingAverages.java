@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.InputMismatchException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,24 +61,21 @@ public class MovingAverages {
       @NotNull List<Pair<LocalDateTime, Double>> list) {
     logger.info("Getting a Simple Moving Average (SMA) list - Periods {}", periods);
     if (periods > 0) {
-      Stream<? extends Pair<Integer, ?>> simpleStream = IntStream.rangeClosed(0, list.size() - 1).boxed()
-          .toList().parallelStream().map(i -> {
-            if ((i + 1) >= periods) {
-              DoubleSummaryStatistics statistics = new DoubleSummaryStatistics();
-              for (int j = 0; j < periods; ++j) {
-                if (Objects.isNull(list.get(i - j).getRight())) {
-                  return Pair.of(i, Pair.of(list.get(i).getLeft(), null));
-                } else {
-                  statistics.accept(list.get(i - j).getRight());
-                }
-              }
-              return Pair.of(i, Pair.of(list.get(i).getLeft(), statistics.getAverage()));
+      return IntStream.rangeClosed(0, list.size() - 1).boxed().toList().parallelStream().map(i -> {
+        if ((i + 1) >= periods) {
+          DoubleSummaryStatistics statistics = new DoubleSummaryStatistics();
+          for (int j = 0; j < periods; ++j) {
+            if (Objects.isNull(list.get(i - j).getRight())) {
+              return Pair.of(list.get(i).getLeft(), (Double) null);
             } else {
-              return Pair.of(i, Pair.of(list.get(i).getLeft(), null));
+              statistics.accept(list.get(i - j).getRight());
             }
-          }).sorted(Comparator.comparingInt(Pair::getKey));
-
-      return simpleStream.sequential().map(pair -> (Pair<LocalDateTime, Double>) pair.getValue()).toList();
+          }
+          return Pair.of(list.get(i).getLeft(), statistics.getAverage());
+        } else {
+          return Pair.of(list.get(i).getLeft(), (Double) null);
+        }
+      }).sorted(Comparator.comparing(Pair::getLeft)).toList();
     } else {
       throw new InputMismatchException(PERIODS + " " + NOT_NEGATIVE_NUMBER);
     }
