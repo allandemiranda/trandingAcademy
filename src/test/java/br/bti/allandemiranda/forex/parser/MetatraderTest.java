@@ -17,7 +17,7 @@ import org.mockito.Mockito;
  * The type Moving averages test.
  *
  * @author Allan de Miranda Silva
- * @version 1.0.0
+ * @version 1.0.1
  */
 class MetatraderTest {
 
@@ -32,10 +32,10 @@ class MetatraderTest {
     Mockito.when(currencyExchange.getCurrencyPair()).thenReturn(new CurrencyPair("EUR", "USD"));
     Chart chart = Metatrader.parser(file, currencyExchange);
     // then
-    Assertions.assertEquals(3, chart.getCandlestickList().size());
+    Assertions.assertEquals(18, chart.getCandlestickList().size());
     Assertions.assertEquals(
-        new Candlestick("1.35442", "1.35502", "1.35437", "1.35502", "1269", "2014-01-23 06:00",
-            currencyExchange.getCurrencyPair()), chart.getCandlestickList().get(0));
+        new Candlestick("1.35442", "1.35502", "1.35437", "1.35502", "1269", "2014-01-23 03:00",
+            currencyExchange.getCurrencyPair()), chart.getCandlestickList().get(4));
   }
 
   @Test

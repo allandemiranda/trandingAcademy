@@ -3,6 +3,7 @@ package br.bti.allandemiranda.forex.model.analysis;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * The type Moving averages test.
  *
  * @author Allan de Miranda Silva
- * @version 1.0.0
+ * @version 1.0.1
  */
 class MovingAveragesTest {
 
@@ -26,7 +27,9 @@ class MovingAveragesTest {
         List.of(1.0, 2.0, 5.0, 6.0, 3.0, 8.0, 12.0, 12.0, 10.0, 7.0, 6.0, 5.0, 5.0, 6.0, 20.0, 8.0, 1.0,
             18.0, 18.0, 18.0, 18.0, 18.0, 18.0, 18.0, 18.0, 16.0, 10.0, 11.0, 12.0, 50.0, 2.0, 3.0, 4.0,
             5.0, 8.0, 8.0, 8.0, 8.0, 8.0));
-    closeList = doubleList.stream().map(aDouble -> Pair.of(LocalDateTime.now(), aDouble))
+    AtomicLong i = new AtomicLong();
+    closeList = doubleList.stream()
+        .map(aDouble -> Pair.of(LocalDateTime.now().plusDays(i.getAndIncrement()), aDouble))
         .collect(Collectors.toCollection(LinkedList::new));
     closeList.addFirst(Pair.of(LocalDateTime.now(), null));
   }
@@ -64,7 +67,7 @@ class MovingAveragesTest {
 
   @ParameterizedTest
   @ValueSource(ints = {2, 4})
-  void getEMA(int periods) throws InterruptedException {
+  void getEMA(int periods) {
     // given
     List<Double> ema2 = List.of(1.5, 3.833333333333333, 5.277777777777778, 3.7592592592592595,
         6.586419753086419, 10.195473251028806, 11.39849108367627, 10.466163694558755, 8.155387898186252,
