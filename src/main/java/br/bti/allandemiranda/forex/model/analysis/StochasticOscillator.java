@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * The type Stochastic oscillator.
  *
  * @author Allan de Miranda Silva
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class StochasticOscillator {
 
@@ -32,15 +32,16 @@ public class StochasticOscillator {
       int slowing, @NotNull List<Candlestick> list) {
     List<Pair<LocalDateTime, Double>> listK = IntStream.rangeClosed(0, list.size() - 1).boxed().toList()
         .parallelStream().map(i -> {
-          double high = list.get(i).getHighPrice();
-          double low = list.get(i).getLowPrice();
           if (i + 1 >= kPeriod) {
-            for (int j = 0; j < kPeriod; ++j) {
+            double high = list.get(i).getHighPrice();
+            double low = list.get(i).getLowPrice();
+
+            for (int j = 1; j < kPeriod; ++j) {
               if (Objects.isNull(list.get(i - j))) {
                 return Pair.of(list.get(i).getLocalDateTime(), (Double) null);
               } else {
-                high = Math.max(high, list.get(i).getHighPrice());
-                low = Math.min(low, list.get(i).getLowPrice());
+                high = Math.max(high, list.get(i - j).getHighPrice());
+                low = Math.min(low, list.get(i - j).getLowPrice());
               }
             }
 
@@ -52,10 +53,9 @@ public class StochasticOscillator {
           }
         }).toList();
 
-    List<Pair<LocalDateTime, Double>> listSlow = MovingAverages.getSMA(slowing,
-        MovingAverages.getSMA(dPeriod, list.stream()
-            .map(candlestick -> Pair.of(candlestick.getLocalDateTime(), candlestick.getClosePrice()))
-            .toList()));
+    List<Pair<LocalDateTime, Double>> dList = MovingAverages.getSMA(dPeriod, listK);
+
+    List<Pair<LocalDateTime, Double>> listSlow = MovingAverages.getSMA(slowing,dList);
 
     return IntStream.rangeClosed(0, list.size() - 1).boxed().toList().parallelStream().map(
             i -> Pair.of(list.get(i).getLocalDateTime(),
