@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * The type Candlestick.
  *
  * @author Allan de Miranda Silva
- * @version 1.0.0
+ * @version 1.1.0
  */
 public class Candlestick {
 
@@ -346,7 +346,7 @@ public class Candlestick {
     setClosePrice(closePrice);
     setLowPrice(lowPrice);
     setHighPrice(highPrice);
-    assert isCandlestick();
+    isCandlestick();
   }
 
   /**
@@ -363,20 +363,16 @@ public class Candlestick {
     setClosePrice(closePrice);
     setLowPrice(lowPrice);
     setHighPrice(highPrice);
-    assert isCandlestick();
+    isCandlestick();
   }
 
   /**
    * Is candlestick boolean.
-   *
-   * @return the boolean
    */
-  private boolean isCandlestick() {
+  private void isCandlestick() {
     if (getLowPrice() <= getHighPrice()) {
       if (getOpenPrice() >= getLowPrice() && getOpenPrice() <= getHighPrice()) {
-        if (getClosePrice() >= getLowPrice() && getClosePrice() <= getHighPrice()) {
-          return true;
-        } else {
+        if (!(getClosePrice() >= getLowPrice() && getClosePrice() <= getHighPrice())) {
           throw new IllegalArgumentException(
               CLOSE_PRICE + " need be between the " + HIGH_PRICE + " and " + LOW_PRICE);
         }
