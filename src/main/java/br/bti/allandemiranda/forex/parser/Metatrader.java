@@ -1,8 +1,8 @@
 package br.bti.allandemiranda.forex.parser;
 
-import br.bti.allandemiranda.forex.model.utils.Candlestick;
-import br.bti.allandemiranda.forex.model.utils.Chart;
-import br.bti.allandemiranda.forex.model.utils.CurrencyExchange;
+import br.bti.allandemiranda.forex.candlestick.Candlestick;
+import br.bti.allandemiranda.forex.chart.Chart;
+import br.bti.allandemiranda.forex.currency.Exchange;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -43,17 +43,17 @@ public class Metatrader {
    * Parser chart.
    *
    * @param file             the file
-   * @param currencyExchange the currency exchange
+   * @param exchange the currency exchange
    *
    * @return the chart
    *
    * @throws IOException the io exception
    */
   @NotNull
-  public static Chart parser(@NotNull File file, @NotNull CurrencyExchange currencyExchange)
+  public static Chart parser(@NotNull File file, @NotNull Exchange exchange)
   throws IOException {
     if (file.isFile() && file.canRead()) {
-      logger.debug("Parsing the file {} to a Chart {}", file.getName(), currencyExchange);
+      logger.debug("Parsing the file {} to a Chart {}", file.getName(), exchange);
       Reader reader;
       try {
         reader = Files.newBufferedReader(file.toPath());
@@ -72,7 +72,7 @@ public class Metatrader {
       }
       logger.debug("Readied a buffer of the file {} in CSV format", file.getPath());
 
-      Chart chart = new Chart(currencyExchange);
+      Chart chart = new Chart(exchange);
       try {
         chart.getCandlestickList().addAll(StreamSupport.stream(records.spliterator(), true).parallel()
             .map(string -> new Candlestick(string.get(OPEN_PRICE_POSITION),  //! openPrice
@@ -81,10 +81,10 @@ public class Metatrader {
                 string.get(HIGH_PRICE_POSITION),  //! highPrice
                 string.get(VOLUME_POSITION),      //! volume
                 string.get(TIME_POSITION),        //! localDateTime
-                currencyExchange.getCurrencyPair()))
+                exchange.getCurrencyPair()))
             .sorted(Comparator.comparing(Candlestick::getLocalDateTime)).toList());
         logger.debug("Created a chart with {} candlestick and {}", chart.getCandlestickList().size(),
-            currencyExchange.getCurrencyPair());
+            exchange.getCurrencyPair());
 
       } catch (Exception e) {
         logger.error(e.toString());

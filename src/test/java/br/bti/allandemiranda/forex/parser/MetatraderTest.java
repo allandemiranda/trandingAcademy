@@ -1,9 +1,9 @@
 package br.bti.allandemiranda.forex.parser;
 
-import br.bti.allandemiranda.forex.model.utils.Candlestick;
-import br.bti.allandemiranda.forex.model.utils.Chart;
-import br.bti.allandemiranda.forex.model.utils.CurrencyExchange;
-import br.bti.allandemiranda.forex.model.utils.CurrencyPair;
+import br.bti.allandemiranda.forex.candlestick.Candlestick;
+import br.bti.allandemiranda.forex.chart.Chart;
+import br.bti.allandemiranda.forex.currency.Exchange;
+import br.bti.allandemiranda.forex.currency.Pair;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -27,15 +27,15 @@ class MetatraderTest {
     URL url = MetatraderTest.class.getResource("EURUSD_M15.csv");
     assert url != null;
     File file = new File(url.toURI());
-    CurrencyExchange currencyExchange = Mockito.mock(CurrencyExchange.class);
+    Exchange exchange = Mockito.mock(Exchange.class);
     // when
-    Mockito.when(currencyExchange.getCurrencyPair()).thenReturn(new CurrencyPair("EUR", "USD"));
-    Chart chart = Metatrader.parser(file, currencyExchange);
+    Mockito.when(exchange.getCurrencyPair()).thenReturn(new Pair("EUR", "USD"));
+    Chart chart = Metatrader.parser(file, exchange);
     // then
     Assertions.assertEquals(18, chart.getCandlestickList().size());
     Assertions.assertEquals(
         new Candlestick("1.35442", "1.35502", "1.35437", "1.35502", "1269", "2014-01-23 03:00",
-            currencyExchange.getCurrencyPair()), chart.getCandlestickList().get(4));
+            exchange.getCurrencyPair()), chart.getCandlestickList().get(4));
   }
 
   @Test
@@ -44,10 +44,10 @@ class MetatraderTest {
     URL url = MetatraderTest.class.getResource("EURUSD_M15_ERRO_TIME.csv");
     assert url != null;
     File file = new File(url.toURI());
-    CurrencyExchange currencyExchange = Mockito.mock(CurrencyExchange.class);
+    Exchange exchange = Mockito.mock(Exchange.class);
     // when
-    Mockito.when(currencyExchange.getCurrencyPair()).thenReturn(new CurrencyPair("EUR", "USD"));
-    Executable executable = () -> Metatrader.parser(file, currencyExchange);
+    Mockito.when(exchange.getCurrencyPair()).thenReturn(new Pair("EUR", "USD"));
+    Executable executable = () -> Metatrader.parser(file, exchange);
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
@@ -58,10 +58,10 @@ class MetatraderTest {
     URL url = MetatraderTest.class.getResource("EURUSD_M15_ERRO_CANDLE.csv");
     assert url != null;
     File file = new File(url.toURI());
-    CurrencyExchange currencyExchange = Mockito.mock(CurrencyExchange.class);
+    Exchange exchange = Mockito.mock(Exchange.class);
     // when
-    Mockito.when(currencyExchange.getCurrencyPair()).thenReturn(new CurrencyPair("EUR", "USD"));
-    Executable executable = () -> Metatrader.parser(file, currencyExchange);
+    Mockito.when(exchange.getCurrencyPair()).thenReturn(new Pair("EUR", "USD"));
+    Executable executable = () -> Metatrader.parser(file, exchange);
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }
