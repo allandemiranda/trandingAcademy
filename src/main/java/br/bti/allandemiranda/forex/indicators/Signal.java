@@ -1,4 +1,4 @@
-package br.bti.allandemiranda.forex.oscillators;
+package br.bti.allandemiranda.forex.indicators;
 
 /**
  * The enum Signal.

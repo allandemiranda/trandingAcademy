@@ -1,21 +1,37 @@
-package br.bti.allandemiranda.forex.oscillators;
+package br.bti.allandemiranda.forex.indicators.oscillators;
 
 import br.bti.allandemiranda.forex.chart.TimeFrame;
+import br.bti.allandemiranda.forex.indicators.Indicator;
 import java.time.LocalDateTime;
 
 /**
  * The type Macd.
  */
-public class MACD extends Oscillator {
+public class MACD extends Indicator {
 
-  private final double histogram;
-  private final double macdValue;
-  private final double signal;
+  //! out
+  private final Double histogram;
+  private final Double macdValue;
+  private final Double signal;
+  //! the MACD List. DateTime -> Histogram - MACD - Signal
 
+  //! in
   private final int fastEMA;
   private final int slowEMA;
   private final int macdSMA;
 
+  /**
+   * Instantiates a new Macd.
+   *
+   * @param localDateTime the local date time
+   * @param timeFrame     the time frame
+   * @param histogram     the histogram
+   * @param macd          the macd
+   * @param signal        the signal
+   * @param fastEMA       the fast ema
+   * @param slowEMA       the slow ema
+   * @param macdSMA       the macd sma
+   */
   private MACD(LocalDateTime localDateTime, TimeFrame timeFrame, double histogram, double macd,
       double signal, int fastEMA, int slowEMA, int macdSMA) {
     super(localDateTime, timeFrame);
@@ -32,7 +48,7 @@ public class MACD extends Oscillator {
    *
    * @return the histogram
    */
-  public double getHistogram() {
+  public Double getHistogram() {
     return histogram;
   }
 
@@ -41,7 +57,7 @@ public class MACD extends Oscillator {
    *
    * @return the macd
    */
-  public double getMacd() {
+  public Double getMacd() {
     return macdValue;
   }
 
@@ -50,7 +66,7 @@ public class MACD extends Oscillator {
    *
    * @return the signal value
    */
-  public double getSignalValue() {
+  public Double getSignalValue() {
     return signal;
   }
 

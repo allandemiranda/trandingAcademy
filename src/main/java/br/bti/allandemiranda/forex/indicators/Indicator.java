@@ -1,24 +1,24 @@
-package br.bti.allandemiranda.forex.oscillators;
+package br.bti.allandemiranda.forex.indicators;
 
 import br.bti.allandemiranda.forex.chart.TimeFrame;
 import java.time.LocalDateTime;
 
 /**
- * The type Oscillator.
+ * The type Indicator.
  */
-public abstract class Oscillator implements Configuration, Values {
+public abstract class Indicator implements Configuration, Values {
 
   private Signal signal;
   private final LocalDateTime localDateTime;
   private final TimeFrame timeFrame;
 
   /**
-   * Instantiates a new Oscillator.
+   * Instantiates a new Indicator.
    *
    * @param localDateTime the local date time
    * @param timeFrame     the time frame
    */
-  protected Oscillator(LocalDateTime localDateTime, TimeFrame timeFrame) {
+  protected Indicator(LocalDateTime localDateTime, TimeFrame timeFrame) {
     this.signal = Signal.NON;
     this.localDateTime = localDateTime;
     this.timeFrame = timeFrame;

@@ -20,12 +20,12 @@ import org.mockito.Mockito;
  * @author Allan de Miranda Silva
  * @version 1.0.0
  */
-class StochasticOscillatorTest {
+class StochasticIndicatorTest {
 
   @Test
   void getStochastic() throws URISyntaxException, IOException {
     // given
-    URL url = StochasticOscillatorTest.class.getResource("EURUSD_M15.csv");
+    URL url = StochasticIndicatorTest.class.getResource("EURUSD_M15.csv");
     assert url != null;
     File file = new File(url.toURI());
     Exchange exchange = Mockito.mock(Exchange.class);
