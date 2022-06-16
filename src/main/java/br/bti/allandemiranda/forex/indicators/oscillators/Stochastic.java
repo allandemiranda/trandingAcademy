@@ -1,6 +1,5 @@
 package br.bti.allandemiranda.forex.indicators.oscillators;
 
-import br.bti.allandemiranda.forex.chart.TimeFrame;
 import br.bti.allandemiranda.forex.indicators.Indicator;
 import java.time.LocalDateTime;
 
@@ -10,29 +9,28 @@ import java.time.LocalDateTime;
 public class Stochastic extends Indicator {
 
   //! out
-  private Double k;
-  private Double slow;
+  private final Double k;
+  private final Double slow;
   //! the stochastic - DateTime -> K, Slow
 
   //! in
-  private int kPeriod;
-  private int dPeriod;
-  private int slowing;
+  private final int kPeriod;
+  private final int dPeriod;
+  private final int slowing;
 
   /**
    * Instantiates a new Stochastic.
    *
    * @param localDateTime the local date time
-   * @param timeFrame     the time frame
    * @param k             the k
    * @param slow          the slow
    * @param kPeriod       the k period
    * @param dPeriod       the d period
    * @param slowing       the slowing
    */
-  private Stochastic(LocalDateTime localDateTime, TimeFrame timeFrame, Double k, Double slow,
-      int kPeriod, int dPeriod, int slowing) {
-    super(localDateTime, timeFrame);
+  private Stochastic(LocalDateTime localDateTime, Double k, Double slow, int kPeriod, int dPeriod,
+      int slowing) {
+    super(localDateTime);
     this.k = k;
     this.slow = slow;
     this.kPeriod = kPeriod;
@@ -92,7 +90,7 @@ public class Stochastic extends Indicator {
 
   @Override
   public String getValues() {
-    return "Stochastic{" + "k=" + k + ", slow=" + slow + '}';
+    return "Stochastic{" + "k=" + getK() + ", slow=" + getSlow() + '}';
   }
 
   @Override

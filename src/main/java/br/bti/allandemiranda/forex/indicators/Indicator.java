@@ -1,6 +1,5 @@
 package br.bti.allandemiranda.forex.indicators;
 
-import br.bti.allandemiranda.forex.chart.TimeFrame;
 import java.time.LocalDateTime;
 
 /**
@@ -10,18 +9,15 @@ public abstract class Indicator implements Configuration, Values {
 
   private Signal signal;
   private final LocalDateTime localDateTime;
-  private final TimeFrame timeFrame;
 
   /**
    * Instantiates a new Indicator.
    *
    * @param localDateTime the local date time
-   * @param timeFrame     the time frame
    */
-  protected Indicator(LocalDateTime localDateTime, TimeFrame timeFrame) {
+  protected Indicator(LocalDateTime localDateTime) {
     this.signal = Signal.NON;
     this.localDateTime = localDateTime;
-    this.timeFrame = timeFrame;
   }
 
   /**
@@ -52,20 +48,11 @@ public abstract class Indicator implements Configuration, Values {
   }
 
   /**
-   * Gets time frame.
-   *
-   * @return the time frame
-   */
-  public TimeFrame getTimeFrame() {
-    return timeFrame;
-  }
-
-  /**
    * Gets name.
    *
    * @return the name
    */
   public String getName() {
-    return "[" + getTimeFrame() + "] " + getClass().getSimpleName() + getConfiguration();
+    return getClass().getSimpleName() + getConfiguration();
   }
 }

@@ -1,6 +1,5 @@
 package br.bti.allandemiranda.forex.indicators.oscillators;
 
-import br.bti.allandemiranda.forex.chart.TimeFrame;
 import br.bti.allandemiranda.forex.indicators.Indicator;
 import java.time.LocalDateTime;
 
@@ -11,7 +10,7 @@ public class MACD extends Indicator {
 
   //! out
   private final Double histogram;
-  private final Double macdValue;
+  private final Double macd;
   private final Double signal;
   //! the MACD List. DateTime -> Histogram - MACD - Signal
 
@@ -24,7 +23,6 @@ public class MACD extends Indicator {
    * Instantiates a new Macd.
    *
    * @param localDateTime the local date time
-   * @param timeFrame     the time frame
    * @param histogram     the histogram
    * @param macd          the macd
    * @param signal        the signal
@@ -32,11 +30,11 @@ public class MACD extends Indicator {
    * @param slowEMA       the slow ema
    * @param macdSMA       the macd sma
    */
-  private MACD(LocalDateTime localDateTime, TimeFrame timeFrame, double histogram, double macd,
-      double signal, int fastEMA, int slowEMA, int macdSMA) {
-    super(localDateTime, timeFrame);
+  private MACD(LocalDateTime localDateTime, double histogram, double macd, double signal, int fastEMA,
+      int slowEMA, int macdSMA) {
+    super(localDateTime);
     this.histogram = histogram;
-    this.macdValue = macd;
+    this.macd = macd;
     this.signal = signal;
     this.fastEMA = fastEMA;
     this.slowEMA = slowEMA;
@@ -58,7 +56,7 @@ public class MACD extends Indicator {
    * @return the macd
    */
   public Double getMacd() {
-    return macdValue;
+    return macd;
   }
 
   /**
@@ -110,7 +108,7 @@ public class MACD extends Indicator {
 
   @Override
   public String toString() {
-    return "MACD{" + "histogram=" + histogram + ", macd=" + macdValue + ", signal=" + signal
+    return "MACD{" + "histogram=" + histogram + ", macd=" + macd + ", signal=" + signal
         + ", fastEMA=" + fastEMA + ", slowEMA=" + slowEMA + ", macdSMA=" + macdSMA + "}";
   }
 }
