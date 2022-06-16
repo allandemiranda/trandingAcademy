@@ -116,9 +116,9 @@ class ChartTest {
     String toString =
         "Chart{" + "candlestickList=[" + "Candlestick{" + "openPrice=0.2," + " closePrice=0.3,"
             + " lowPrice=0.1, highPrice=0.4" + ", volume=10," + " localDateTime=2021-01-01T12:22,"
-            + " pair=Pair{base=EUR, profit=USD}}],"
+            + " pair=Pair{base=EUR, quote=USD}}],"
             + " exchange=Exchange{spread=1," + " digits=1,"
-            + " pair=Pair{base=EUR, profit=USD}," + " swapLong=1.0," + " swapShort=1.0,"
+            + " pair=Pair{base=EUR, quote=USD}," + " swapLong=1.0," + " swapShort=1.0,"
             + " swapThreeDays=MONDAY}}";
     Assertions.assertEquals(toString, chart.toString());
   }

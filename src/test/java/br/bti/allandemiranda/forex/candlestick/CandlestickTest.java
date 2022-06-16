@@ -724,7 +724,7 @@ class CandlestickTest {
     String toString =
         "Candlestick{openPrice=0.2," + " closePrice=0.3," + " lowPrice=0.1," + " highPrice=0.4,"
             + " volume=10," + " localDateTime=2021-01-01T12:22,"
-            + " pair=Pair{base=EUR, profit=USD}}";
+            + " pair=Pair{base=EUR, quote=USD}}";
     Assertions.assertEquals(toString, candlestick.toString());
   }
 

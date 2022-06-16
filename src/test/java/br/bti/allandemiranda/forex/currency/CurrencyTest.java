@@ -1,6 +1,5 @@
 package br.bti.allandemiranda.forex.currency;
 
-import br.bti.allandemiranda.forex.currency.Currency;
 import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ class CurrencyTest {
   @Test
   void valuesSize() {
     // given
-    int size = 8;
+    int size = 35;
     // when
     int trueSize = Currency.values().length;
     // then
@@ -27,7 +26,9 @@ class CurrencyTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"EUR", "USD", "JPY", "GBP", "AUD", "CAD", "CHF", "NZD"})
+  @ValueSource(strings = {"EUR", "USD", "JPY", "GBP", "AUD", "CAD", "CHF", "CNY", "HKD", "NZD", "SEK",
+      "KRW", "SGD", "NOK", "MXN", "INR", "RUB", "ZAR", "TRY", "BRL", "TWD", "DKK", "PLN", "THB", "IDR",
+      "HUF", "CZK", "ILS", "CLP", "PHP", "AED", "COP", "SAR", "MYR", "RON"})
   void valuesList(String currency) {
     // given
     // when
@@ -37,7 +38,8 @@ class CurrencyTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"BRL", "MXN", "ZAR", "SGD", "NOK", "TRY"})
+  @ValueSource(strings = {"BTC", "BTCB", "ETH", "ADA", "XRP", "DOGE", "IBEX35", "SMI20", "NASDAQ",
+      "IBOV", "PETR3", "USIM5"})
   void valuesListFalse(String currency) {
     // given
     // when
