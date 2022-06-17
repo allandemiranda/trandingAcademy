@@ -1,5 +1,7 @@
 package br.bti.allandemiranda.forex.analysis;
 
+import br.bti.allandemiranda.forex.indicators.trends.EMA;
+import br.bti.allandemiranda.forex.indicators.trends.SMA;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -42,8 +44,7 @@ public class MovingAverages {
    *
    * @return the sma
    */
-  public static @NotNull List<Pair<LocalDateTime, Double>> getSMA(int periods,
-      @NotNull List<Pair<LocalDateTime, Double>> list) {
+  public static @NotNull List<SMA> getSMA(int periods, @NotNull List<Pair<LocalDateTime, Double>> list) {
     return getSimpleList(periods, list);
   }
 
@@ -55,7 +56,7 @@ public class MovingAverages {
    *
    * @return the simple list
    */
-  private static @NotNull List<Pair<LocalDateTime, Double>> getSimpleList(int periods,
+  private static @NotNull List<SMA> getSimpleList(int periods,
       @NotNull List<Pair<LocalDateTime, Double>> list) {
     logger.info("Getting a Simple Moving Average (SMA) list - Periods {}", periods);
     if (periods > 0) {
@@ -64,16 +65,16 @@ public class MovingAverages {
           DoubleSummaryStatistics statistics = new DoubleSummaryStatistics();
           for (int j = 0; j < periods; ++j) {
             if (Objects.isNull(list.get(i - j).getRight())) {
-              return Pair.of(list.get(i).getLeft(), (Double) null);
+              return new SMA(list.get(i).getLeft(), (Double) null, periods);
             } else {
               statistics.accept(list.get(i - j).getRight());
             }
           }
-          return Pair.of(list.get(i).getLeft(), statistics.getAverage());
+          return new SMA(list.get(i).getLeft(), statistics.getAverage(), periods);
         } else {
-          return Pair.of(list.get(i).getLeft(), (Double) null);
+          return new SMA(list.get(i).getLeft(), (Double) null, periods);
         }
-      }).sorted(Comparator.comparing(Pair::getLeft)).toList();
+      }).sorted(Comparator.comparing(SMA::getLocalDateTime)).toList();
     } else {
       throw new InputMismatchException(PERIODS + " " + NOT_NEGATIVE_NUMBER);
     }
@@ -88,23 +89,23 @@ public class MovingAverages {
    *
    * @return the exponential
    */
-  private static @NotNull List<Pair<LocalDateTime, Double>> getExponential(int periods, int smoothing,
+  private static @NotNull List<EMA> getExponential(int periods, int smoothing,
       @NotNull List<Pair<LocalDateTime, Double>> list) {
     logger.info("Getting a Exponential Moving Average (EMA) list - Periods {} - Smoothing {}", periods,
         smoothing);
     if (periods > 0) {
       double percentage = (smoothing / (periods + 1.0));
 
-      List<Pair<LocalDateTime, Double>> finalList = new ArrayList<>();
+      List<EMA> finalList = new ArrayList<>();
 
       for (int i = 0; i < list.size(); ++i) {
         if ((i + 1) >= periods && !finalList.isEmpty()) {
-          if (Objects.isNull(finalList.get(i - 1).getRight())) {
+          if (Objects.isNull(finalList.get(i - 1).getEma())) {
             DoubleSummaryStatistics statistics = new DoubleSummaryStatistics();
             boolean flag = false;
             for (int j = 0; j < periods; ++j) {
               if (Objects.isNull(list.get(i - j).getRight())) {
-                finalList.add(Pair.of(list.get(i).getLeft(), null));
+                finalList.add(new EMA(list.get(i).getLeft(), (Double) null, periods));
                 flag = true;
                 break;
               } else {
@@ -112,15 +113,15 @@ public class MovingAverages {
               }
             }
             if (!flag) {
-              finalList.add(Pair.of(list.get(i).getLeft(), statistics.getAverage()));
+              finalList.add(new EMA(list.get(i).getLeft(), statistics.getAverage(), periods));
             }
           } else {
-            double ema = (list.get(i).getRight() * percentage) + (finalList.get(i - 1).getRight() * (1
+            double ema = (list.get(i).getRight() * percentage) + (finalList.get(i - 1).getEma() * (1
                 - percentage));
-            finalList.add(Pair.of(list.get(i).getLeft(), ema));
+            finalList.add(new EMA(list.get(i).getLeft(), ema, periods));
           }
         } else {
-          finalList.add(Pair.of(list.get(i).getLeft(), null));
+          finalList.add(new EMA(list.get(i).getLeft(), null, periods));
         }
       }
 
@@ -140,7 +141,7 @@ public class MovingAverages {
    *
    * @return the ema
    */
-  public static @NotNull List<Pair<LocalDateTime, Double>> getEMA(int periods, int smoothing,
+  public static @NotNull List<EMA> getEMA(int periods, int smoothing,
       List<Pair<LocalDateTime, Double>> list) {
     return getExponential(periods, smoothing, list);
   }
@@ -155,8 +156,7 @@ public class MovingAverages {
    *
    * @since 1.1.0
    */
-  public static @NotNull List<Pair<LocalDateTime, Double>> getDefaultEMA(int periods,
-      List<Pair<LocalDateTime, Double>> list) {
+  public static @NotNull List<EMA> getDefaultEMA(int periods, List<Pair<LocalDateTime, Double>> list) {
     return getExponential(periods, 2, list);
   }
 }

@@ -28,7 +28,7 @@ public class Stochastic extends Indicator {
    * @param dPeriod       the d period
    * @param slowing       the slowing
    */
-  private Stochastic(LocalDateTime localDateTime, Double k, Double slow, int kPeriod, int dPeriod,
+  public Stochastic(LocalDateTime localDateTime, Double k, Double slow, int kPeriod, int dPeriod,
       int slowing) {
     super(localDateTime);
     this.k = k;
@@ -43,7 +43,7 @@ public class Stochastic extends Indicator {
    *
    * @return the k
    */
-  private Double getK() {
+  public Double getK() {
     return k;
   }
 
@@ -52,7 +52,7 @@ public class Stochastic extends Indicator {
    *
    * @return the slow
    */
-  private Double getSlow() {
+  public Double getSlow() {
     return slow;
   }
 
@@ -61,7 +61,7 @@ public class Stochastic extends Indicator {
    *
    * @return the period
    */
-  private int getkPeriod() {
+  public int getkPeriod() {
     return kPeriod;
   }
 
@@ -70,7 +70,7 @@ public class Stochastic extends Indicator {
    *
    * @return the period
    */
-  private int getdPeriod() {
+  public int getdPeriod() {
     return dPeriod;
   }
 
@@ -79,7 +79,7 @@ public class Stochastic extends Indicator {
    *
    * @return the slowing
    */
-  private int getSlowing() {
+  public int getSlowing() {
     return slowing;
   }
 
@@ -95,7 +95,7 @@ public class Stochastic extends Indicator {
 
   @Override
   public String toString() {
-    return "Stochastic{" + "k=" + k + ", slow=" + slow + ", kPeriod=" + kPeriod + ", dPeriod=" + dPeriod
-        + ", slowing=" + slowing + '}';
+    return "Stochastic{" + "time=" + getLocalDateTime() + ", k=" + k + ", slow=" + slow + ", kPeriod="
+        + kPeriod + ", dPeriod=" + dPeriod + ", slowing=" + slowing + '}';
   }
 }

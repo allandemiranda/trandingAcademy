@@ -1,6 +1,5 @@
 package br.bti.allandemiranda.forex.order;
 
-import br.bti.allandemiranda.forex.order.OrderForexStatus;
 import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,14 +12,14 @@ import org.junit.jupiter.params.provider.ValueSource;
  * @author Allan de Miranda Silva
  * @version 1.0.0
  */
-class OrderForexStatusTest {
+class StatusTest {
 
   @Test
   void values() {
     // given
     int size = 5;
     // when
-    int trueSize = OrderForexStatus.values().length;
+    int trueSize = Status.values().length;
     // then
     Assertions.assertEquals(size, trueSize);
   }
@@ -31,7 +30,7 @@ class OrderForexStatusTest {
   void valuesList(String status) {
     // given
     // when
-    String list = Arrays.toString(OrderForexStatus.values());
+    String list = Arrays.toString(Status.values());
     // then
     Assertions.assertTrue(list.contains(status));
   }
@@ -41,7 +40,7 @@ class OrderForexStatusTest {
   void valuesListFalse(String status) {
     // given
     // when
-    String list = Arrays.toString(OrderForexStatus.values());
+    String list = Arrays.toString(Status.values());
     // then
     Assertions.assertFalse(list.contains(status));
   }
@@ -52,11 +51,11 @@ class OrderForexStatusTest {
     String eur = "OPEN";
     String usd = "ClOSE_MANUALLY";
     // when
-    OrderForexStatus orderForexStatus = OrderForexStatus.valueOf(eur);
-    OrderForexStatus orderForexStatus2 = OrderForexStatus.valueOf(usd);
+    Status status = Status.valueOf(eur);
+    Status status2 = Status.valueOf(usd);
 
     // then
-    Assertions.assertEquals(OrderForexStatus.OPEN, orderForexStatus);
-    Assertions.assertEquals(OrderForexStatus.ClOSE_MANUALLY, orderForexStatus2);
+    Assertions.assertEquals(Status.OPEN, status);
+    Assertions.assertEquals(Status.ClOSE_MANUALLY, status2);
   }
 }

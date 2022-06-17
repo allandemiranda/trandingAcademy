@@ -21,7 +21,7 @@ public class SMA extends Indicator {
    * @param sma           the sma
    * @param periods       the periods
    */
-  private SMA(LocalDateTime localDateTime, Double sma, int periods) {
+  public SMA(LocalDateTime localDateTime, Double sma, int periods) {
     super(localDateTime);
     this.sma = sma;
     this.periods = periods;
@@ -32,7 +32,7 @@ public class SMA extends Indicator {
    *
    * @return the sma
    */
-  private Double getSma() {
+  public Double getSma() {
     return sma;
   }
 
@@ -41,7 +41,7 @@ public class SMA extends Indicator {
    *
    * @return the periods
    */
-  private int getPeriods() {
+  public int getPeriods() {
     return periods;
   }
 
@@ -57,6 +57,6 @@ public class SMA extends Indicator {
 
   @Override
   public String toString() {
-    return "SMA{" + "sma=" + sma + ", periods=" + periods + '}';
+    return "SMA{" + "time=" + getLocalDateTime() + ", sma=" + sma + ", periods=" + periods + '}';
   }
 }

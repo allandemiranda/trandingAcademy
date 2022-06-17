@@ -23,7 +23,7 @@ public class EMA extends Indicator {
    * @param periods       the periods
    * @param smoothing     the smoothing
    */
-  private EMA(LocalDateTime localDateTime, Double ema, int periods, int smoothing) {
+  public EMA(LocalDateTime localDateTime, Double ema, int periods, int smoothing) {
     super(localDateTime);
     this.ema = ema;
     this.periods = periods;
@@ -37,7 +37,7 @@ public class EMA extends Indicator {
    * @param ema           the ema
    * @param periods       the periods
    */
-  private EMA(LocalDateTime localDateTime, Double ema, int periods) {
+  public EMA(LocalDateTime localDateTime, Double ema, int periods) {
     super(localDateTime);
     this.ema = ema;
     this.periods = periods;
@@ -49,7 +49,7 @@ public class EMA extends Indicator {
    *
    * @return the ema
    */
-  private Double getEma() {
+  public Double getEma() {
     return ema;
   }
 
@@ -58,7 +58,7 @@ public class EMA extends Indicator {
    *
    * @return the periods
    */
-  private int getPeriods() {
+  public int getPeriods() {
     return periods;
   }
 
@@ -67,7 +67,7 @@ public class EMA extends Indicator {
    *
    * @return the smoothing
    */
-  private int getSmoothing() {
+  public int getSmoothing() {
     return smoothing;
   }
 
@@ -87,6 +87,7 @@ public class EMA extends Indicator {
 
   @Override
   public String toString() {
-    return "EMA{" + "ema=" + ema + ", periods=" + periods + ", smoothing=" + smoothing + '}';
+    return "EMA{" + "time=" + getLocalDateTime() + ", ema=" + ema + ", periods=" + periods
+        + ", smoothing=" + smoothing + '}';
   }
 }

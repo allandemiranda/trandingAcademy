@@ -1,6 +1,8 @@
 package br.bti.allandemiranda.forex.analysis;
 
 import br.bti.allandemiranda.forex.candlestick.Candlestick;
+import br.bti.allandemiranda.forex.indicators.oscillators.Stochastic;
+import br.bti.allandemiranda.forex.indicators.trends.SMA;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -28,8 +30,8 @@ public class StochasticOscillator {
    * @return the stochastic - TIME -> K, Slow
    */
   @NotNull
-  public static List<Pair<LocalDateTime, Pair<Double, Double>>> getStochastic(int kPeriod, int dPeriod,
-      int slowing, @NotNull List<Candlestick> list) {
+  public static List<Stochastic> getStochastic(int kPeriod, int dPeriod, int slowing,
+      @NotNull List<Candlestick> list) {
     List<Pair<LocalDateTime, Double>> listK = IntStream.rangeClosed(0, list.size() - 1).boxed().toList()
         .parallelStream().map(i -> {
           if (i + 1 >= kPeriod) {
@@ -53,13 +55,14 @@ public class StochasticOscillator {
           }
         }).toList();
 
-    List<Pair<LocalDateTime, Double>> dList = MovingAverages.getSMA(dPeriod, listK);
+    List<SMA> dList = MovingAverages.getSMA(dPeriod, listK);
 
-    List<Pair<LocalDateTime, Double>> listSlow = MovingAverages.getSMA(slowing,dList);
+    List<SMA> listSlow = MovingAverages.getSMA(slowing,
+        dList.stream().map(sma -> Pair.of(sma.getLocalDateTime(), sma.getSma())).toList());
 
     return IntStream.rangeClosed(0, list.size() - 1).boxed().toList().parallelStream().map(
-            i -> Pair.of(list.get(i).getLocalDateTime(),
-                Pair.of(listK.get(i).getRight(), listSlow.get(i).getRight())))
-        .sorted(Comparator.comparing(Pair::getLeft)).toList();
+            i -> new Stochastic(list.get(i).getLocalDateTime(), listK.get(i).getRight(),
+                listSlow.get(i).getSma(), kPeriod, dPeriod, slowing))
+        .sorted(Comparator.comparing(Stochastic::getLocalDateTime)).toList();
   }
 }

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Allan de Miranda Silva
  * @version 1.0.0
  */
-public class OrderForex {
+public class Order {
 
   //! TODO: NEED IMPROVE THE CONCEPT OF THIS CLASS
   //! TODO: CHECK IF IS A JPY CURRENCY
@@ -19,11 +19,11 @@ public class OrderForex {
   private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
   private static final String STOP_LOSS = "Stop Loss";
   private static final String TAKE_PROFIT = "Take Profit";
-  private static final String IS_CLOSED = "Can't close the orderForexPosition, because this is closed";
+  private static final String IS_CLOSED = "Can't close the position, because this is closed";
 
   private Exchange exchange;
-  private OrderForexPosition orderForexPosition;
-  private OrderForexStatus orderForexStatus = OrderForexStatus.OPEN;
+  private Position position;
+  private Status status = Status.OPEN;
   private double stopLoss;
   private double takeProfit;
   private double points;
@@ -33,18 +33,17 @@ public class OrderForex {
    * Instantiates a new Order forex.
    *
    * @param exchange   the currency exchange
-   * @param orderForexPosition the order forex position
-   * @param orderForexStatus   the order forex status
-   * @param stopLoss           the stop loss
-   * @param takeProfit         the take profit
-   * @param comment            the comment
+   * @param position   the order forex position
+   * @param status     the order forex status
+   * @param stopLoss   the stop loss
+   * @param takeProfit the take profit
+   * @param comment    the comment
    */
-  public OrderForex(@NotNull Exchange exchange,
-      @NotNull OrderForexPosition orderForexPosition, @NotNull OrderForexStatus orderForexStatus,
+  public Order(@NotNull Exchange exchange, @NotNull Position position, @NotNull Status status,
       double stopLoss, double takeProfit, double initialPoints, @NotNull String comment) {
     setCurrencyExchange(exchange);
-    setPosition(orderForexPosition);
-    setPositionStatus(orderForexStatus);
+    setPosition(position);
+    setPositionStatus(status);
     setStopLoss(stopLoss);
     setTakeProfit(takeProfit);
     setComment(comment);
@@ -74,17 +73,17 @@ public class OrderForex {
    *
    * @return the position
    */
-  public @NotNull OrderForexPosition getPosition() {
-    return orderForexPosition;
+  public @NotNull Position getPosition() {
+    return position;
   }
 
   /**
    * Sets position.
    *
-   * @param orderForexPosition the order forex position
+   * @param position the order forex position
    */
-  private void setPosition(@NotNull OrderForexPosition orderForexPosition) {
-    this.orderForexPosition = orderForexPosition;
+  private void setPosition(@NotNull Position position) {
+    this.position = position;
   }
 
   /**
@@ -92,25 +91,25 @@ public class OrderForex {
    *
    * @return the position status
    */
-  public @NotNull OrderForexStatus getPositionStatus() {
-    return orderForexStatus;
+  public @NotNull Status getPositionStatus() {
+    return status;
   }
 
   /**
    * Sets position status.
    *
-   * @param orderForexStatus the order forex status
+   * @param status the order forex status
    */
-  private void setPositionStatus(@NotNull OrderForexStatus orderForexStatus) {
-    this.orderForexStatus = orderForexStatus;
+  private void setPositionStatus(@NotNull Status status) {
+    this.status = status;
   }
 
   /**
    * Close position manual.
    */
   public void closePositionManual() {
-    if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
-      this.orderForexStatus = OrderForexStatus.ClOSE_MANUALLY;
+    if (getPositionStatus().equals(Status.OPEN)) {
+      this.status = Status.ClOSE_MANUALLY;
     } else {
       throw new IllegalStateException(IS_CLOSED);
     }
@@ -120,8 +119,8 @@ public class OrderForex {
    * Close position margin loss.
    */
   private void closePositionMarginLoss() {
-    if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
-      this.orderForexStatus = OrderForexStatus.ClOSE_MARGIN_LOSS;
+    if (getPositionStatus().equals(Status.OPEN)) {
+      this.status = Status.ClOSE_MARGIN_LOSS;
     } else {
       throw new IllegalStateException(IS_CLOSED);
     }
@@ -131,8 +130,8 @@ public class OrderForex {
    * Close position stop loss.
    */
   private void closePositionStopLoss() {
-    if (getPositionStatus().equals(OrderForexStatus.OPEN)) {
-      this.orderForexStatus = OrderForexStatus.ClOSE_STOP_LOSS;
+    if (getPositionStatus().equals(Status.OPEN)) {
+      this.status = Status.ClOSE_STOP_LOSS;
     } else {
       throw new IllegalStateException(IS_CLOSED);
     }
@@ -235,23 +234,21 @@ public class OrderForex {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    OrderForex that = (OrderForex) o;
+    Order that = (Order) o;
     return Double.compare(that.stopLoss, stopLoss) == 0
         && Double.compare(that.takeProfit, takeProfit) == 0 && Double.compare(that.points, points) == 0
-        && exchange.equals(that.exchange)
-        && orderForexPosition == that.orderForexPosition && orderForexStatus == that.orderForexStatus;
+        && exchange.equals(that.exchange) && position == that.position && status == that.status;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(exchange, orderForexPosition, orderForexStatus, stopLoss, takeProfit,
-        points);
+    return Objects.hash(exchange, position, status, stopLoss, takeProfit, points);
   }
 
   @Override
   public String toString() {
-    return "OrderForex{" + "exchange=" + exchange + ", orderForexPosition="
-        + orderForexPosition + ", orderForexStatus=" + orderForexStatus + ", stopLoss=" + stopLoss
-        + ", takeProfit=" + takeProfit + ", points=" + points + ", comment='" + comment + '\'' + '}';
+    return "Order{" + "exchange=" + exchange + ", position=" + position + ", status=" + status
+        + ", stopLoss=" + stopLoss + ", takeProfit=" + takeProfit + ", points=" + points + ", comment='"
+        + comment + '\'' + '}';
   }
 }

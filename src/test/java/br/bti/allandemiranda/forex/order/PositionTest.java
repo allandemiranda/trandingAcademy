@@ -1,6 +1,5 @@
 package br.bti.allandemiranda.forex.order;
 
-import br.bti.allandemiranda.forex.order.OrderForexPosition;
 import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * @author Allan de Miranda Silva
  * @version 1.0.0
  */
-class OrderForexPositionTest {
+class PositionTest {
 
   @Test
   void values() {
@@ -23,8 +22,8 @@ class OrderForexPositionTest {
     String sell = "SELL";
     int size = 2;
     // when
-    String array = Arrays.toString(OrderForexPosition.values());
-    int arraySize = OrderForexPosition.values().length;
+    String array = Arrays.toString(Position.values());
+    int arraySize = Position.values().length;
     // then
     Assertions.assertTrue(array.contains(buy));
     Assertions.assertTrue(array.contains(sell));
@@ -37,11 +36,11 @@ class OrderForexPositionTest {
     String buy = "BUY";
     String sell = "SELL";
     // when
-    OrderForexPosition buyOrderForexPosition = OrderForexPosition.valueOf(buy);
-    OrderForexPosition sellOrderForexPosition = OrderForexPosition.valueOf(sell);
+    Position buyPosition = Position.valueOf(buy);
+    Position sellPosition = Position.valueOf(sell);
     // then
-    Assertions.assertEquals(OrderForexPosition.BUY, buyOrderForexPosition);
-    Assertions.assertEquals(OrderForexPosition.SELL, sellOrderForexPosition);
+    Assertions.assertEquals(Position.BUY, buyPosition);
+    Assertions.assertEquals(Position.SELL, sellPosition);
   }
 
   @ParameterizedTest
@@ -49,7 +48,7 @@ class OrderForexPositionTest {
   void valueOfThrows(String name) {
     // given
     // when
-    Executable executable = () -> OrderForexPosition.valueOf(name);
+    Executable executable = () -> Position.valueOf(name);
     // then
     Assertions.assertThrows(IllegalArgumentException.class, executable);
   }

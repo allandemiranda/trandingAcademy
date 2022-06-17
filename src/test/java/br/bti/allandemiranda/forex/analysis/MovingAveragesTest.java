@@ -1,6 +1,7 @@
 package br.bti.allandemiranda.forex.analysis;
 
-import br.bti.allandemiranda.forex.analysis.MovingAverages;
+import br.bti.allandemiranda.forex.indicators.trends.EMA;
+import br.bti.allandemiranda.forex.indicators.trends.SMA;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,9 +47,9 @@ class MovingAveragesTest {
         8.75, 11.75, 11.25, 13.75, 18.0, 18.0, 18.0, 18.0, 18.0, 17.5, 15.5, 13.75, 12.25, 20.75, 18.75,
         16.75, 14.75, 3.5, 5.0, 6.25, 7.25, 8.0, 8.0);
     // when
-    List<Pair<LocalDateTime, Double>> result = MovingAverages.getSMA(periods, closeList);
+    List<SMA> result = MovingAverages.getSMA(periods, closeList);
     // then
-    int nullPoint = (int) result.parallelStream().filter(pair -> pair.getRight() == null).count();
+    int nullPoint = (int) result.parallelStream().filter(pair -> pair.getSma() == null).count();
     switch (periods) {
       case 2 -> Assertions.assertEquals(2, nullPoint);
       case 4 -> Assertions.assertEquals(4, nullPoint);
@@ -56,12 +57,12 @@ class MovingAveragesTest {
     }
     if (periods == 2) {
       for (int i = nullPoint; i < result.size(); ++i) {
-        Assertions.assertEquals(sma2.get(i - nullPoint), result.get(i).getRight());
+        Assertions.assertEquals(sma2.get(i - nullPoint), result.get(i).getSma());
       }
     }
     if (periods == 4) {
       for (int i = nullPoint; i < result.size(); ++i) {
-        Assertions.assertEquals(sma4.get(i - nullPoint), result.get(i).getRight());
+        Assertions.assertEquals(sma4.get(i - nullPoint), result.get(i).getSma());
       }
     }
   }
@@ -87,21 +88,21 @@ class MovingAveragesTest {
         27.542083027999908, 17.325249816799946, 11.595149890079966, 8.55708993404798, 7.134253960428787,
         7.480552376257273, 7.688331425754364, 7.812998855452618, 7.887799313271571, 7.932679587962943);
     // when
-    List<Pair<LocalDateTime, Double>> result = MovingAverages.getEMA(periods, 2, closeList);
+    List<EMA> result = MovingAverages.getEMA(periods, 2, closeList);
     // then
-    int nullPoint = (int) result.parallelStream().filter(pair -> pair.getRight() == null).count();
+    int nullPoint = (int) result.parallelStream().filter(pair -> pair.getEma() == null).count();
     switch (periods) {
       case 2 -> Assertions.assertEquals(2, nullPoint);
       case 4 -> Assertions.assertEquals(4, nullPoint);
     }
     if (periods == 2) {
       for (int i = nullPoint; i < result.size(); ++i) {
-        Assertions.assertEquals(ema2.get(i - nullPoint), result.get(i).getRight());
+        Assertions.assertEquals(ema2.get(i - nullPoint), result.get(i).getEma());
       }
     }
     if (periods == 4) {
       for (int i = nullPoint; i < result.size(); ++i) {
-        Assertions.assertEquals(ema4.get(i - nullPoint), result.get(i).getRight());
+        Assertions.assertEquals(ema4.get(i - nullPoint), result.get(i).getEma());
       }
     }
   }

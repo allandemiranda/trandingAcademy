@@ -6,7 +6,7 @@ package br.bti.allandemiranda.forex.order;
  * @author Allan de Miranda Silva
  * @version 1.0.0
  */
-public enum OrderForexStatus {
+public enum Status {
   //! Open a position
   OPEN,
   //! Close a position ->> "CLOSE_<CAUSE>"

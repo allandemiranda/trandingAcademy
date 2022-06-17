@@ -6,7 +6,7 @@ package br.bti.allandemiranda.forex.order;
  * @author Allan de Miranda Silva
  * @version 1.0.0
  */
-public enum OrderForexPosition {
+public enum Position {
   BUY,  //! Open in Bid (Candlestick price) --> Ask
   SELL  //! Open in Ask --> Bid (Candlestick price)
 }

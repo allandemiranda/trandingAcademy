@@ -30,7 +30,7 @@ public class MACD extends Indicator {
    * @param slowEMA       the slow ema
    * @param macdSMA       the macd sma
    */
-  private MACD(LocalDateTime localDateTime, double histogram, double macd, double signal, int fastEMA,
+  public MACD(LocalDateTime localDateTime, Double histogram, Double macd, Double signal, int fastEMA,
       int slowEMA, int macdSMA) {
     super(localDateTime);
     this.histogram = histogram;
@@ -108,7 +108,8 @@ public class MACD extends Indicator {
 
   @Override
   public String toString() {
-    return "MACD{" + "histogram=" + histogram + ", macd=" + macd + ", signal=" + signal
-        + ", fastEMA=" + fastEMA + ", slowEMA=" + slowEMA + ", macdSMA=" + macdSMA + "}";
+    return "MACD{" + "time=" + getLocalDateTime() + ", histogram=" + histogram + ", macd=" + macd
+        + ", signal=" + signal + ", fastEMA=" + fastEMA + ", slowEMA=" + slowEMA + ", macdSMA=" + macdSMA
+        + "}";
   }
 }
