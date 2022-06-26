@@ -34,7 +34,7 @@ public class Candlestick {
   private double closePrice;
   private double lowPrice;
   private double highPrice;
-  private int volume;
+  private double volume;
   private LocalDateTime localDateTime;
   private Pair pair;
 
@@ -47,10 +47,10 @@ public class Candlestick {
    * @param highPrice     the high price
    * @param volume        the volume
    * @param localDateTime the local date time
-   * @param pair  the currency pair
+   * @param pair          the currency pair
    */
-  public Candlestick(double openPrice, double closePrice, double lowPrice, double highPrice, int volume,
-      @NotNull LocalDateTime localDateTime, @NotNull Pair pair) {
+  public Candlestick(double openPrice, double closePrice, double lowPrice, double highPrice,
+      double volume, @NotNull LocalDateTime localDateTime, @NotNull Pair pair) {
     setCandlestick(openPrice, closePrice, lowPrice, highPrice);
     setLocalDateTime(localDateTime);
     setCurrencyPair(pair);
@@ -65,7 +65,7 @@ public class Candlestick {
    * @param lowPrice      the low price
    * @param highPrice     the high price
    * @param localDateTime the local date time
-   * @param pair  the currency pair
+   * @param pair          the currency pair
    */
   public Candlestick(@NotNull String openPrice, @NotNull String closePrice, @NotNull String lowPrice,
       @NotNull String highPrice, @NotNull String volume, @NotNull String localDateTime,
@@ -272,7 +272,7 @@ public class Candlestick {
    *
    * @return the volume
    */
-  public int getVolume() {
+  public double getVolume() {
     return volume;
   }
 
@@ -281,7 +281,7 @@ public class Candlestick {
    *
    * @param volume the volume
    */
-  private void setVolume(int volume) {
+  private void setVolume(double volume) {
     if (Math.abs(volume) == volume) {
       this.volume = volume;
     } else {

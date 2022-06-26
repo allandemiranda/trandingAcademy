@@ -1,5 +1,6 @@
 package br.bti.allandemiranda.forex.parser;
 
+
 import br.bti.allandemiranda.forex.candlestick.Candlestick;
 import br.bti.allandemiranda.forex.chart.Chart;
 import br.bti.allandemiranda.forex.currency.Exchange;

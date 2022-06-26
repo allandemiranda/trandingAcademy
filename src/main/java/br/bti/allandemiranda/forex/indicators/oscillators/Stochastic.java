@@ -1,22 +1,17 @@
 package br.bti.allandemiranda.forex.indicators.oscillators;
 
-import br.bti.allandemiranda.forex.indicators.Indicator;
+import br.bti.allandemiranda.forex.chart.Point;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * The type Stochastic.
  */
-public class Stochastic extends Indicator {
+public class Stochastic {
 
-  //! out
-  private final Double k;
-  private final Double slow;
-  //! the stochastic - DateTime -> K, Slow
-
-  //! in
-  private final int kPeriod;
-  private final int dPeriod;
-  private final int slowing;
+  private final Point k;
+  private final Point slow;
+  private final LocalDateTime localDateTime;
 
   /**
    * Instantiates a new Stochastic.
@@ -24,18 +19,11 @@ public class Stochastic extends Indicator {
    * @param localDateTime the local date time
    * @param k             the k
    * @param slow          the slow
-   * @param kPeriod       the k period
-   * @param dPeriod       the d period
-   * @param slowing       the slowing
    */
-  public Stochastic(LocalDateTime localDateTime, Double k, Double slow, int kPeriod, int dPeriod,
-      int slowing) {
-    super(localDateTime);
-    this.k = k;
-    this.slow = slow;
-    this.kPeriod = kPeriod;
-    this.dPeriod = dPeriod;
-    this.slowing = slowing;
+  public Stochastic(LocalDateTime localDateTime, Double k, Double slow) {
+    this.k = new Point(localDateTime, k);
+    this.slow = new Point(localDateTime, slow);
+    this.localDateTime = localDateTime;
   }
 
   /**
@@ -43,7 +31,7 @@ public class Stochastic extends Indicator {
    *
    * @return the k
    */
-  public Double getK() {
+  public Point getK() {
     return k;
   }
 
@@ -52,50 +40,38 @@ public class Stochastic extends Indicator {
    *
    * @return the slow
    */
-  public Double getSlow() {
+  public Point getSlow() {
     return slow;
   }
 
   /**
-   * Gets period.
+   * Gets local date time.
    *
-   * @return the period
+   * @return the local date time
    */
-  public int getkPeriod() {
-    return kPeriod;
-  }
-
-  /**
-   * Gets period.
-   *
-   * @return the period
-   */
-  public int getdPeriod() {
-    return dPeriod;
-  }
-
-  /**
-   * Gets slowing.
-   *
-   * @return the slowing
-   */
-  public int getSlowing() {
-    return slowing;
+  public LocalDateTime getLocalDateTime() {
+    return localDateTime;
   }
 
   @Override
-  public String getConfiguration() {
-    return "(" + getkPeriod() + ", " + getdPeriod() + ", " + getSlowing() + ")";
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Stochastic that = (Stochastic) o;
+    return Objects.equals(k, that.k) && Objects.equals(slow, that.slow);
   }
 
   @Override
-  public String getValues() {
-    return "Stochastic{" + "k=" + getK() + ", slow=" + getSlow() + '}';
+  public int hashCode() {
+    return Objects.hash(k, slow);
   }
 
   @Override
   public String toString() {
-    return "Stochastic{" + "time=" + getLocalDateTime() + ", k=" + k + ", slow=" + slow + ", kPeriod="
-        + kPeriod + ", dPeriod=" + dPeriod + ", slowing=" + slowing + '}';
+    return "Stochastic{" + "k=" + k + ", slow=" + slow + '}';
   }
 }

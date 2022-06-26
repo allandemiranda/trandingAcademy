@@ -1,5 +1,6 @@
 package br.bti.allandemiranda.forex.currency;
 
+
 import java.util.InputMismatchException;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +44,15 @@ public class Pair {
     setBase(base);
     setProfit(quote);
     setPip(getQuote());
+  }
+
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return getBase() + "/" + getQuote();
   }
 
   /**
@@ -121,6 +131,7 @@ public class Pair {
    * @param quote the quote
    */
   private void setPip(Currency quote) {
+    //! Only JYP have diferent pip value
     if (Currency.JPY.equals(quote)) {
       this.pip = 0.01;
     } else {
@@ -133,7 +144,7 @@ public class Pair {
    *
    * @return the pip
    */
-  public double getPip() {
+  public  double getPip() {
     return pip;
   }
 

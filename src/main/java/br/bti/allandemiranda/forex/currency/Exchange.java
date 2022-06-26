@@ -11,9 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Allan de Miranda Silva
  * @version 1.0.0
  */
-public class Exchange {
-
-  //! TODO: CHECK IF IS A JPY CURRENCY
+public class Exchange extends Pair {
 
   private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
   private static final String VALID_NUMBER = "need be a valid number";
@@ -33,17 +31,19 @@ public class Exchange {
   private DayOfWeek swapThreeDays;
 
   /**
-   * Instantiates a new Currency exchange.
+   * Instantiates a new Exchange.
    *
    * @param spread        the spread
    * @param digits        the digits
-   * @param pair  the currency pair
+   * @param base          the base
+   * @param quote         the quote
    * @param swapLong      the swap long
    * @param swapShort     the swap short
    * @param swapThreeDays the swap three days
    */
-  public Exchange(int spread, int digits, @NotNull Pair pair, double swapLong,
-      double swapShort, @NotNull DayOfWeek swapThreeDays) {
+  public Exchange(int spread, int digits, @NotNull Currency base, @NotNull Currency quote,
+      double swapLong, double swapShort, @NotNull DayOfWeek swapThreeDays) {
+    super(base, quote);
     setSpread(spread);
     setDigits(digits);
     setCurrencyPair(pair);
@@ -53,18 +53,20 @@ public class Exchange {
   }
 
   /**
-   * Instantiates a new Currency exchange.
+   * Instantiates a new Exchange.
    *
    * @param spread        the spread
    * @param digits        the digits
-   * @param pair  the currency pair
+   * @param base          the base
+   * @param quote         the quote
    * @param swapLong      the swap long
    * @param swapShort     the swap short
    * @param swapThreeDays the swap three days
    */
-  public Exchange(@NotNull String spread, @NotNull String digits,
-      @NotNull Pair pair, @NotNull String swapLong, @NotNull String swapShort,
+  public Exchange(@NotNull String spread, @NotNull String digits, @NotNull String base,
+      @NotNull String quote, @NotNull String swapLong, @NotNull String swapShort,
       @NotNull String swapThreeDays) {
+    super(base, quote);
     setSpread(spread);
     setDigits(digits);
     setCurrencyPair(pair);
@@ -304,8 +306,7 @@ public class Exchange {
 
   @Override
   public String toString() {
-    return "Exchange{" + "spread=" + spread + ", digits=" + digits + ", pair="
-        + pair + ", swapLong=" + swapLong + ", swapShort=" + swapShort + ", swapThreeDays="
-        + swapThreeDays + '}';
+    return "Exchange{" + "spread=" + spread + ", digits=" + digits + ", pair=" + pair + ", swapLong="
+        + swapLong + ", swapShort=" + swapShort + ", swapThreeDays=" + swapThreeDays + '}';
   }
 }
