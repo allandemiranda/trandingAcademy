@@ -2,13 +2,6 @@ package br.bti.allandemiranda.forex.chart;
 
 import br.bti.allandemiranda.forex.candlestick.Candlestick;
 import br.bti.allandemiranda.forex.currency.Exchange;
-import br.bti.allandemiranda.forex.indicators.oscillators.MACD;
-import br.bti.allandemiranda.forex.indicators.oscillators.Stochastic;
-import br.bti.allandemiranda.forex.indicators.trends.EMA;
-import br.bti.allandemiranda.forex.indicators.trends.SMA;
-import com.google.common.collect.Lists;
-import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -52,5 +45,14 @@ public class Chart extends Analysis {
    */
   public TimeFrame getTimeFrame() {
     return timeFrame;
+  }
+
+  /**
+   * Gets candlestick list.
+   *
+   * @return the candlestick list
+   */
+  public Stream<Candlestick> getCandlestickList() {
+    return super.stream();
   }
 }

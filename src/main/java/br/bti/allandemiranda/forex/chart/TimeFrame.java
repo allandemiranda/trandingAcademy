@@ -2,6 +2,9 @@ package br.bti.allandemiranda.forex.chart;
 
 /**
  * The enum Time frame.
+ *
+ * @author Allan de Miranda Silva
+ * @version 1.0.0
  */
 public enum TimeFrame {
   M1(1),

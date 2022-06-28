@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Point.
+ *
+ * @author Allan de Miranda Silva
+ * @version 1.0.0
  */
 public class Point {
 

@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Order {
 
-  //! TODO: NEED IMPROVE THE CONCEPT OF THIS CLASS
-  //! TODO: CHECK IF IS A JPY CURRENCY
+  // TODO: NEED IMPROVE THE CONCEPT OF THIS CLASS
+  // TODO: CHECK IF IS A JPY CURRENCY
 
   private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
   private static final String STOP_LOSS = "Stop Loss";

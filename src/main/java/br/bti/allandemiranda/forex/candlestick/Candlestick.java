@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * The type Candlestick.
  *
  * @author Allan de Miranda Silva
- * @version 1.1.0
+ * @version 1.0.0
  */
 public class Candlestick {
 

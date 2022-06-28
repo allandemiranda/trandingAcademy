@@ -6,6 +6,9 @@ import java.util.Objects;
 
 /**
  * The type Macd.
+ *
+ * @author Allan de Miranda Silva
+ * @version 1.0.0
  */
 public class MACD {
 
