@@ -207,7 +207,7 @@ public class Analysis extends LinkedList<Candlestick> {
    * @param macdSMA    the macd sma
    * @param priceField the price field
    *
-   * @return the MACD List. DateTime -> Histogram - MACD - Signal
+   * @return the MACD List. DateTime -> Histogram - MACD - Trend
    */
   public List<MACD> getMACD(int fastEMA, int slowEMA, int macdSMA, PriceField priceField) {
     if (fastEMA > 0 && slowEMA > 0 && macdSMA > 0) {

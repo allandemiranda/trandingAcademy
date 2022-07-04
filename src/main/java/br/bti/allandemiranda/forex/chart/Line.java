@@ -1,6 +1,5 @@
 package br.bti.allandemiranda.forex.chart;
 
-import com.beust.jcommander.internal.Lists;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -37,5 +36,45 @@ public class Line extends LinkedList<Point> {
    */
   public Line(@NotNull Collection<? extends Point> c) {
     super(c);
+  }
+
+  /**
+   * Crossed list.
+   *
+   * @param line the line
+   *
+   * @return the list
+   */
+  public List<LocalDateTime> crossed(@NotNull Line line) {
+    if (compatible(line)) {
+      return IntStream.rangeClosed(0, line.size() - 1).boxed().toList().parallelStream().map(i -> {
+        if ((Objects.nonNull(line.get(i).getValue()) && Objects.nonNull(this.get(i).getValue())) && (
+            (line.get(i).getValue().equals(this.get(i).getValue())) || ((i > 0) && (
+                (line.get(i - 1).isHigh(this.get(i - 1)) && line.get(i).isLow(this.get(i))) || (
+                    this.get(i - 1).isHigh(line.get(i - 1)) && this.get(i).isLow(line.get(i))))))) {
+          return line.get(i).getLocalDateTime();
+        } else {
+          return null;
+        }
+      }).filter(Objects::nonNull).toList();
+    } else {
+      throw new IllegalStateException("Trying to compare lines incompatibility");
+    }
+  }
+
+  /**
+   * Compatible boolean.
+   *
+   * @param line the line
+   *
+   * @return the boolean
+   */
+  public boolean compatible(@NotNull Line line) {
+    if (line.size() == this.size()) {
+      return IntStream.rangeClosed(0, line.size() - 1).boxed().toList().parallelStream()
+          .map(i -> line.get(i).equals(this.get(i))).anyMatch(aBoolean -> !aBoolean);
+    } else {
+      return false;
+    }
   }
 }
