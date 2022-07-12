@@ -3,45 +3,103 @@ package br.bti.allandemiranda.forex.indicators.trend;
 import br.bti.allandemiranda.forex.chart.Line;
 import br.bti.allandemiranda.forex.indicators.Signal;
 import br.bti.allandemiranda.forex.indicators.Trend;
-import java.security.InvalidParameterException;
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The type Cross signal.+
+ */
 public class CrossSignal {
 
-  public static @NotNull List<Signal> getTrendSinal(@NotNull Line line1, Line line2) {
-    if (line1.compatible(line2)) {
-      boolean up = false;
-      for (int i = 0; (i + 1) < line1.size(); i++) {
-        if (Objects.nonNull(line1.get(i).getValue()) && Objects.nonNull(line1.get(i + 1).getValue())) {
-          if (line1.get(i).getValue() > line2.get(i).getValue()) {
-            up = true;
-          }
+  /**
+   * Gets trend sinal.
+   *
+   * @param line1 the line 1
+   * @param line2 the line 2
+   *
+   * @return the trend sinal
+   */
+  public static @NotNull List<Signal> getTrendSinal(Line line1, Line line2) {
+    List<LocalDateTime> localDateTimes = line1.crossed(line2);
+    if (localDateTimes.size() > 1) {
+      int positionInitial;
+      boolean flag = true;
+      for (positionInitial = 0; positionInitial < line1.size(); ++positionInitial) {
+        if (Objects.nonNull(line1.get(positionInitial).getValue()) && Objects.nonNull(
+            line2.get(positionInitial).getValue())) {
+          flag = false;
           break;
         }
-        if ((i + 2) < line1.size()) {
-          throw new IllegalStateException("Impossible decide the trend to this line");
+      }
+      if (flag) {
+        return line1.parallelStream().map(point -> new Signal(point.getLocalDateTime(), Trend.NON))
+            .toList();
+      } else {
+        if (line1.get(positionInitial).getLocalDateTime().equals(localDateTimes.get(0))) {
+          if (localDateTimes.size() > 2) {
+            final Trend[] ini = {line1.get(positionInitial).getValue() < line1.parallelStream()
+                .filter(point -> point.getLocalDateTime().equals(localDateTimes.get(1))).findFirst()
+                .get().getValue() ? Trend.UP : Trend.DOWN};
+            int finalPositionInitial2 = positionInitial;
+            return IntStream.rangeClosed(0, line1.size() - 1).boxed().toList().stream().map(i -> {
+              if (localDateTimes.isEmpty()) {
+                return new Signal(line1.get(i).getLocalDateTime(), ini[0]);
+              } else {
+                return getSignal(line1, localDateTimes, ini, finalPositionInitial2, i);
+              }
+            }).toList();
+          } else {
+            Trend ini = line1.get(positionInitial).getValue() < line1.getLast().getValue() ? Trend.UP
+                : Trend.DOWN;
+            int finalPositionInitial1 = positionInitial;
+            return IntStream.rangeClosed(0, line1.size() - 1).boxed().toList().parallelStream()
+                .map(i -> {
+                  if (i < finalPositionInitial1) {
+                    return new Signal(line1.get(i).getLocalDateTime(), Trend.NON);
+                  } else {
+                    return new Signal(line1.get(i).getLocalDateTime(), ini);
+                  }
+                }).toList();
+          }
+        } else {
+          final Trend[] ini = {line1.get(positionInitial).getValue() < line1.parallelStream()
+              .filter(point -> point.getLocalDateTime().equals(localDateTimes.get(0))).findFirst().get()
+              .getValue() ? Trend.UP : Trend.DOWN};
+          int finalPositionInitial = positionInitial;
+          return IntStream.rangeClosed(0, line1.size() - 1).boxed().toList().stream().map(i -> {
+            if (localDateTimes.isEmpty()) {
+              return new Signal(line1.get(i).getLocalDateTime(), ini[0]);
+            } else {
+              if (i < finalPositionInitial) {
+                return new Signal(line1.get(i).getLocalDateTime(), Trend.NON);
+              } else {
+                return getSignal(line1, localDateTimes, ini, finalPositionInitial, i);
+              }
+            }
+          }).toList();
         }
       }
-      boolean finalUp = up;
-      return IntStream.rangeClosed(0, line1.size() - 1).boxed().toList().parallelStream().map(i -> {
-        if (Objects.nonNull(line1.get(i).getValue()) && Objects.nonNull(line2.get(i).getValue())) {
-          if (line1.get(i).getValue() > line2.get(i).getValue()) {
-            return new Signal(line1.get(i).getLocalDateTime(), finalUp ? Trend.UP : Trend.DOWN);
-          } else {
-            if (line1.get(i).getValue() < line2.get(i).getValue()) {
-              return new Signal(line1.get(i).getLocalDateTime(), finalUp ? Trend.DOWN : Trend.UP);
-            }
-          }
-        }
-        return new Signal(line1.get(i).getLocalDateTime(), Trend.NON);
-      }).sorted(Comparator.comparing(Signal::getLocalDateTime)).collect(Collectors.toList());
     } else {
-      throw new InvalidParameterException("Incompatible lines to get trend");
+      return line1.parallelStream().map(point -> new Signal(point.getLocalDateTime(), Trend.NON))
+          .toList();
+    }
+  }
+
+  @NotNull
+  private static Signal getSignal(Line line1, List<LocalDateTime> localDateTimes, Trend[] ini,
+      int finalPositionInitial, Integer i) {
+    if (i == finalPositionInitial) {
+      localDateTimes.remove(0);
+      return new Signal(line1.get(i).getLocalDateTime(), ini[0]);
+    } else {
+      if (localDateTimes.get(0).equals(line1.get(i).getLocalDateTime())) {
+        localDateTimes.remove(0);
+        ini[0] = ini[0].equals(Trend.UP) ? Trend.DOWN : Trend.UP;
+      }
+      return new Signal(line1.get(i).getLocalDateTime(), ini[0]);
     }
   }
 }

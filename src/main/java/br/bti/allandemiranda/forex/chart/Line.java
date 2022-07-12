@@ -1,5 +1,6 @@
 package br.bti.allandemiranda.forex.chart;
 
+import com.beust.jcommander.internal.Lists;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -46,19 +47,32 @@ public class Line extends LinkedList<Point> {
    * @return the list
    */
   public List<LocalDateTime> crossed(@NotNull Line line) {
-    if (compatible(line)) {
-      return IntStream.rangeClosed(0, line.size() - 1).boxed().toList().parallelStream().map(i -> {
-        if ((Objects.nonNull(line.get(i).getValue()) && Objects.nonNull(this.get(i).getValue())) && (
-            (line.get(i).getValue().equals(this.get(i).getValue())) || ((i > 0) && (
-                (line.get(i - 1).isHigh(this.get(i - 1)) && line.get(i).isLow(this.get(i))) || (
-                    this.get(i - 1).isHigh(line.get(i - 1)) && this.get(i).isLow(line.get(i))))))) {
-          return line.get(i).getLocalDateTime();
+    if (compatible(line) && this.size() > 1) {
+      return IntStream.rangeClosed(1, this.size() - 1).boxed().toList().parallelStream().map(i -> {
+        // TODO: can put all in one if
+        if (Objects.nonNull(get(i).getValue()) && Objects.nonNull(line.get(i).getValue())
+            && Objects.nonNull(get(i - 1).getValue()) && Objects.nonNull(line.get(i - 1).getValue())) {
+          if (get(i).getValue().equals(line.get(i).getValue())) {
+            return get(i).getLocalDateTime();
+          } else {
+            if ((get(i).getValue() > line.get(i).getValue()) && (get(i - 1).getValue() < line.get(i - 1)
+                .getValue())) {
+              return get(i).getLocalDateTime();
+            } else {
+              if ((get(i).getValue() < line.get(i).getValue()) && (get(i - 1).getValue() > line.get(
+                  i - 1).getValue())) {
+                return get(i).getLocalDateTime();
+              } else {
+                return null;
+              }
+            }
+          }
         } else {
           return null;
         }
       }).filter(Objects::nonNull).toList();
     } else {
-      throw new IllegalStateException("Trying to compare lines incompatibility");
+      return Lists.newArrayList();
     }
   }
 
@@ -70,11 +84,30 @@ public class Line extends LinkedList<Point> {
    * @return the boolean
    */
   public boolean compatible(@NotNull Line line) {
-    if (line.size() == this.size()) {
-      return IntStream.rangeClosed(0, line.size() - 1).boxed().toList().parallelStream()
-          .map(i -> line.get(i).equals(this.get(i))).anyMatch(aBoolean -> !aBoolean);
+    if (line.size() == this.size() && this.size() - 1 > 0 && consistency() && line.consistency()) {
+      return IntStream.rangeClosed(0, this.size() - 1).boxed().toList().parallelStream()
+          .allMatch(i -> this.get(i).getLocalDateTime().equals(line.get(i).getLocalDateTime()));
     } else {
       return false;
     }
+  }
+
+  /**
+   * Consistency boolean.
+   *
+   * @return the boolean
+   */
+  public boolean consistency() {
+    if(!isEmpty()) {
+      boolean nun = Objects.isNull(getFirst().getValue());
+      for (int i = 1; i < size(); ++i) {
+        if(nun){
+          nun = Objects.isNull(get(i).getValue());
+        } else {
+          return IntStream.rangeClosed(i, size() - 1).boxed().toList().parallelStream().noneMatch(integer -> Objects.isNull(get(integer).getValue()));
+        }
+      }
+    }
+    return true;
   }
 }
