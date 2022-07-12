@@ -36,7 +36,6 @@ public class Candlestick {
   private double highPrice;
   private double volume;
   private LocalDateTime localDateTime;
-  private Pair pair;
 
   /**
    * Instantiates a new Candlestick.
@@ -47,13 +46,11 @@ public class Candlestick {
    * @param highPrice     the high price
    * @param volume        the volume
    * @param localDateTime the local date time
-   * @param pair          the currency pair
    */
   public Candlestick(double openPrice, double closePrice, double lowPrice, double highPrice,
-      double volume, @NotNull LocalDateTime localDateTime, @NotNull Pair pair) {
+      double volume, @NotNull LocalDateTime localDateTime) {
     setCandlestick(openPrice, closePrice, lowPrice, highPrice);
     setLocalDateTime(localDateTime);
-    setCurrencyPair(pair);
     setVolume(volume);
   }
 
@@ -65,14 +62,11 @@ public class Candlestick {
    * @param lowPrice      the low price
    * @param highPrice     the high price
    * @param localDateTime the local date time
-   * @param pair          the currency pair
    */
   public Candlestick(@NotNull String openPrice, @NotNull String closePrice, @NotNull String lowPrice,
-      @NotNull String highPrice, @NotNull String volume, @NotNull String localDateTime,
-      @NotNull Pair pair) {
+      @NotNull String highPrice, @NotNull String volume, @NotNull String localDateTime) {
     setCandlestick(openPrice, closePrice, lowPrice, highPrice);
     setLocalDateTime(localDateTime);
-    setCurrencyPair(pair);
     setVolume(volume);
   }
 
@@ -317,24 +311,6 @@ public class Candlestick {
   }
 
   /**
-   * Gets currency exchange.
-   *
-   * @return the currency exchange
-   */
-  public @NotNull Pair getCurrencyPair() {
-    return pair;
-  }
-
-  /**
-   * Sets currency exchange.
-   *
-   * @param pair the currency pair
-   */
-  private void setCurrencyPair(@NotNull Pair pair) {
-    this.pair = pair;
-  }
-
-  /**
    * Sets candlestick.
    *
    * @param openPrice  the open price
@@ -428,6 +404,6 @@ public class Candlestick {
   public String toString() {
     return "Candlestick{" + "openPrice=" + openPrice + ", closePrice=" + closePrice + ", lowPrice="
         + lowPrice + ", highPrice=" + highPrice + ", volume=" + volume + ", localDateTime="
-        + localDateTime + ", pair=" + pair + '}';
+        + localDateTime + '}';
   }
 }
