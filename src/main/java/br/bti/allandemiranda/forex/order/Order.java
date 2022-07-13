@@ -1,6 +1,7 @@
 package br.bti.allandemiranda.forex.order;
 
 import br.bti.allandemiranda.forex.currency.Exchange;
+import java.time.LocalDateTime;
 import java.util.InputMismatchException;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -11,10 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Allan de Miranda Silva
  * @version 1.0.0
  */
-public class Order {
-
-  // TODO: NEED IMPROVE THE CONCEPT OF THIS CLASS
-  // TODO: CHECK IF IS A JPY CURRENCY
+public class Order implements Cloneable {
 
   private static final String NOT_NEGATIVE_NUMBER = "can't be a negative number";
   private static final String STOP_LOSS = "Stop Loss";
@@ -24,30 +22,77 @@ public class Order {
   private Exchange exchange;
   private Position position;
   private Status status = Status.OPEN;
-  private double stopLoss;
-  private double takeProfit;
-  private double points;
+  private Double stopLoss;
+  private Double takeProfit;
+  private Double lastPoint = null;
+  private double actualPoint;
+  private double gain;
   private String comment;
+  private LocalDateTime time;
 
   /**
    * Instantiates a new Order forex.
    *
    * @param exchange   the currency exchange
    * @param position   the order forex position
-   * @param status     the order forex status
    * @param stopLoss   the stop loss
    * @param takeProfit the take profit
    * @param comment    the comment
    */
-  public Order(@NotNull Exchange exchange, @NotNull Position position, @NotNull Status status,
-      double stopLoss, double takeProfit, double initialPoints, @NotNull String comment) {
+  public Order(@NotNull Exchange exchange, @NotNull Position position,
+      Double stopLoss, Double takeProfit, double initialPoints, @NotNull String comment,
+      LocalDateTime time) {
     setCurrencyExchange(exchange);
     setPosition(position);
-    setPositionStatus(status);
     setStopLoss(stopLoss);
     setTakeProfit(takeProfit);
     setComment(comment);
-    setPoints(initialPoints);
+    this.actualPoint = initialPoints;
+    this.gain = exchange.getSpread() * exchange.getPip() * (-1);
+    this.time = time;
+  }
+
+  public Status setNewPoints(double pointActual) {
+    if(pointActual > 0.0 && getPositionStatus().equals(Status.OPEN)) {
+      this.lastPoint = this.actualPoint;
+      this.actualPoint = pointActual;
+
+      if(getPosition().equals(Position.BUY)){
+        if(Objects.nonNull(getTakeProfit()) && getTakeProfit() <= pointActual) {
+          closePositioTakeProfit();
+        } else {
+          if(Objects.nonNull(getStopLoss()) && getStopLoss() >= pointActual){
+            closePositionStopLoss();
+          }
+        }
+        this.gain = this.gain + (this.actualPoint - this.lastPoint);
+      } else {
+        if(Objects.nonNull(getTakeProfit()) && getTakeProfit() >= pointActual) {
+          closePositioTakeProfit();
+        } else {
+          if(Objects.nonNull(getStopLoss()) && getStopLoss() <= pointActual){
+            closePositionStopLoss();
+          }
+        }
+        this.gain = this.gain + (this.lastPoint - this.actualPoint);
+      }
+    } else {
+      throw new IllegalArgumentException("Can't set a new value");
+    }
+
+    return getPositionStatus();
+  }
+
+  private double getGain() {
+    return gain;
+  }
+
+  private LocalDateTime getTime() {
+    return time;
+  }
+
+  private void setTime(LocalDateTime time) {
+    this.time = time;
   }
 
   /**
@@ -116,17 +161,6 @@ public class Order {
   }
 
   /**
-   * Close position margin loss.
-   */
-  private void closePositionMarginLoss() {
-    if (getPositionStatus().equals(Status.OPEN)) {
-      this.status = Status.ClOSE_MARGIN_LOSS;
-    } else {
-      throw new IllegalStateException(IS_CLOSED);
-    }
-  }
-
-  /**
    * Close position stop loss.
    */
   private void closePositionStopLoss() {
@@ -138,11 +172,22 @@ public class Order {
   }
 
   /**
+   * Close positio take profit.
+   */
+  private void closePositioTakeProfit() {
+    if (getPositionStatus().equals(Status.OPEN)) {
+      this.status = Status.ClOSE_TAKE_PROFIT;
+    } else {
+      throw new IllegalStateException(IS_CLOSED);
+    }
+  }
+
+  /**
    * Gets stop loss.
    *
    * @return the stop loss
    */
-  public double getStopLoss() {
+  public Double getStopLoss() {
     return stopLoss;
   }
 
@@ -164,7 +209,7 @@ public class Order {
    *
    * @return the take profit
    */
-  public double getTakeProfit() {
+  public Double getTakeProfit() {
     return takeProfit;
   }
 
@@ -197,58 +242,5 @@ public class Order {
    */
   private void setComment(@NotNull String comment) {
     this.comment = comment;
-  }
-
-  /**
-   * Gets points.
-   *
-   * @return the points
-   */
-  public double getPoints() {
-    return points;
-  }
-
-  /**
-   * Sets points.
-   *
-   * @param points the points
-   */
-  private void setPoints(double points) {
-    this.points = points;
-  }
-
-  /**
-   * Add points.
-   *
-   * @param points the points
-   */
-  public void addPoints(double points) {
-    setPoints(getPoints() + points);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Order that = (Order) o;
-    return Double.compare(that.stopLoss, stopLoss) == 0
-        && Double.compare(that.takeProfit, takeProfit) == 0 && Double.compare(that.points, points) == 0
-        && exchange.equals(that.exchange) && position == that.position && status == that.status;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(exchange, position, status, stopLoss, takeProfit, points);
-  }
-
-  @Override
-  public String toString() {
-    return "Order{" + "exchange=" + exchange + ", position=" + position + ", status=" + status
-        + ", stopLoss=" + stopLoss + ", takeProfit=" + takeProfit + ", points=" + points + ", comment='"
-        + comment + '\'' + '}';
   }
 }

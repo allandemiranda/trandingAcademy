@@ -1,6 +1,6 @@
 package br.bti.allandemiranda.forex.candlestick;
 
-import br.bti.allandemiranda.forex.currency.Pair;
+import br.bti.allandemiranda.forex.indicators.Trend;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -367,16 +367,16 @@ public class Candlestick {
    *
    * @return the candlestick action
    */
-  public Action getCandlestickAction() {
+  public Trend getCandlestickAction() {
     double value = getOpenPrice() - getClosePrice();
     if (value <= 0.0) {
       if (value == 0.0) {
-        return Action.NEUTRAL;
+        return Trend.NEUTRAL;
       } else {
-        return Action.UPPER;
+        return Trend.UPPER;
       }
     } else {
-      return Action.DOWN;
+      return Trend.DOWN;
     }
   }
 

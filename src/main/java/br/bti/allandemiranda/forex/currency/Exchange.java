@@ -285,29 +285,4 @@ public class Exchange extends Pair {
       throw new IllegalArgumentException(SWAP_SHORT + " " + BE_NUMBER);
     }
   }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Exchange that = (Exchange) o;
-    return spread == that.spread && digits == that.digits && Double.compare(that.swapLong, swapLong) == 0
-        && Double.compare(that.swapShort, swapShort) == 0 && pair.equals(that.pair)
-        && swapThreeDays == that.swapThreeDays;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(spread, digits, pair, swapLong, swapShort, swapThreeDays);
-  }
-
-  @Override
-  public String toString() {
-    return "Exchange{" + "spread=" + spread + ", digits=" + digits + ", pair=" + pair + ", swapLong="
-        + swapLong + ", swapShort=" + swapShort + ", swapThreeDays=" + swapThreeDays + '}';
-  }
 }

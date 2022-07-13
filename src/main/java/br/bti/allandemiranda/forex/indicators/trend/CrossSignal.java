@@ -35,14 +35,14 @@ public class CrossSignal {
         }
       }
       if (flag) {
-        return line1.parallelStream().map(point -> new Signal(point.getLocalDateTime(), Trend.NON))
+        return line1.parallelStream().map(point -> new Signal(point.getLocalDateTime(), Trend.NEUTRAL))
             .toList();
       } else {
         if (line1.get(positionInitial).getLocalDateTime().equals(localDateTimes.get(0))) {
           if (localDateTimes.size() > 2) {
             final Trend[] ini = {line1.get(positionInitial).getValue() < line1.parallelStream()
                 .filter(point -> point.getLocalDateTime().equals(localDateTimes.get(1))).findFirst()
-                .get().getValue() ? Trend.UP : Trend.DOWN};
+                .get().getValue() ? Trend.UPPER : Trend.DOWN};
             int finalPositionInitial2 = positionInitial;
             return IntStream.rangeClosed(0, line1.size() - 1).boxed().toList().stream().map(i -> {
               if (localDateTimes.isEmpty()) {
@@ -52,13 +52,13 @@ public class CrossSignal {
               }
             }).toList();
           } else {
-            Trend ini = line1.get(positionInitial).getValue() < line1.getLast().getValue() ? Trend.UP
+            Trend ini = line1.get(positionInitial).getValue() < line1.getLast().getValue() ? Trend.UPPER
                 : Trend.DOWN;
             int finalPositionInitial1 = positionInitial;
             return IntStream.rangeClosed(0, line1.size() - 1).boxed().toList().parallelStream()
                 .map(i -> {
                   if (i < finalPositionInitial1) {
-                    return new Signal(line1.get(i).getLocalDateTime(), Trend.NON);
+                    return new Signal(line1.get(i).getLocalDateTime(), Trend.NEUTRAL);
                   } else {
                     return new Signal(line1.get(i).getLocalDateTime(), ini);
                   }
@@ -67,14 +67,14 @@ public class CrossSignal {
         } else {
           final Trend[] ini = {line1.get(positionInitial).getValue() < line1.parallelStream()
               .filter(point -> point.getLocalDateTime().equals(localDateTimes.get(0))).findFirst().get()
-              .getValue() ? Trend.UP : Trend.DOWN};
+              .getValue() ? Trend.UPPER : Trend.DOWN};
           int finalPositionInitial = positionInitial;
           return IntStream.rangeClosed(0, line1.size() - 1).boxed().toList().stream().map(i -> {
             if (localDateTimes.isEmpty()) {
               return new Signal(line1.get(i).getLocalDateTime(), ini[0]);
             } else {
               if (i < finalPositionInitial) {
-                return new Signal(line1.get(i).getLocalDateTime(), Trend.NON);
+                return new Signal(line1.get(i).getLocalDateTime(), Trend.NEUTRAL);
               } else {
                 return getSignal(line1, localDateTimes, ini, finalPositionInitial, i);
               }
@@ -83,7 +83,7 @@ public class CrossSignal {
         }
       }
     } else {
-      return line1.parallelStream().map(point -> new Signal(point.getLocalDateTime(), Trend.NON))
+      return line1.parallelStream().map(point -> new Signal(point.getLocalDateTime(), Trend.NEUTRAL))
           .toList();
     }
   }
@@ -97,7 +97,7 @@ public class CrossSignal {
     } else {
       if (localDateTimes.get(0).equals(line1.get(i).getLocalDateTime())) {
         localDateTimes.remove(0);
-        ini[0] = ini[0].equals(Trend.UP) ? Trend.DOWN : Trend.UP;
+        ini[0] = ini[0].equals(Trend.UPPER) ? Trend.DOWN : Trend.UPPER;
       }
       return new Signal(line1.get(i).getLocalDateTime(), ini[0]);
     }

@@ -32,9 +32,9 @@ public class StochasticSignal {
             return new Signal(point.getLocalDateTime(), Trend.DOWN);
           } else {
             if(point.getValue() <= area){
-              return new Signal(point.getLocalDateTime(), Trend.UP);
+              return new Signal(point.getLocalDateTime(), Trend.UPPER);
             } else {
-              return new Signal(point.getLocalDateTime(), Trend.NON);
+              return new Signal(point.getLocalDateTime(), Trend.NEUTRAL);
             }
           }
         }).toList();

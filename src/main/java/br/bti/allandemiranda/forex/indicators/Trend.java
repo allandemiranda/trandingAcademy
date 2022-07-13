@@ -7,5 +7,5 @@ package br.bti.allandemiranda.forex.indicators;
  * @version 1.0.0
  */
 public enum Trend {
-  UP, DOWN, NON
+  UPPER, DOWN, NEUTRAL
 }

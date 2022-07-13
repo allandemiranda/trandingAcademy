@@ -35,12 +35,12 @@ public class MACDSignal {
   public static List<Signal> getTrend(List<MACD> macdList) {
     return macdList.parallelStream().map(macd -> {
       if (macd.getHistogram().getValue() > 0) {
-        return new Signal(macd.getLocalDateTime(), Trend.UP);
+        return new Signal(macd.getLocalDateTime(), Trend.UPPER);
       } else {
         if (macd.getHistogram().getValue() < 0) {
           return new Signal(macd.getLocalDateTime(), Trend.DOWN);
         } else {
-          return new Signal(macd.getLocalDateTime(), Trend.NON);
+          return new Signal(macd.getLocalDateTime(), Trend.UPPER);
         }
       }
     }).sorted(Comparator.comparing(Signal::getLocalDateTime)).toList();
