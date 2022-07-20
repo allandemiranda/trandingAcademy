@@ -47,12 +47,32 @@ public class Pair {
   }
 
   /**
+   * Instantiates a new Pair.
+   *
+   * @param pair the pair
+   */
+  public Pair(@NotNull String pair) {
+    setBase(pair.substring(0, 3).toUpperCase());
+    setProfit(pair.substring(3, 6).toUpperCase());
+    setPip(getQuote());
+  }
+
+  /**
    * Gets name.
    *
    * @return the name
    */
   public String getName() {
     return getBase() + "/" + getQuote();
+  }
+
+  /**
+   * Gets name togeder.
+   *
+   * @return the name togeder
+   */
+  public String getNameTogeder() {
+    return getBase().toString().concat(getQuote().toString());
   }
 
   /**
@@ -144,7 +164,7 @@ public class Pair {
    *
    * @return the pip
    */
-  public  double getPip() {
+  public double getPip() {
     return pip;
   }
 
