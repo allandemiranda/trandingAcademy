@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Trading view analysis write.
@@ -33,7 +34,7 @@ public class TradingViewAnalysisWrite {
      * @param price              the price
      * @param lastStatus         the last status
      */
-    public void setLine(TradingviewScraper tradingviewScraper, LocalDateTime time, Double price, String lastStatus) {
+    public void setLine(@NotNull TradingviewScraper tradingviewScraper, LocalDateTime time, Double price, String lastStatus) {
         if (Objects.nonNull(tradingviewScraper.getSummary())) {
             String value = String.valueOf(price).replace(".", ",");
             String dateTime = time.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).substring(0,19);

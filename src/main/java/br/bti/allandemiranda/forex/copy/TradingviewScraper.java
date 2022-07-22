@@ -3,8 +3,8 @@ package br.bti.allandemiranda.forex.copy;
 import br.bti.allandemiranda.forex.chart.TimeFrame;
 import br.bti.allandemiranda.forex.currency.Pair;
 import java.io.File;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,8 +13,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
  * The type Tradingview scraper.
  */
 public class TradingviewScraper {
-
-    private static final Logger logger = LogManager.getLogger(TradingviewScraper.class);
 
     private static final String FULL_URL = "https://www.tradingview.com/symbols/EURUSD/technicals/";
     private static final String PAIR_DEFALT = "EURUSD";
@@ -28,7 +26,7 @@ public class TradingviewScraper {
      * @param timeFrame  the time frame
      * @param pair       the pair
      */
-    public TradingviewScraper(File driverFile, TimeFrame timeFrame, Pair pair) {
+    public TradingviewScraper(@NotNull File driverFile, TimeFrame timeFrame, @NotNull Pair pair) {
         //! starting the chrome drive
         System.setProperty("webdriver.chrome.driver", driverFile.getAbsolutePath());
         WebDriver driver = new ChromeDriver();
@@ -69,7 +67,8 @@ public class TradingviewScraper {
      * @param value the value
      * @return the string
      */
-    private String checkValueStatus(String value) {
+    @Contract("_ -> param1")
+    private @NotNull String checkValueStatus(@NotNull String value) {
         if (value.equals("STRONG SELL") || value.equals("SELL") || value.equals("NEUTRA") || value.equals("BUY") || value.equals("STRONG BUY")) {
             return value;
         }

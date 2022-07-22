@@ -67,7 +67,10 @@ public class TradingViewAnalysisProcessor extends Processor {
         if (!driveFile.isFile() || !driveFile.canRead()) {
             throw new IllegalArgumentException("Set a valid drive file");
         }
-        File outFile = new File(outputFolder, "TradingViewAnalysis_".concat(time).concat("_").concat(pair.getNameTogeder()).concat("_").concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd'-'HH'h'mm"))).concat(".csv"));
+        File outFile = new File(outputFolder, "TradingViewAnalysis_".concat(time).concat("_")
+                .concat(pair.getNameTogeder()).concat("_")
+                .concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd'-'HH'h'mm")))
+                .concat(".csv"));
         if (sleepTime > 1) {
             sleepTime = sleepTime * 1000; //! Convert the time in seconds to nanoseconds
         } else {
