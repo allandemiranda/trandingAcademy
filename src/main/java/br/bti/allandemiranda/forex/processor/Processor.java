@@ -14,11 +14,20 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * The type Processor.
+ */
 public abstract class Processor {
 
   private static final String PROPERTIES_FILE = "-propertiesFile";
   protected Logger logger = LogManager.getLogger(this.getClass());
 
+  /**
+   * Instantiates a new Processor.
+   *
+   * @param args the args
+   * @throws IOException the io exception
+   */
   protected Processor(String... args) throws IOException {
     logger.info("Starting the job {}", this.getClass());
 
@@ -70,5 +79,8 @@ public abstract class Processor {
     logger.info("#########################");
   }
 
+  /**
+   * Run.
+   */
   public abstract void run();
 }
