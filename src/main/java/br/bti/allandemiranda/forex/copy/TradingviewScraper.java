@@ -32,8 +32,8 @@ public class TradingviewScraper {
         WebDriver driver = new ChromeDriver();
         try {
             //! checking the correct url
-            if (!pair.getNameTogeder().equals(PAIR_DEFALT)) {
-                driver.get(FULL_URL.replace(PAIR_DEFALT, pair.getNameTogeder()));
+            if (!pair.getTradingViewName().equals(PAIR_DEFALT)) {
+                driver.get(FULL_URL.replace(PAIR_DEFALT, pair.getTradingViewName()));
             } else {
                 driver.get(FULL_URL);
             }
@@ -45,11 +45,11 @@ public class TradingviewScraper {
                 case M15 -> driver.findElement(By.id("15m")).click();
                 case M30 -> driver.findElement(By.id("30m")).click();
                 case H1 -> driver.findElement(By.id("1h")).click();
-                case H4 -> driver.findElement(By.id("4h")).click();
+                // case H4 -> driver.findElement(By.id("4h")).click(); //! We don't have this time frame in the investing
                 case D1 -> driver.findElement(By.id("1D")).click();
                 case W1 -> driver.findElement(By.id("1W")).click();
                 case MN -> driver.findElement(By.id("1M")).click();
-                default -> throw new IllegalArgumentException("Can't get the time frame from the web aplication");
+                default -> throw new IllegalArgumentException("Can't get the time frame from the web aplication " + this.getClass().getName());
             }
 
             // select the Summary status
@@ -69,7 +69,7 @@ public class TradingviewScraper {
      */
     @Contract("_ -> param1")
     private @NotNull String checkValueStatus(@NotNull String value) {
-        if (value.equals("STRONG SELL") || value.equals("SELL") || value.equals("NEUTRA") || value.equals("BUY") || value.equals("STRONG BUY")) {
+        if ("STRONG SELL".equals(value) || "SELL".equals(value) || "NEUTRA".equals(value) || "BUY".equals(value) || "STRONG BUY".equals(value)) {
             return value;
         }
         throw new IllegalStateException("Don't received a correct value");

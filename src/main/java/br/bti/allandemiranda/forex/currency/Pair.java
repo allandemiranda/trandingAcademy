@@ -71,8 +71,17 @@ public class Pair {
    *
    * @return the name togeder
    */
-  public String getNameTogeder() {
+  public String getTradingViewName() {
     return getBase().toString().concat(getQuote().toString());
+  }
+
+  /**
+   * Gets investing name.
+   *
+   * @return the investing name
+   */
+  public String getInvestingName() {
+    return getBase().toString().toLowerCase().concat("-").concat(getQuote().toString().toLowerCase());
   }
 
   /**
