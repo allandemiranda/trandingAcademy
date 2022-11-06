@@ -34,6 +34,8 @@ public class SocketMetaTrader extends Thread {
     @Override
     public void run() {
         try (ServerSocket server = new ServerSocket(port); Socket client = server.accept(); Scanner entrant = new Scanner(client.getInputStream())) {
+            logger.info("Socket started at port {}", port);
+            logger.info("Client connected IP {}", client.getInetAddress().getHostAddress());
             while (state.equals(Thread.State.RUNNABLE) && entrant.hasNextLine()) {
                 setPrice(entrant.nextLine());
             }
@@ -77,5 +79,9 @@ public class SocketMetaTrader extends Thread {
      */
     public Double getPrice() {
         return price;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

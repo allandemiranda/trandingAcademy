@@ -51,8 +51,7 @@ public class InvestingScraper {
                 case D1 -> driver.findElement(By.linkText("Daily")).click();
                 case W1 -> driver.findElement(By.linkText("Weekly")).click();
                 case MN -> driver.findElement(By.linkText("Monthly")).click();
-                default ->
-                        throw new IllegalArgumentException("Can't get the time frame from the web aplication " + this.getClass().getName());
+                default -> throw new IllegalArgumentException("Can't get the time frame from the web aplication " + this.getClass().getName());
             }
 
             //! select the Moving Averages status
